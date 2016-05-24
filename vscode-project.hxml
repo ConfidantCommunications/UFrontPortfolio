@@ -1,0 +1,32 @@
+#automatically generated do not edit
+#@date Mon May 23 2016 21:54:05 GMT-0600 (CST)
+#@begin-cache -lib ufront-mvc
+-cp /usr/lib/haxe/lib/ufront-mvc/1,1,0/src/
+-D ufront-mvc=1.1.0
+-cp /usr/lib/haxe/lib/compiletime/2,6,0/src/
+-D compiletime=2.6.0
+-cp /usr/lib/haxe/lib/minject/2,0,0-rc,1/src/lib/
+-D minject=2.0.0
+-cp /usr/lib/haxe/lib/tink_core/1,0,0-rc,11/src/
+-D tink_core=1.0.0-rc.11
+-cp /usr/lib/haxe/lib/tink_macro/0,6,4/src/
+-D tink_macro=0.6.4
+#@end-cache
+#@begin-cache -lib express
+
+
+-cp /usr/lib/haxe/lib/express/0,3,1/src/
+-D express=0.3.1
+#@end-cache
+#@begin-cache -lib tink_core
+-cp /usr/lib/haxe/lib/tink_core/1,0,0-rc,11/src/
+-D tink_core=1.0.0-rc.11
+#@end-cache
+-D server
+
+
+-cp /Users/allan/Documents/Freelance/Confidant/Website/3d confidant site/ufront/src/
+-main Server
+--php-front index.php
+-php www/
+-cp /var/folders/f3/svbkvkwn75s93xf9nnwdbsqw0000gq/T/e446fb719a33b087b00fa2e43923647a3b56e7b2

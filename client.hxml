@@ -1,0 +1,7 @@
+-lib ufront-mvc
+-lib pushstate
+-D client
+
+-cp src
+-main Client
+-js www/js/client.js

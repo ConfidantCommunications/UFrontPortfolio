@@ -1,0 +1,9 @@
+-lib ufront-mvc
+-lib express
+-lib tink_core
+-D server
+
+-cp src
+-main Server
+--php-front index.php
+-php www/

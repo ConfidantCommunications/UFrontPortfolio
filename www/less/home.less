@@ -1,0 +1,250 @@
+@zDepthHidden: -2000px;
+@zDepth0: 0px;
+@zOpacity0: 1;
+@zDepth1: -800px;
+@zOpacity1: .5;
+@zDepth2: -1200px;
+@zOpacity2: .1;
+@zDepth3: -1600px;
+@zOpacity3: 0;
+@brand-primary:#caba9c;
+@import url(https://fonts.googleapis.com/css?family=Catamaran:400,700|Allura);
+html{margin:0;padding:0;}
+body{
+    overflow:hidden;
+    margin:0;
+    padding:0;
+    height:100%;
+    width:100%;
+    color:#333;
+        -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Catamaran', sans-serif;
+    line-height: 1.5em;
+    font-size:18px;
+}
+strong{font-weight:700;}
+a{
+    color:@brand-primary;
+    text-decoration:none;
+    &:hover{color:darken(@brand-primary,50%);}
+}
+h1{
+        color:@brand-primary;
+        font-family: 'Allura', cursive;
+        font-size:5em;
+        line-height:1em;
+        text-align:center;
+}
+.bbq-content{margin:0 10%;}
+.bbq-item{max-width: 40em;margin:0 auto;width:100%;}
+dt{
+    display:block;
+    float:left;
+    width:28%;
+    text-align:right;
+    padding:0 2% 0 0;
+}
+dd{
+    display:block;
+    float:left;
+    width:70%;
+    margin:0;
+}
+nav{
+    z-index:99;
+    position:absolute;
+    bottom:0;
+    left:0;
+}
+
+.list-divider{list-style-type:none;}
+#stage {
+    width: 100%;//600px;
+    height: 100%;//510px;
+    //border: 1px solid #CCC;
+    margin: 0 auto;
+    position: absolute;
+  //-webkit-perspective: 600px;
+    // -moz-perspective: 600px;
+      // -o-perspective: 600px;
+    perspective: 300px;
+    perspective-origin: 50% 0%;
+    nav{display:none;}
+}
+
+#panel1 { //homepage logo
+    width: 100%;
+    height: auto;
+    text-align:center;
+    position: absolute;
+    opacity: 1;
+    background-color:transparent;
+    top: 50%;
+    left: 50%;//250px; //container width / 2 minus half of panel width
+    //transform-origin: 150px 1500px; //center bottom; 
+    //transform: translateX( -50% ) rotateX( 0deg ); 
+    transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth0);
+    //p{text-align:center;}
+    img{width:100%; max-width:600px;}
+    h1{margin:80px 0 0;}
+    ul{
+        width:600px;
+        height:200px;
+        //background-color:red;
+        margin:-40px auto 0;
+        padding:0;
+        text-align:center;
+        position:relative;
+        perspective: 600px;
+        perspective-origin: 50% 0%;
+    }
+    li{
+       list-style-type:none;
+        margin:0;padding:0;
+        display:block;
+        position:absolute;
+        margin:0 1.4em;
+    }
+    a{
+        font-family: 'Allura', cursive;
+        font-size:3em;
+        display:block;
+    }
+    
+
+    #about{
+        top:0; left:5%;
+        font-size:80%;
+        transform: rotateZ( 12deg );
+    }
+    #portfolio{
+        top:12%; left:27%;
+        transform: rotateZ( -8deg );
+    }
+    #blog{
+        top:17%; left:53%;
+        font-size:110%;
+        transform: rotateZ( -2deg );
+    }
+    #contact{
+        top:0; left:69%;
+        font-size:80%;
+        transform: rotateZ( -8deg );
+    }
+    @media screen and (max-width:600px){
+        a{font-size:2em;}
+        ul{width:100%;}
+    }
+    a.goback{
+        display:none;
+        position:absolute;
+        width:100%;
+        height:100%;
+        background-color:transparent;
+        top:0;
+        left:0;
+        text-indent:-9999px;
+    }
+}
+#panel2,#panel3 { //main navigation
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0;
+    display:none;
+    background-color:rgb(240,240,240);
+    background-color:rgba(255,255,255,.8);
+    top: 50%;
+    left: 50%;
+    overflow-y:scroll;
+    padding:10%;
+    //transform: translateX( -50% ) translateZ(@zDepthHidden);
+    h1{
+        //transform:rotate(-9deg);
+        margin-top:1em;
+    }
+}
+#panel3{
+    
+}
+
+
+@keyframes fadein3 { //recessed3 to recessed2
+    from {opacity:@zOpacity3;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);}
+    to {opacity:@zOpacity2;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);}
+}
+@keyframes fadein2 { //recessed2 to recessed1
+    from {opacity:@zOpacity2;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);}
+    to {opacity:@zOpacity1;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);}
+}
+@keyframes fadein1 { //recessed1 to normal
+    from {opacity:@zOpacity1;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);}
+    to {opacity:@zOpacity0;transform: translateX( -50% ) translateY( -50% ) translateZ(0px);}
+}
+
+@keyframes fadeout1 { //normal to recessed1
+    from {opacity:@zOpacity0;transform: translateX( -50% ) translateY( -50% ) translateZ(0px);}
+    to {opacity:@zOpacity1;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);}
+}
+@keyframes fadeout2 { //recessed1 to recessed 2
+    from {opacity:@zOpacity1;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);}
+    to {opacity:@zOpacity2;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);}
+}
+@keyframes fadeout3 { //recessed2 to recessed 3
+    from {opacity:@zOpacity2;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);}
+    to {opacity:@zOpacity3;transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);}
+}
+@keyframes fadein0{
+    from {opacity:@zOpacity3;}
+    to {opacity:@zOpacity0;}
+}
+@keyframes fadeout0{
+    from {opacity:@zOpacity0;}
+    to {opacity:@zOpacity3;}
+}
+#stage {
+    .recessed0 {
+        display:block;transform: translateX(-50%) translateY( -50% ) translateZ(0px);opacity:1;
+        animation-name: fadein0;
+    	animation-duration: 0.5s;
+    }
+    
+    .recessed1 {
+        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
+        opacity: @zOpacity1;
+    	animation-name: fadeout1;
+    	animation-duration: 0.5s;
+    	overflow:hidden;
+    	
+        &.recessed2{
+            transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
+            opacity: @zOpacity2;
+        	animation-name: fadeout2;
+        	animation-duration: 0.5s;
+            &.recessed3{
+                transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
+                opacity: @zOpacity3;
+            	animation-name: fadeout3;
+            	animation-duration: 0.5s;
+            }
+        }
+    }
+    
+    &.reversed{ //reversed animation
+        #panel1,#panel2,#panel3{ 
+            animation-name: fadein1;
+    	    animation-duration: 0.5s;
+    	    
+    	    &.recessed1{
+    	        animation-name: fadein2;
+    	        animation-duration: 0.5s;
+    	        &.recessed2{
+        	        animation-name: fadein3;
+        	        animation-duration: 0.5s;
+        	    }
+    	    }
+        }
+        
+    }
+}
