@@ -10,7 +10,7 @@ var Client = function() { };
 $hxClasses["Client"] = Client;
 Client.__name__ = ["Client"];
 Client.main = function() {
-	var ufrontApp = new ufront_app_ClientJsApplication({ indexController : controller_HomeController, defaultLayout : "layout.html"});
+	var ufrontApp = new ufront_app_ClientJsApplication({ indexController : controller_HomeController, defaultLayout : "layout.html", clientActions : [actions_ConfidantInterface]});
 	ufrontApp.listen();
 };
 var CompileTime = function() { };
@@ -559,6 +559,97 @@ Type["typeof"] = function(v) {
 		return ValueType.TUnknown;
 	}
 };
+var ufront_web_client_UFClientAction = function() { };
+$hxClasses["ufront.web.client.UFClientAction"] = ufront_web_client_UFClientAction;
+ufront_web_client_UFClientAction.__name__ = ["ufront","web","client","UFClientAction"];
+ufront_web_client_UFClientAction.prototype = {
+	execute: function(context,data) {
+	}
+	,toString: function() {
+		return Type.getClassName(js_Boot.getClass(this));
+	}
+	,ufTrace: function(msg,pos) {
+		this.logToConsole(($_=window.console,$bind($_,$_.log)),msg,pos);
+	}
+	,ufLog: function(msg,pos) {
+		this.logToConsole(($_=window.console,$bind($_,$_.info)),msg,pos);
+	}
+	,ufWarn: function(msg,pos) {
+		this.logToConsole(($_=window.console,$bind($_,$_.warn)),msg,pos);
+	}
+	,ufError: function(msg,pos) {
+		this.logToConsole(($_=window.console,$bind($_,$_.error)),msg,pos);
+	}
+	,logToConsole: function(fn,msg,p) {
+		fn("" + p.className + "." + p.methodName + "()[" + p.lineNumber + "]:",msg);
+	}
+	,__class__: ufront_web_client_UFClientAction
+};
+var actions_ConfidantInterface = function() {
+	this.currentPath = "";
+	this.currentLevel = 1;
+};
+$hxClasses["actions.ConfidantInterface"] = actions_ConfidantInterface;
+actions_ConfidantInterface.__name__ = ["actions","ConfidantInterface"];
+actions_ConfidantInterface.__super__ = ufront_web_client_UFClientAction;
+actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.prototype,{
+	currentLevel: null
+	,currentPath: null
+	,execute: function(context,data) {
+		this.delay($bind(this,this.listen));
+	}
+	,listen: function() {
+		var _g = this;
+		window.document.querySelector("#stage").className = "";
+		var goback = window.document.querySelector("#goback");
+		var a = pushstate_PushState.currentPath.split("/");
+		a.pop();
+		goback.setAttribute("href","/" + a.join("/"));
+		goback.addEventListener("click",function() {
+			window.document.querySelector("#stage").className = "reversed";
+		});
+		window.document.querySelector("#previous").addEventListener("click",$bind(this,this.prev));
+		pushstate_PushState.addEventListener(null,function(url,state) {
+			_g.logToConsole(($_=window.console,$bind($_,$_.log)),"Visiting " + url + " and " + state,{ fileName : "ConfidantInterface.hx", lineNumber : 45, className : "actions.ConfidantInterface", methodName : "listen"});
+			_g.updateClasses();
+		});
+		this.updateClasses();
+	}
+	,updateClasses: function() {
+		var a = pushstate_PushState.currentPath.split("/");
+		this.currentLevel = a.length - 1;
+		this.logToConsole(($_=window.console,$bind($_,$_.log)),"currentLevel is " + this.currentLevel,{ fileName : "ConfidantInterface.hx", lineNumber : 58, className : "actions.ConfidantInterface", methodName : "updateClasses"});
+		var levels = ["#panel1","#panel2","#panel3"];
+		var classes = ["recessed0","recessed1","recessed2","recessed3"];
+		var newlen;
+		if(this.currentLevel >= 0) newlen = this.currentLevel + 1; else newlen = 1;
+		classes = classes.slice(0,newlen - 1);
+		var _g = 0;
+		while(_g < levels.length) {
+			var thisLevel = levels[_g];
+			++_g;
+			window.document.querySelector(thisLevel).className = "";
+			window.document.querySelector(thisLevel).className = classes.join(" ");
+			classes.pop();
+		}
+		if(this.currentLevel > 0) window.document.querySelector(".goback").setAttribute("style","display:block;"); else window.document.querySelector(".goback").setAttribute("style","display:none;");
+	}
+	,delay: function(fn) {
+		var tim = haxe_Timer.delay(fn,100);
+	}
+	,next: function(e) {
+		window.document.querySelector("#stage").className = "";
+	}
+	,prev: function(e) {
+		window.document.querySelector("#stage").className = "reversed";
+		if(this.currentLevel > 0) {
+			var a = pushstate_PushState.currentPath.split("/");
+			a.pop();
+			pushstate_PushState.push(a.join("/"));
+		} else pushstate_PushState.push("/");
+	}
+	,__class__: actions_ConfidantInterface
+});
 var ufront_api_UFApi = function() {
 };
 $hxClasses["ufront.api.UFApi"] = ufront_api_UFApi;
@@ -754,35 +845,50 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 	testApi: null
 	,main: function(args) {
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.test(args.param),function(result) {
-			return new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 				var $r;
 				var obj = { };
 				$r = obj != null?obj:{ };
 				return $r;
-			}(this)),{ title : "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", message : "Result: " + result, renderedBy : "Client"}));
+			}(this)),{ title : "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", message : "Result: " + result, renderedBy : "Client"})),(function($this) {
+				var $r;
+				var className = Type.getClassName(actions_ConfidantInterface);
+				$r = className;
+				return $r;
+			}(this)),{ msg : "simpleAction"});
 		});
 	}
 	,about: function(args) {
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.test(args.param),function(result) {
-			return new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 				var $r;
 				var obj = { };
 				$r = obj != null?obj:{ };
 				return $r;
-			}(this)),{ title : "Confidant Communications : About Us", header1 : "About Us", message : "Result: " + result, renderedBy : "Client"}));
+			}(this)),{ title : "Confidant Communications : About Us", header1 : "About Us", message : "Result: " + result, renderedBy : "Client"})),(function($this) {
+				var $r;
+				var className = Type.getClassName(actions_ConfidantInterface);
+				$r = className;
+				return $r;
+			}(this)),{ msg : "simpleAction"});
 		});
 	}
 	,contact: function(args) {
-		return new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 			var $r;
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Contact Us"}));
+		}(this)),{ title : "Contact Us", header1 : "Contact Us"})),(function($this) {
+			var $r;
+			var className = Type.getClassName(actions_ConfidantInterface);
+			$r = className;
+			return $r;
+		}(this)),{ msg : "simpleAction"});
 	}
 	,portfolio: function(args) {
 		var ni = ["Interactive Development","Overview","ThinkSask.ca","Wapos Bay Flash Site","PotashCorp Slideshow Player","Shelterbelt Design Tool","Lentil Hunter Map","Print / Miscellaneous","Book Cover Designs","T-Shirt Design","Product Packaging","Logo Designs","Websites","Agtron","Faith River","All-West Dental","Mable Elliott Guest Ranch","J.B. Black Estates","ICR Commercial Real Estate","Transforming Teachers"];
-		return new ufront_web_result_ViewResult((function($this) {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult((function($this) {
 			var $r;
 			var d = { title : "Portfolio", random : Math.random() + " willikers", content : "The Content", subcontent : "The Subcontent", navItems : ni};
 			$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
@@ -792,18 +898,25 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				return $r;
 			}($this)),d);
 			return $r;
-		}(this))).addPartial("portfolioNavPartial","portfolioNavPartial.html");
+		}(this))).addPartial("portfolioNavPartial","portfolioNavPartial.html"),(function($this) {
+			var $r;
+			var className = Type.getClassName(actions_ConfidantInterface);
+			$r = className;
+			return $r;
+		}(this)),{ msg : "simpleAction"});
 	}
 	,portfolioNavPartialShell: function(args) {
-		return new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 			var $r;
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "PorfolioNav", random : "not really random"}));
-	}
-	,mixed: function(param1,args) {
-		return new ufront_web_result_JsonResult({ param1 : param1, param2 : args.param2});
+		}(this)),{ title : "PorfolioNav", random : "not really random"})),(function($this) {
+			var $r;
+			var className = Type.getClassName(actions_ConfidantInterface);
+			$r = className;
+			return $r;
+		}(this)),{ msg : "simpleAction"});
 	}
 	,execute: function() {
 		var uriParts = this.context.actionContext.get_uriParts();
@@ -872,27 +985,12 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				var result4 = this.wrapResult(this.portfolioNavPartialShell(args4),wrappingRequired4);
 				this.setContextActionResultWhenFinished(result4);
 				return result4;
-			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "mixed" && uriParts[1].length > 0) {
-				var param1 = uriParts[1];
-				if(!(__map_reserved.param2 != null?params.existsReserved("param2"):params.h.hasOwnProperty("param2"))) throw new js__$Boot_HaxeError(ufront_web_HttpError.badRequest("Missing parameter " + "param2",{ fileName : "HomeController.hx", lineNumber : 109, className : "controller.HomeController", methodName : "execute"}));
-				var _param_tmp_param21 = Std.parseInt(ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"param2"));
-				if(_param_tmp_param21 == null) throw new js__$Boot_HaxeError(ufront_web_HttpError.badRequest("Could not parse parameter " + "args.param2" + ":Int = " + ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"param2"),{ fileName : "HomeController.hx", lineNumber : 109, className : "controller.HomeController", methodName : "execute"}));
-				var args5 = { param2 : _param_tmp_param21};
-				this.context.actionContext.action = "mixed";
-				this.context.actionContext.args = [param1,args5];
-				this.context.actionContext.get_uriParts().splice(0,2);
-				var wrappingRequired5;
-				var i5 = haxe_rtti_Meta.getFields(controller_HomeController).mixed.wrapResult[0];
-				wrappingRequired5 = i5;
-				var result5 = this.wrapResult(this.mixed(param1,args5),wrappingRequired5);
-				this.setContextActionResultWhenFinished(result5);
-				return result5;
 			}
-			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 8, className : "controller.HomeController", methodName : "execute"}));
+			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 10, className : "controller.HomeController", methodName : "execute"}));
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
 			if (e instanceof js__$Boot_HaxeError) e = e.val;
-			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 8, className : "controller.HomeController", methodName : "execute"});
+			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 10, className : "controller.HomeController", methodName : "execute"});
 		}
 	}
 	,__class__: controller_HomeController
@@ -1847,6 +1945,33 @@ haxe_Template.prototype = {
 		}
 	}
 	,__class__: haxe_Template
+};
+var haxe_Timer = function(time_ms) {
+	var me = this;
+	this.id = setInterval(function() {
+		me.run();
+	},time_ms);
+};
+$hxClasses["haxe.Timer"] = haxe_Timer;
+haxe_Timer.__name__ = ["haxe","Timer"];
+haxe_Timer.delay = function(f,time_ms) {
+	var t = new haxe_Timer(time_ms);
+	t.run = function() {
+		t.stop();
+		f();
+	};
+	return t;
+};
+haxe_Timer.prototype = {
+	id: null
+	,stop: function() {
+		if(this.id == null) return;
+		clearInterval(this.id);
+		this.id = null;
+	}
+	,run: function() {
+	}
+	,__class__: haxe_Timer
 };
 var haxe_Unserializer = function(buf) {
 	this.buf = buf;
@@ -8356,32 +8481,6 @@ ufront_web_UserAgent.prototype = {
 	}
 	,__class__: ufront_web_UserAgent
 };
-var ufront_web_client_UFClientAction = function() { };
-$hxClasses["ufront.web.client.UFClientAction"] = ufront_web_client_UFClientAction;
-ufront_web_client_UFClientAction.__name__ = ["ufront","web","client","UFClientAction"];
-ufront_web_client_UFClientAction.prototype = {
-	execute: function(context,data) {
-	}
-	,toString: function() {
-		return Type.getClassName(js_Boot.getClass(this));
-	}
-	,ufTrace: function(msg,pos) {
-		this.logToConsole(($_=window.console,$bind($_,$_.log)),msg,pos);
-	}
-	,ufLog: function(msg,pos) {
-		this.logToConsole(($_=window.console,$bind($_,$_.info)),msg,pos);
-	}
-	,ufWarn: function(msg,pos) {
-		this.logToConsole(($_=window.console,$bind($_,$_.warn)),msg,pos);
-	}
-	,ufError: function(msg,pos) {
-		this.logToConsole(($_=window.console,$bind($_,$_.error)),msg,pos);
-	}
-	,logToConsole: function(fn,msg,p) {
-		fn("" + p.className + "." + p.methodName + "()[" + p.lineNumber + "]:",msg);
-	}
-	,__class__: ufront_web_client_UFClientAction
-};
 var ufront_web_context_ActionContext = function(httpContext) {
 	ufront_web_HttpError.throwIfNull(httpContext,"httpContext",{ fileName : "ActionContext.hx", lineNumber : 80, className : "ufront.web.context.ActionContext", methodName : "new"});
 	this.httpContext = httpContext;
@@ -10437,13 +10536,13 @@ var ArrayBuffer = $global.ArrayBuffer || js_html_compat_ArrayBuffer;
 if(ArrayBuffer.prototype.slice == null) ArrayBuffer.prototype.slice = js_html_compat_ArrayBuffer.sliceImpl;
 var DataView = $global.DataView || js_html_compat_DataView;
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
-CompileTimeClassList.__meta__ = { obj : { classLists : [["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"],["null,true,ufront.web.client.UFClientAction",""],["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"]]}};
+CompileTimeClassList.__meta__ = { obj : { classLists : [["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"],["null,true,ufront.web.client.UFClientAction","actions.ConfidantInterface"],["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"]]}};
 ufront_api_UFApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.Connection",""]]}};
 api_TestApi.__meta__ = { obj : { asyncApi : ["api.AsyncTestApi"]}, fields : { test : { returnType : [3]}}};
 ufront_api_UFAsyncApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.AsyncConnection",""]]}};
 api_AsyncTestApi.__meta__ = { obj : { rtti : [["injectApi","minject.Injector","",""]]}};
 ufront_web_Controller.__meta__ = { obj : { rtti : [["injectContext","ufront.web.context.HttpContext","",""]]}};
-controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [4]}, about : { wrapResult : [4]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [3]}, portfolioNavPartialShell : { wrapResult : [3]}, mixed : { wrapResult : [3]}}};
+controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [4]}, about : { wrapResult : [4]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [3]}, portfolioNavPartialShell : { wrapResult : [3]}}};
 haxe_IMap.__meta__ = { obj : { 'interface' : null}};
 haxe_Serializer.USE_CACHE = false;
 haxe_Serializer.USE_ENUM_INDEX = false;

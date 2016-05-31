@@ -16,7 +16,7 @@ class Server
 		var ufrontApp = new UfrontApplication({
 			indexController: HomeController,
 			remotingApi: ApiContext, // specify our remoting API context (interface)
-			defaultLayout: "layout.html",
+			defaultLayout: "layout.html"
 		});
 		
 		// listen for incoming connection at this port number

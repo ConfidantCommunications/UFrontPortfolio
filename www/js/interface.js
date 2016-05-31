@@ -2,25 +2,29 @@ function log(m){try{console.log(m);}catch(e){}}
 
 var currentLevel=0;
 
+function next(){
+
+	currentLevel++;
+	$("#stage").removeClass("reversed");
+	updateClasses();
+}
+function prev(){
+	if(currentLevel>0)currentLevel--;
+	$("#stage").addClass("reversed");
+	updateClasses();
+
+}
 
 
 $(document).ready(function(){
-	$("#next").click(
-		function(){
-			currentLevel++;
-			$("#stage").removeClass("reversed");
-			updateClasses();
-		}
+/*	$("#next").click(
+		next();
 	);
 	$("#previous").click(
-		function(){
-			if(currentLevel>0)currentLevel--;
-			$("#stage").addClass("reversed");
-			updateClasses();
-		}
+		prev();
 	);
 	
-	
+	*/
 	$(".goback").click(
 		function(){
 			if(currentLevel>0)currentLevel--;

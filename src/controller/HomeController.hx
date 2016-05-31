@@ -1,9 +1,11 @@
 package controller;
 
 import api.TestApi;
-
+import actions.ConfidantInterface;
 //import tink.core.Future;
 using ufront.MVC;
+using ufront.web.result.AddClientActionResult;
+
 
 class HomeController extends Controller
 {
@@ -18,7 +20,9 @@ class HomeController extends Controller
 				title: "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan",
 				message: 'Result: $result', // print the result of the API call
 				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
-			});
+			})
+			
+			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 	}
 	
 	//@:route(GET, "/portfolio/*")
@@ -34,7 +38,9 @@ class HomeController extends Controller
 				header1:"About Us",
 				message: 'Result: $result', // print the result of the API call
 				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
-			});
+			})
+			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+			
 	}
 	@:route(GET, "/contact")
 
@@ -48,8 +54,11 @@ class HomeController extends Controller
 				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			});*/
 		return new ViewResult({ 
-			title:'Contact Us'
-		});
+			title:'Contact Us',
+			header1:'Contact Us'
+		})
+		
+		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 	}
 	
 	@:route(GET, "/portfolio")
@@ -80,7 +89,9 @@ class HomeController extends Controller
 			subcontent:'The Subcontent',
 			navItems:ni
 		})
-		.addPartial("portfolioNavPartial","portfolioNavPartial.html");
+		.addPartial("portfolioNavPartial","portfolioNavPartial.html")
+		
+		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
 		
 		/*
@@ -101,17 +112,11 @@ class HomeController extends Controller
 			title:"PorfolioNav",
 			random:"not really random"
 			
-		});
+		})
+		
+		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		
 	}
 	
-	@:route(GET, "/mixed/$param1")
-	public function mixed(param1:String, args:{param2:Int})
-	{
-		return new JsonResult({
-			param1: param1,
-			param2: args.param2,
-		});
-	}
 	
 }
