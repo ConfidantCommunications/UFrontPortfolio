@@ -21,7 +21,8 @@ class HomeController extends Controller
 				message: 'Result: $result', // print the result of the API call
 				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			})
-			
+			//.addPartial("panel2Partial","home.html")
+			//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 	}
 	
@@ -33,9 +34,8 @@ class HomeController extends Controller
 	public function about(?args:{param:String})
 	{
 		return testApi.test(args.param) >>
-			function(result:String) return new ViewResult({
+			function(result:String) return new PartialViewResult({
 				title: "Confidant Communications : About Us",
-				header1:"About Us",
 				message: 'Result: $result', // print the result of the API call
 				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			})
@@ -53,16 +53,14 @@ class HomeController extends Controller
 				message: 'Result: $result', // print the result of the API call
 				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			});*/
-		return new ViewResult({ 
-			title:'Contact Us',
-			header1:'Contact Us'
+		return new PartialViewResult({ 
+			title:'Contact Us'
 		})
 		
 		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 	}
 	
 	@:route(GET, "/portfolio")
-
 	public function portfolio(?args:{id:String})
 	{
 		/*return testApi.test(args.param) >>
@@ -78,19 +76,20 @@ class HomeController extends Controller
 "Interactive Development","Overview","ThinkSask.ca","Wapos Bay Flash Site","PotashCorp Slideshow Player","Shelterbelt Design Tool","Lentil Hunter Map",
 "Print / Miscellaneous","Book Cover Designs","T-Shirt Design","Product Packaging","Logo Designs",
 "Websites","Agtron","Faith River","All-West Dental","Mable Elliott Guest Ranch","J.B. Black Estates","ICR Commercial Real Estate","Transforming Teachers"];
-
 		
-		
-		
-		return new ViewResult({ 
+		var navItems:Array<String>=new Array<String>();
+		var i=1;
+		navItems.push("<ul>");
+		for (thisItem in ni){
+			navItems.push('<li><a href="/portfolio/$i/">'+thisItem+"</a></li>");
+			i++;
+		}
+		navItems.push("</ul>");
+		return new PartialViewResult({ 
 			title:"Portfolio",
-			random:Math.random()+" willikers", //'Portfolio '+args.id,
-			content:'The Content',
-			subcontent:'The Subcontent',
-			navItems:ni
+			content:navItems.join("")
 		})
-		.addPartial("portfolioNavPartial","portfolioNavPartial.html")
-		
+		//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
 		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
 		
@@ -109,9 +108,8 @@ class HomeController extends Controller
 	public function portfolioNavPartialShell(?args:{id:String})
 	{
 		return new PartialViewResult({
-			title:"PorfolioNav",
+			title:"Portfolio Item",
 			random:"not really random"
-			
 		})
 		
 		.addClientAction(ConfidantInterface,{msg:"simpleAction"});

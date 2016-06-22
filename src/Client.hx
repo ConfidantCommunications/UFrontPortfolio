@@ -21,6 +21,8 @@ class Client
 			indexController: HomeController,
 			defaultLayout: "layout.html",
 		});*/
+		
+		PushState.init();
 		var ufrontApp = new ClientJsApplication({ 
 			indexController: HomeController, 
 			//templatingEngines: [TemplatingEngines.erazor], 

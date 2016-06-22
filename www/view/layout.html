@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 	<link rel="shortcut icon" href="favicon.ico" />
-	<meta charset="utf-8" />
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<title>::title::</title>  
 	<link rel="stylesheet" href="/css/home.css" media="screen" />
@@ -22,39 +23,25 @@
 					<li id="blog"><a href="http://confidant.ca/blog/" title="Thoughts on creativity, coding, and life.">Blog</a></li>
 					<li id="contact"><a rel="pushstate" href="/contact/" title="Phone numbers, email, etc.">Contact&#8239;Us</a></li>
 				</ul>
-				<a class="goback" title="Main Menu" href="/">Home</a>
+				<a rel="pushstate" class="" title="Main Menu" href="/">Home</a>
 			</div>
 			
 			<div id="panel2" class="bbq">
-				<div class="bbq-content">
-					<div class="bbq-loading" style="display:none;">Loading…</div>
-					<div class="bbq-default bbq-item" style="">
-					  ::viewContent::
-					</div>
+				<div class="bbq-content" data-uf-partial="panel2Partial">
+					::viewContent::
 				</div>
 			
 			</div>
 			<div id="panel3">
-				<div class="bbq-content2">
-					<div class="bbq-loading" style="display:none;">Loading…</div>
-					<div class="bbq-default bbq-item" style="">
-					  ::subcontent::
+				<div class="bbq-content">
+					<div data-uf-partial="portfolioNavPartial" style="">
+						<p>::random:: normal</p>
 					</div>
-			
 				</div>
 			</div>
 			<a id="goback" href="#" rel="pushstate" title="Go Back One Level">&lt;</a>
 		</div>
-		<!--script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TweenLite.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TimelineLite.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/easing/EasePack.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/plugins/CSSPlugin.min.js"></script -->
-		<nav>
-			<button id="previous" data-increment="-1">Previous</button>
-			<!--button id="next" data-increment="1">Next</button-->
-		</nav>
 	</div>
-	<script type="text/javascript" src="js/interface.js"></script>
-	<script type="text/javascript" src="js/client.js"></script>
+	<script type="text/javascript" src="/js/client.js"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@ class api_AsyncTestApi extends ufront_api_UFAsyncApi {
 		parent::__construct();
 	}}
 	public function test($param) {
-		return $this->_makeApiCall("test", (new _hx_array(array($param))), 3, _hx_anonymous(array("methodName" => "test", "lineNumber" => 0, "customParams" => null, "fileName" => "/Users/allan/Documents/Freelance/Confidant/Website/3d confidant site/ufront/src/api/TestApi.hx", "className" => "AsyncTestApi")));
+		return $this->_makeApiCall("test", (new _hx_array(array($param))), 3, _hx_anonymous(array("methodName" => "test", "lineNumber" => 0, "customParams" => null, "fileName" => "src/api/TestApi.hx", "className" => "AsyncTestApi")));
 	}
 	public function injectApi($injector) {
 		try {

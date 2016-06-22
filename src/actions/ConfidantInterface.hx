@@ -27,22 +27,24 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 
   function listen():Void {
     document.querySelector("#stage").className="";//remove reversal
-    var goback =document.querySelector('#goback');
-    var a=PushState.currentPath.split("/");
-      a.pop();
-     goback.setAttribute("href","/"+a.join("/"));
+	//change the goback link
+    var goback = document.querySelector('#goback');
+    var a = PushState.currentPath.split("/");
+    a=a.splice(0, a.length-2);
+	var newHash:String="http://localhost:2987"+a.join("/")+"/";
+    goback.setAttribute("href",newHash);
      
     goback.addEventListener("click",function(){
       document.querySelector("#stage").className="reversed";
       
     });
 
-    document.querySelector("#previous").addEventListener("click",prev);
+    //document.querySelector("#previous").addEventListener("click",prev);
     //document.querySelector("#next").addEventListener("click",next);
     
     PushState.addEventListener(function(url,state) {
       // The URL of the request (eg. "/uploads")
-      ufTrace( 'Visiting $url and $state' );
+      //ufTrace( 'Visiting $url and $state' );
       //untyped __js__('console.log(state);');
       
       
@@ -55,7 +57,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     var a=PushState.currentPath.split("/");
     currentLevel=a.length-1;
     //add classes to correspond with depth of navigation
-    ufTrace("currentLevel is "+currentLevel);
+    //ufTrace("currentLevel is "+currentLevel);
     var levels=["#panel1","#panel2","#panel3"];
     var classes=["recessed0","recessed1","recessed2","recessed3"];
     
@@ -67,10 +69,10 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
       document.querySelector(thisLevel).className=classes.join(" ");
       classes.pop();
     }
-    if (currentLevel>0){
-      document.querySelector(".goback").setAttribute("style","display:block;");
+    if (currentLevel!=1){
+      document.querySelector("#goback").setAttribute("style","display:block;");
     } else {
-      document.querySelector(".goback").setAttribute("style","display:none;");
+      document.querySelector("#goback").setAttribute("style","display:none;");
     }
   }
   
@@ -93,7 +95,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     
     /*currentLevel++;
     //ufTrace(currentLevel);
-    updateClasses();*/
+    updateClasses();*/ 
   }
   function prev(e:Dynamic){
     document.querySelector("#stage").className="reversed";

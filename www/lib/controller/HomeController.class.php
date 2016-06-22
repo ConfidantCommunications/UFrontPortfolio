@@ -13,14 +13,28 @@ class controller_HomeController extends ufront_web_Controller {
 		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->test($args->param), array(new _hx_lambda(array(&$args), "controller_HomeController_1"), 'execute'));
 	}
 	public function contact($args = null) {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_ViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this, $args), _hx_anonymous(array("title" => "Contact Us", "header1" => "Contact Us"))), null, null), controller_HomeController_3($this, $args), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this, $args), _hx_anonymous(array("title" => "Contact Us"))), null, null), controller_HomeController_3($this, $args), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function portfolio($args = null) {
 		$ni = (new _hx_array(array("Interactive Development", "Overview", "ThinkSask.ca", "Wapos Bay Flash Site", "PotashCorp Slideshow Player", "Shelterbelt Design Tool", "Lentil Hunter Map", "Print / Miscellaneous", "Book Cover Designs", "T-Shirt Design", "Product Packaging", "Logo Designs", "Websites", "Agtron", "Faith River", "All-West Dental", "Mable Elliott Guest Ranch", "J.B. Black Estates", "ICR Commercial Real Estate", "Transforming Teachers")));
-		return ufront_web_result_AddClientActionResult::addClientAction(_hx_deref(new ufront_web_result_ViewResult(controller_HomeController_4($this, $args, $ni), null, null))->addPartial("portfolioNavPartial", "portfolioNavPartial.html", null), controller_HomeController_5($this, $args, $ni), _hx_anonymous(array("msg" => "simpleAction")));
+		$navItems = new _hx_array(array());
+		$i = 1;
+		$navItems->push("<ul>");
+		{
+			$_g = 0;
+			while($_g < $ni->length) {
+				$thisItem = $ni[$_g];
+				++$_g;
+				$navItems->push("<li><a href=\"/portfolio/" . _hx_string_rec($i, "") . "/\">" . _hx_string_or_null($thisItem) . "</a></li>");
+				$i++;
+				unset($thisItem);
+			}
+		}
+		$navItems->push("</ul>");
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(controller_HomeController_4($this, $args, $i, $navItems, $ni), null, null), controller_HomeController_5($this, $args, $i, $navItems, $ni), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function portfolioNavPartialShell($args = null) {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_6($this, $args), _hx_anonymous(array("title" => "PorfolioNav", "random" => "not really random"))), null, null), controller_HomeController_7($this, $args), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_6($this, $args), _hx_anonymous(array("title" => "Portfolio Item", "random" => "not really random"))), null, null), controller_HomeController_7($this, $args), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function execute() {
 		$uriParts = $this->context->actionContext->get_uriParts();
@@ -139,7 +153,7 @@ function controller_HomeController_0(&$args, $result) {
 }
 function controller_HomeController_1(&$args, $result) {
 	{
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_ViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_10($args, $result), _hx_anonymous(array("title" => "Confidant Communications : About Us", "header1" => "About Us", "message" => "Result: " . _hx_string_or_null($result), "renderedBy" => "Server"))), null, null), controller_HomeController_11($args, $result), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_10($args, $result), _hx_anonymous(array("title" => "Confidant Communications : About Us", "message" => "Result: " . _hx_string_or_null($result), "renderedBy" => "Server"))), null, null), controller_HomeController_11($args, $result), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 }
 function controller_HomeController_2(&$__hx__this, &$args) {
@@ -154,13 +168,13 @@ function controller_HomeController_3(&$__hx__this, &$args) {
 		return $className;
 	}
 }
-function controller_HomeController_4(&$__hx__this, &$args, &$ni) {
+function controller_HomeController_4(&$__hx__this, &$args, &$i, &$navItems, &$ni) {
 	{
-		$d = _hx_anonymous(array("title" => "Portfolio", "random" => _hx_string_rec(Math::random(), "") . " willikers", "content" => "The Content", "subcontent" => "The Subcontent", "navItems" => $ni));
-		return ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_12($args, $d, $ni), $d);
+		$d = _hx_anonymous(array("title" => "Portfolio", "content" => $navItems->join("")));
+		return ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_12($args, $d, $i, $navItems, $ni), $d);
 	}
 }
-function controller_HomeController_5(&$__hx__this, &$args, &$ni) {
+function controller_HomeController_5(&$__hx__this, &$args, &$i, &$navItems, &$ni) {
 	{
 		$className = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
 		return $className;
@@ -202,7 +216,7 @@ function controller_HomeController_11(&$args, &$result) {
 		return $className;
 	}
 }
-function controller_HomeController_12(&$args, &$d, &$ni) {
+function controller_HomeController_12(&$args, &$d, &$i, &$navItems, &$ni) {
 	{
 		$obj = _hx_anonymous(array());
 		return (($obj !== null) ? $obj : _hx_anonymous(array()));

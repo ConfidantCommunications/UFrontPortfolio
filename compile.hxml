@@ -1,0 +1,19 @@
+-lib ufront-mvc
+-lib pushstate
+-D client
+-dce std
+-cp src
+-main Client
+-js www/js/client.js
+
+--next
+
+-lib ufront-mvc
+-lib express
+-lib tink_core
+-D server 
+-dce std
+-cp src
+-main Server
+--php-front index.php
+-php www/

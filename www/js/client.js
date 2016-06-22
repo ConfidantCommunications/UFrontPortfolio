@@ -10,6 +10,7 @@ var Client = function() { };
 $hxClasses["Client"] = Client;
 Client.__name__ = ["Client"];
 Client.main = function() {
+	pushstate_PushState.init();
 	var ufrontApp = new ufront_app_ClientJsApplication({ indexController : controller_HomeController, defaultLayout : "layout.html", clientActions : [actions_ConfidantInterface]});
 	ufrontApp.listen();
 };
@@ -603,14 +604,13 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 		window.document.querySelector("#stage").className = "";
 		var goback = window.document.querySelector("#goback");
 		var a = pushstate_PushState.currentPath.split("/");
-		a.pop();
-		goback.setAttribute("href","/" + a.join("/"));
+		a = a.splice(0,a.length - 2);
+		var newHash = "http://localhost:2987" + a.join("/") + "/";
+		goback.setAttribute("href",newHash);
 		goback.addEventListener("click",function() {
 			window.document.querySelector("#stage").className = "reversed";
 		});
-		window.document.querySelector("#previous").addEventListener("click",$bind(this,this.prev));
 		pushstate_PushState.addEventListener(null,function(url,state) {
-			_g.logToConsole(($_=window.console,$bind($_,$_.log)),"Visiting " + url + " and " + state,{ fileName : "ConfidantInterface.hx", lineNumber : 45, className : "actions.ConfidantInterface", methodName : "listen"});
 			_g.updateClasses();
 		});
 		this.updateClasses();
@@ -618,7 +618,6 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	,updateClasses: function() {
 		var a = pushstate_PushState.currentPath.split("/");
 		this.currentLevel = a.length - 1;
-		this.logToConsole(($_=window.console,$bind($_,$_.log)),"currentLevel is " + this.currentLevel,{ fileName : "ConfidantInterface.hx", lineNumber : 58, className : "actions.ConfidantInterface", methodName : "updateClasses"});
 		var levels = ["#panel1","#panel2","#panel3"];
 		var classes = ["recessed0","recessed1","recessed2","recessed3"];
 		var newlen;
@@ -632,7 +631,7 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 			window.document.querySelector(thisLevel).className = classes.join(" ");
 			classes.pop();
 		}
-		if(this.currentLevel > 0) window.document.querySelector(".goback").setAttribute("style","display:block;"); else window.document.querySelector(".goback").setAttribute("style","display:none;");
+		if(this.currentLevel != 1) window.document.querySelector("#goback").setAttribute("style","display:block;"); else window.document.querySelector("#goback").setAttribute("style","display:none;");
 	}
 	,delay: function(fn) {
 		var tim = haxe_Timer.delay(fn,100);
@@ -860,12 +859,12 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 	}
 	,about: function(args) {
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.test(args.param),function(result) {
-			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 				var $r;
 				var obj = { };
 				$r = obj != null?obj:{ };
 				return $r;
-			}(this)),{ title : "Confidant Communications : About Us", header1 : "About Us", message : "Result: " + result, renderedBy : "Client"})),(function($this) {
+			}(this)),{ title : "Confidant Communications : About Us", message : "Result: " + result, renderedBy : "Client"})),(function($this) {
 				var $r;
 				var className = Type.getClassName(actions_ConfidantInterface);
 				$r = className;
@@ -874,12 +873,12 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		});
 	}
 	,contact: function(args) {
-		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 			var $r;
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Contact Us", header1 : "Contact Us"})),(function($this) {
+		}(this)),{ title : "Contact Us"})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -888,9 +887,20 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 	}
 	,portfolio: function(args) {
 		var ni = ["Interactive Development","Overview","ThinkSask.ca","Wapos Bay Flash Site","PotashCorp Slideshow Player","Shelterbelt Design Tool","Lentil Hunter Map","Print / Miscellaneous","Book Cover Designs","T-Shirt Design","Product Packaging","Logo Designs","Websites","Agtron","Faith River","All-West Dental","Mable Elliott Guest Ranch","J.B. Black Estates","ICR Commercial Real Estate","Transforming Teachers"];
-		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult((function($this) {
+		var navItems = [];
+		var i = 1;
+		navItems.push("<ul>");
+		var _g = 0;
+		while(_g < ni.length) {
+			var thisItem = ni[_g];
+			++_g;
+			navItems.push("<li><a href=\"/portfolio/" + i + "/\">" + thisItem + "</a></li>");
+			i++;
+		}
+		navItems.push("</ul>");
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 			var $r;
-			var d = { title : "Portfolio", random : Math.random() + " willikers", content : "The Content", subcontent : "The Subcontent", navItems : ni};
+			var d = { title : "Portfolio", content : navItems.join("")};
 			$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 				var $r;
 				var obj = { };
@@ -898,7 +908,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				return $r;
 			}($this)),d);
 			return $r;
-		}(this))).addPartial("portfolioNavPartial","portfolioNavPartial.html"),(function($this) {
+		}(this))),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -911,7 +921,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "PorfolioNav", random : "not really random"})),(function($this) {
+		}(this)),{ title : "Portfolio Item", random : "not really random"})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
