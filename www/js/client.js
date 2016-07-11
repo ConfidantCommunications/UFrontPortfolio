@@ -685,8 +685,11 @@ $hxClasses["api.TestApi"] = api_TestApi;
 api_TestApi.__name__ = ["api","TestApi"];
 api_TestApi.__super__ = ufront_api_UFApi;
 api_TestApi.prototype = $extend(ufront_api_UFApi.prototype,{
-	test: function(param) {
-		return this._makeApiCall("test",[param]);
+	getJson: function(path) {
+		return this._makeApiCall("getJson",[path]);
+	}
+	,getItem: function(id) {
+		return this._makeApiCall("getItem",[id]);
 	}
 	,__class__: api_TestApi
 });
@@ -743,8 +746,11 @@ api_AsyncTestApi._getClass = function() {
 };
 api_AsyncTestApi.__super__ = ufront_api_UFAsyncApi;
 api_AsyncTestApi.prototype = $extend(ufront_api_UFAsyncApi.prototype,{
-	test: function(param) {
-		return this._makeApiCall("test",[param],3,{ methodName : "test", lineNumber : 0, customParams : null, fileName : "src/api/TestApi.hx", className : "AsyncTestApi"});
+	getJson: function(path) {
+		return this._makeApiCall("getJson",[path],3,{ methodName : "getJson", lineNumber : 0, customParams : null, fileName : "src/api/TestApi.hx", className : "AsyncTestApi"});
+	}
+	,getItem: function(id) {
+		return this._makeApiCall("getItem",[id],3,{ methodName : "getItem", lineNumber : 0, customParams : null, fileName : "src/api/TestApi.hx", className : "AsyncTestApi"});
 	}
 	,injectApi: function(injector) {
 		this.className = "api.TestApi";
@@ -842,29 +848,54 @@ controller_HomeController.__name__ = ["controller","HomeController"];
 controller_HomeController.__super__ = ufront_web_Controller;
 controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 	testApi: null
-	,main: function(args) {
-		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.test(args.param),function(result) {
-			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_ViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
-				var $r;
-				var obj = { };
-				$r = obj != null?obj:{ };
-				return $r;
-			}(this)),{ title : "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", message : "Result: " + result, renderedBy : "Client"})),(function($this) {
-				var $r;
-				var className = Type.getClassName(actions_ConfidantInterface);
-				$r = className;
-				return $r;
-			}(this)),{ msg : "simpleAction"});
-		});
+	,main: function() {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			var $r;
+			var obj = { };
+			$r = obj != null?obj:{ };
+			return $r;
+		}(this)),{ title : "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan"})),(function($this) {
+			var $r;
+			var className = Type.getClassName(actions_ConfidantInterface);
+			$r = className;
+			return $r;
+		}(this)),{ msg : "simpleAction"});
 	}
-	,about: function(args) {
-		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.test(args.param),function(result) {
+	,about: function() {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			var $r;
+			var obj = { };
+			$r = obj != null?obj:{ };
+			return $r;
+		}(this)),{ title : "Confidant Communications : About Us", portfolioItem : ""})),(function($this) {
+			var $r;
+			var className = Type.getClassName(actions_ConfidantInterface);
+			$r = className;
+			return $r;
+		}(this)),{ msg : "simpleAction"});
+	}
+	,contact: function() {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			var $r;
+			var obj = { };
+			$r = obj != null?obj:{ };
+			return $r;
+		}(this)),{ title : "Contact Us", portfolioItem : ""})),(function($this) {
+			var $r;
+			var className = Type.getClassName(actions_ConfidantInterface);
+			$r = className;
+			return $r;
+		}(this)),{ msg : "simpleAction"});
+	}
+	,portfolio: function() {
+		var path = "portfolio.json";
+		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getJson(path),function(result) {
 			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 				var $r;
 				var obj = { };
 				$r = obj != null?obj:{ };
 				return $r;
-			}(this)),{ title : "Confidant Communications : About Us", message : "Result: " + result, renderedBy : "Client"})),(function($this) {
+			}(this)),{ title : "Portfolio", content : result, portfolioItem : "", random : "Client"})),(function($this) {
 				var $r;
 				var className = Type.getClassName(actions_ConfidantInterface);
 				$r = className;
@@ -872,61 +903,20 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			}(this)),{ msg : "simpleAction"});
 		});
 	}
-	,contact: function(args) {
-		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
-			var $r;
-			var obj = { };
-			$r = obj != null?obj:{ };
-			return $r;
-		}(this)),{ title : "Contact Us"})),(function($this) {
-			var $r;
-			var className = Type.getClassName(actions_ConfidantInterface);
-			$r = className;
-			return $r;
-		}(this)),{ msg : "simpleAction"});
-	}
-	,portfolio: function(args) {
-		var ni = ["Interactive Development","Overview","ThinkSask.ca","Wapos Bay Flash Site","PotashCorp Slideshow Player","Shelterbelt Design Tool","Lentil Hunter Map","Print / Miscellaneous","Book Cover Designs","T-Shirt Design","Product Packaging","Logo Designs","Websites","Agtron","Faith River","All-West Dental","Mable Elliott Guest Ranch","J.B. Black Estates","ICR Commercial Real Estate","Transforming Teachers"];
-		var navItems = [];
-		var i = 1;
-		navItems.push("<ul>");
-		var _g = 0;
-		while(_g < ni.length) {
-			var thisItem = ni[_g];
-			++_g;
-			navItems.push("<li><a href=\"/portfolio/" + i + "/\">" + thisItem + "</a></li>");
-			i++;
-		}
-		navItems.push("</ul>");
-		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
-			var $r;
-			var d = { title : "Portfolio", content : navItems.join("")};
-			$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+	,portfolioNavPartialShell: function(id) {
+		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getItem(id),function(result) {
+			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 				var $r;
 				var obj = { };
 				$r = obj != null?obj:{ };
 				return $r;
-			}($this)),d);
-			return $r;
-		}(this))),(function($this) {
-			var $r;
-			var className = Type.getClassName(actions_ConfidantInterface);
-			$r = className;
-			return $r;
-		}(this)),{ msg : "simpleAction"});
-	}
-	,portfolioNavPartialShell: function(args) {
-		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
-			var $r;
-			var obj = { };
-			$r = obj != null?obj:{ };
-			return $r;
-		}(this)),{ title : "Portfolio Item", random : "not really random"})),(function($this) {
-			var $r;
-			var className = Type.getClassName(actions_ConfidantInterface);
-			$r = className;
-			return $r;
-		}(this)),{ msg : "simpleAction"});
+			}(this)),{ title : "Portfolio Item", viewContent : "Better!", content : "", portfolioItem : result})),(function($this) {
+				var $r;
+				var className = Type.getClassName(actions_ConfidantInterface);
+				$r = className;
+				return $r;
+			}(this)),{ msg : "simpleAction"});
+		});
 	}
 	,execute: function() {
 		var uriParts = this.context.actionContext.get_uriParts();
@@ -936,63 +926,54 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		this.context.actionContext.action = "execute";
 		try {
 			if(method.toLowerCase() == "get" && 0 == uriParts.length) {
-				var _param_tmp_param = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"param");
-				var args = { param : _param_tmp_param};
 				this.context.actionContext.action = "main";
-				this.context.actionContext.args = [args];
+				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,0);
 				var wrappingRequired;
 				var i = haxe_rtti_Meta.getFields(controller_HomeController).main.wrapResult[0];
 				wrappingRequired = i;
-				var result = this.wrapResult(this.main(args),wrappingRequired);
+				var result = this.wrapResult(this.main(),wrappingRequired);
 				this.setContextActionResultWhenFinished(result);
 				return result;
 			} else if(method.toLowerCase() == "get" && 1 == uriParts.length && uriParts[0] == "about") {
-				var _param_tmp_param1 = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"param");
-				var args1 = { param : _param_tmp_param1};
 				this.context.actionContext.action = "about";
-				this.context.actionContext.args = [args1];
+				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,1);
 				var wrappingRequired1;
 				var i1 = haxe_rtti_Meta.getFields(controller_HomeController).about.wrapResult[0];
 				wrappingRequired1 = i1;
-				var result1 = this.wrapResult(this.about(args1),wrappingRequired1);
+				var result1 = this.wrapResult(this.about(),wrappingRequired1);
 				this.setContextActionResultWhenFinished(result1);
 				return result1;
 			} else if(method.toLowerCase() == "get" && 1 == uriParts.length && uriParts[0] == "contact") {
-				var _param_tmp_param2 = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"param");
-				var args2 = { param : _param_tmp_param2};
 				this.context.actionContext.action = "contact";
-				this.context.actionContext.args = [args2];
+				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,1);
 				var wrappingRequired2;
 				var i2 = haxe_rtti_Meta.getFields(controller_HomeController).contact.wrapResult[0];
 				wrappingRequired2 = i2;
-				var result2 = this.wrapResult(this.contact(args2),wrappingRequired2);
+				var result2 = this.wrapResult(this.contact(),wrappingRequired2);
 				this.setContextActionResultWhenFinished(result2);
 				return result2;
 			} else if(method.toLowerCase() == "get" && 1 == uriParts.length && uriParts[0] == "portfolio") {
-				var _param_tmp_id = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"id");
-				var args3 = { id : _param_tmp_id};
 				this.context.actionContext.action = "portfolio";
-				this.context.actionContext.args = [args3];
+				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,1);
 				var wrappingRequired3;
 				var i3 = haxe_rtti_Meta.getFields(controller_HomeController).portfolio.wrapResult[0];
 				wrappingRequired3 = i3;
-				var result3 = this.wrapResult(this.portfolio(args3),wrappingRequired3);
+				var result3 = this.wrapResult(this.portfolio(),wrappingRequired3);
 				this.setContextActionResultWhenFinished(result3);
 				return result3;
 			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "portfolio" && uriParts[1].length > 0) {
-				var _param_tmp_id1 = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"id");
-				var args4 = { id : _param_tmp_id1};
+				var id = uriParts[1];
 				this.context.actionContext.action = "portfolioNavPartialShell";
-				this.context.actionContext.args = [args4];
+				this.context.actionContext.args = [id];
 				this.context.actionContext.get_uriParts().splice(0,2);
 				var wrappingRequired4;
 				var i4 = haxe_rtti_Meta.getFields(controller_HomeController).portfolioNavPartialShell.wrapResult[0];
 				wrappingRequired4 = i4;
-				var result4 = this.wrapResult(this.portfolioNavPartialShell(args4),wrappingRequired4);
+				var result4 = this.wrapResult(this.portfolioNavPartialShell(id),wrappingRequired4);
 				this.setContextActionResultWhenFinished(result4);
 				return result4;
 			}
@@ -10548,11 +10529,11 @@ var DataView = $global.DataView || js_html_compat_DataView;
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
 CompileTimeClassList.__meta__ = { obj : { classLists : [["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"],["null,true,ufront.web.client.UFClientAction","actions.ConfidantInterface"],["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"]]}};
 ufront_api_UFApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.Connection",""]]}};
-api_TestApi.__meta__ = { obj : { asyncApi : ["api.AsyncTestApi"]}, fields : { test : { returnType : [3]}}};
+api_TestApi.__meta__ = { obj : { asyncApi : ["api.AsyncTestApi"]}, fields : { getJson : { returnType : [3]}, getItem : { returnType : [3]}}};
 ufront_api_UFAsyncApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.AsyncConnection",""]]}};
 api_AsyncTestApi.__meta__ = { obj : { rtti : [["injectApi","minject.Injector","",""]]}};
 ufront_web_Controller.__meta__ = { obj : { rtti : [["injectContext","ufront.web.context.HttpContext","",""]]}};
-controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [4]}, about : { wrapResult : [4]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [3]}, portfolioNavPartialShell : { wrapResult : [3]}}};
+controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [3]}, about : { wrapResult : [3]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [4]}, portfolioNavPartialShell : { wrapResult : [4]}}};
 haxe_IMap.__meta__ = { obj : { 'interface' : null}};
 haxe_Serializer.USE_CACHE = false;
 haxe_Serializer.USE_ENUM_INDEX = false;

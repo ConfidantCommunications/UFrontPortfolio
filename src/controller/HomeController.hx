@@ -13,55 +13,43 @@ class HomeController extends Controller
 	public var testApi:AsyncTestApi;
 	
 	@:route(GET, "/")
-	public function main(?args:{param:String})
+	public function main()
 	{
-		return testApi.test(args.param) >>
-			function(result:String) return new ViewResult({
-				title: "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan",
-				message: 'Result: $result', // print the result of the API call
-				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
+		return new PartialViewResult({
+				title: "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan"
 			})
 			//.addPartial("panel2Partial","home.html")
 			//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
-	}
+	} 
 	
 	//@:route(GET, "/portfolio/*")
 	//public var portfolioController:PortfolioController;
 	//@:route(GET, "/portfolio/*")
 	@:route(GET, "/about")
 
-	public function about(?args:{param:String})
+	public function about()
 	{
-		return testApi.test(args.param) >>
-			function(result:String) return new PartialViewResult({
+		return new PartialViewResult({
 				title: "Confidant Communications : About Us",
-				message: 'Result: $result', // print the result of the API call
-				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
+				portfolioItem:""
 			})
-			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
-			
+			.addClientAction(ConfidantInterface,{msg:"simpleAction"});		
 	}
 	@:route(GET, "/contact")
 
-	public function contact(?args:{param:String})
+	public function contact()
 	{
-		/*return testApi.test(args.param) >>
-			function(result:String) return new ViewResult({
-				title: "Confidant Communications : Portfolio",
-				header1:"Contact Us",
-				message: 'Result: $result', // print the result of the API call
-				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
-			});*/
 		return new PartialViewResult({ 
-			title:'Contact Us'
+			title:'Contact Us',
+			portfolioItem:""
 		})
 		
 		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 	}
 	
 	@:route(GET, "/portfolio")
-	public function portfolio(?args:{id:String})
+	public function portfolio()
 	{
 		/*return testApi.test(args.param) >>
 			function(result:String) return new ViewResult({
@@ -72,25 +60,23 @@ class HomeController extends Controller
 		//	untyped __js__('alert("yes")');
 		
 		//ufLog('Custom id ${args.id} entered');
-		var ni = [
-"Interactive Development","Overview","ThinkSask.ca","Wapos Bay Flash Site","PotashCorp Slideshow Player","Shelterbelt Design Tool","Lentil Hunter Map",
-"Print / Miscellaneous","Book Cover Designs","T-Shirt Design","Product Packaging","Logo Designs",
-"Websites","Agtron","Faith River","All-West Dental","Mable Elliott Guest Ranch","J.B. Black Estates","ICR Commercial Real Estate","Transforming Teachers"];
+//		var path=context.contentDirectory+"portfolio.json";
+	
+		var path="portfolio.json";	
+		return testApi.getJson(path) >>
+			function(result:String) return new PartialViewResult({
+				title: "Portfolio",
+				content:result,
+				portfolioItem:"",
+				random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
+			})
+			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+		//	untyped __js__('alert("yes")');
 		
-		var navItems:Array<String>=new Array<String>();
-		var i=1;
-		navItems.push("<ul>");
-		for (thisItem in ni){
-			navItems.push('<li><a href="/portfolio/$i/">'+thisItem+"</a></li>");
-			i++;
-		}
-		navItems.push("</ul>");
-		return new PartialViewResult({ 
-			title:"Portfolio",
-			content:navItems.join("")
-		})
+		
+		
 		//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
-		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+		//.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
 		
 		/*
@@ -102,17 +88,33 @@ class HomeController extends Controller
 		.addPartial( "nav", "nav.html", TemplatingEngines.erazorHtml );*/
 		//.withLayout("layoutE.html",TemplatingEngines.erazorHtml)
 		//.addPartialString( "btn", "<a href='::link::' class='btn'>::name::</a>", TemplatingEngines.haxe );
-
 	}
 	@:route(GET, "/portfolio/$id")
-	public function portfolioNavPartialShell(?args:{id:String})
+	public function portfolioNavPartialShell(id:String)
 	{
+		/*
 		return new PartialViewResult({
 			title:"Portfolio Item",
 			random:"not really random"
 		})
 		
 		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+		
+		*/
+		
+		
+		return testApi.getItem(id) >>
+			function(result:String) return new PartialViewResult({
+				title: "Portfolio Item",
+				viewContent:"Better!",
+				content:"",
+				portfolioItem: result
+				//portfolioItem: 'Result: $result'//, // print the result of the API call
+				//random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
+			})
+			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+		//	untyped __js__('alert("yes")');
+		
 		
 	}
 	

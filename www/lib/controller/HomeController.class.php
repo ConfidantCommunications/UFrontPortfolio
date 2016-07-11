@@ -6,35 +6,21 @@ class controller_HomeController extends ufront_web_Controller {
 		parent::__construct();
 	}}
 	public $testApi;
-	public function main($args = null) {
-		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->test($args->param), array(new _hx_lambda(array(&$args), "controller_HomeController_0"), 'execute'));
+	public function main() {
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan"))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
-	public function about($args = null) {
-		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->test($args->param), array(new _hx_lambda(array(&$args), "controller_HomeController_1"), 'execute'));
+	public function about() {
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this), _hx_anonymous(array("title" => "Confidant Communications : About Us", "portfolioItem" => ""))), null, null), controller_HomeController_3($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
-	public function contact($args = null) {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this, $args), _hx_anonymous(array("title" => "Contact Us"))), null, null), controller_HomeController_3($this, $args), _hx_anonymous(array("msg" => "simpleAction")));
+	public function contact() {
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_4($this), _hx_anonymous(array("title" => "Contact Us", "portfolioItem" => ""))), null, null), controller_HomeController_5($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
-	public function portfolio($args = null) {
-		$ni = (new _hx_array(array("Interactive Development", "Overview", "ThinkSask.ca", "Wapos Bay Flash Site", "PotashCorp Slideshow Player", "Shelterbelt Design Tool", "Lentil Hunter Map", "Print / Miscellaneous", "Book Cover Designs", "T-Shirt Design", "Product Packaging", "Logo Designs", "Websites", "Agtron", "Faith River", "All-West Dental", "Mable Elliott Guest Ranch", "J.B. Black Estates", "ICR Commercial Real Estate", "Transforming Teachers")));
-		$navItems = new _hx_array(array());
-		$i = 1;
-		$navItems->push("<ul>");
-		{
-			$_g = 0;
-			while($_g < $ni->length) {
-				$thisItem = $ni[$_g];
-				++$_g;
-				$navItems->push("<li><a href=\"/portfolio/" . _hx_string_rec($i, "") . "/\">" . _hx_string_or_null($thisItem) . "</a></li>");
-				$i++;
-				unset($thisItem);
-			}
-		}
-		$navItems->push("</ul>");
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(controller_HomeController_4($this, $args, $i, $navItems, $ni), null, null), controller_HomeController_5($this, $args, $i, $navItems, $ni), _hx_anonymous(array("msg" => "simpleAction")));
+	public function portfolio() {
+		$path = "portfolio.json";
+		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->getJson($path), array(new _hx_lambda(array(&$path), "controller_HomeController_6"), 'execute'));
 	}
-	public function portfolioNavPartialShell($args = null) {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_6($this, $args), _hx_anonymous(array("title" => "Portfolio Item", "random" => "not really random"))), null, null), controller_HomeController_7($this, $args), _hx_anonymous(array("msg" => "simpleAction")));
+	public function portfolioNavPartialShell($id) {
+		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->getItem($id), array(new _hx_lambda(array(&$id), "controller_HomeController_7"), 'execute'));
 	}
 	public function execute() {
 		$uriParts = $this->context->actionContext->get_uriParts();
@@ -44,77 +30,68 @@ class controller_HomeController extends ufront_web_Controller {
 		$this->context->actionContext->action = "execute";
 		try {
 			if(strtolower($method) === "get" && 0 === $uriParts->length) {
-				$_param_tmp_param = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "param");
-				$args = _hx_anonymous(array("param" => $_param_tmp_param));
 				$this->context->actionContext->action = "main";
-				$this->context->actionContext->args = (new _hx_array(array($args)));
+				$this->context->actionContext->args = (new _hx_array(array()));
 				$this->context->actionContext->get_uriParts()->splice(0, 0);
 				$wrappingRequired = null;
 				{
 					$i = haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController"))->main->wrapResult[0];
 					$wrappingRequired = $i;
 				}
-				$result = $this->wrapResult($this->main($args), $wrappingRequired);
+				$result = $this->wrapResult($this->main(), $wrappingRequired);
 				$this->setContextActionResultWhenFinished($result);
 				return $result;
 			} else {
 				if(strtolower($method) === "get" && 1 === $uriParts->length && $uriParts[0] === "about") {
-					$_param_tmp_param1 = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "param");
-					$args1 = _hx_anonymous(array("param" => $_param_tmp_param1));
 					$this->context->actionContext->action = "about";
-					$this->context->actionContext->args = (new _hx_array(array($args1)));
+					$this->context->actionContext->args = (new _hx_array(array()));
 					$this->context->actionContext->get_uriParts()->splice(0, 1);
 					$wrappingRequired1 = null;
 					{
 						$i1 = haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController"))->about->wrapResult[0];
 						$wrappingRequired1 = $i1;
 					}
-					$result1 = $this->wrapResult($this->about($args1), $wrappingRequired1);
+					$result1 = $this->wrapResult($this->about(), $wrappingRequired1);
 					$this->setContextActionResultWhenFinished($result1);
 					return $result1;
 				} else {
 					if(strtolower($method) === "get" && 1 === $uriParts->length && $uriParts[0] === "contact") {
-						$_param_tmp_param2 = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "param");
-						$args2 = _hx_anonymous(array("param" => $_param_tmp_param2));
 						$this->context->actionContext->action = "contact";
-						$this->context->actionContext->args = (new _hx_array(array($args2)));
+						$this->context->actionContext->args = (new _hx_array(array()));
 						$this->context->actionContext->get_uriParts()->splice(0, 1);
 						$wrappingRequired2 = null;
 						{
 							$i2 = haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController"))->contact->wrapResult[0];
 							$wrappingRequired2 = $i2;
 						}
-						$result2 = $this->wrapResult($this->contact($args2), $wrappingRequired2);
+						$result2 = $this->wrapResult($this->contact(), $wrappingRequired2);
 						$this->setContextActionResultWhenFinished($result2);
 						return $result2;
 					} else {
 						if(strtolower($method) === "get" && 1 === $uriParts->length && $uriParts[0] === "portfolio") {
-							$_param_tmp_id = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "id");
-							$args3 = _hx_anonymous(array("id" => $_param_tmp_id));
 							$this->context->actionContext->action = "portfolio";
-							$this->context->actionContext->args = (new _hx_array(array($args3)));
+							$this->context->actionContext->args = (new _hx_array(array()));
 							$this->context->actionContext->get_uriParts()->splice(0, 1);
 							$wrappingRequired3 = null;
 							{
 								$i3 = haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController"))->portfolio->wrapResult[0];
 								$wrappingRequired3 = $i3;
 							}
-							$result3 = $this->wrapResult($this->portfolio($args3), $wrappingRequired3);
+							$result3 = $this->wrapResult($this->portfolio(), $wrappingRequired3);
 							$this->setContextActionResultWhenFinished($result3);
 							return $result3;
 						} else {
 							if(strtolower($method) === "get" && 2 === $uriParts->length && $uriParts[0] === "portfolio" && strlen($uriParts[1]) > 0) {
-								$_param_tmp_id1 = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "id");
-								$args4 = _hx_anonymous(array("id" => $_param_tmp_id1));
+								$id = $uriParts[1];
 								$this->context->actionContext->action = "portfolioNavPartialShell";
-								$this->context->actionContext->args = (new _hx_array(array($args4)));
+								$this->context->actionContext->args = (new _hx_array(array($id)));
 								$this->context->actionContext->get_uriParts()->splice(0, 2);
 								$wrappingRequired4 = null;
 								{
 									$i4 = haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController"))->portfolioNavPartialShell->wrapResult[0];
 									$wrappingRequired4 = $i4;
 								}
-								$result4 = $this->wrapResult($this->portfolioNavPartialShell($args4), $wrappingRequired4);
+								$result4 = $this->wrapResult($this->portfolioNavPartialShell($id), $wrappingRequired4);
 								$this->setContextActionResultWhenFinished($result4);
 								return $result4;
 							}
@@ -145,80 +122,74 @@ class controller_HomeController extends ufront_web_Controller {
 	static $__meta__;
 	function __toString() { return 'controller.HomeController'; }
 }
-controller_HomeController::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.AsyncTestApi", "")))))))), "fields" => _hx_anonymous(array("main" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "about" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "contact" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "portfolio" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "portfolioNavPartialShell" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3)))))))));
-function controller_HomeController_0(&$args, $result) {
-	{
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_ViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_8($args, $result), _hx_anonymous(array("title" => "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", "message" => "Result: " . _hx_string_or_null($result), "renderedBy" => "Server"))), null, null), controller_HomeController_9($args, $result), _hx_anonymous(array("msg" => "simpleAction")));
-	}
-}
-function controller_HomeController_1(&$args, $result) {
-	{
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_10($args, $result), _hx_anonymous(array("title" => "Confidant Communications : About Us", "message" => "Result: " . _hx_string_or_null($result), "renderedBy" => "Server"))), null, null), controller_HomeController_11($args, $result), _hx_anonymous(array("msg" => "simpleAction")));
-	}
-}
-function controller_HomeController_2(&$__hx__this, &$args) {
+controller_HomeController::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.AsyncTestApi", "")))))))), "fields" => _hx_anonymous(array("main" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "about" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "contact" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "portfolio" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "portfolioNavPartialShell" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4)))))))));
+function controller_HomeController_0(&$__hx__this) {
 	{
 		$obj = _hx_anonymous(array());
 		return (($obj !== null) ? $obj : _hx_anonymous(array()));
 	}
 }
-function controller_HomeController_3(&$__hx__this, &$args) {
+function controller_HomeController_1(&$__hx__this) {
 	{
 		$className = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
 		return $className;
 	}
 }
-function controller_HomeController_4(&$__hx__this, &$args, &$i, &$navItems, &$ni) {
-	{
-		$d = _hx_anonymous(array("title" => "Portfolio", "content" => $navItems->join("")));
-		return ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_12($args, $d, $i, $navItems, $ni), $d);
-	}
-}
-function controller_HomeController_5(&$__hx__this, &$args, &$i, &$navItems, &$ni) {
-	{
-		$className = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
-		return $className;
-	}
-}
-function controller_HomeController_6(&$__hx__this, &$args) {
+function controller_HomeController_2(&$__hx__this) {
 	{
 		$obj = _hx_anonymous(array());
 		return (($obj !== null) ? $obj : _hx_anonymous(array()));
 	}
 }
-function controller_HomeController_7(&$__hx__this, &$args) {
+function controller_HomeController_3(&$__hx__this) {
 	{
 		$className = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
 		return $className;
 	}
 }
-function controller_HomeController_8(&$args, &$result) {
+function controller_HomeController_4(&$__hx__this) {
 	{
 		$obj = _hx_anonymous(array());
 		return (($obj !== null) ? $obj : _hx_anonymous(array()));
 	}
 }
-function controller_HomeController_9(&$args, &$result) {
+function controller_HomeController_5(&$__hx__this) {
 	{
 		$className = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
 		return $className;
 	}
 }
-function controller_HomeController_10(&$args, &$result) {
+function controller_HomeController_6(&$path, $result) {
+	{
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_8($path, $result), _hx_anonymous(array("title" => "Portfolio", "content" => $result, "portfolioItem" => "", "random" => "Server"))), null, null), controller_HomeController_9($path, $result), _hx_anonymous(array("msg" => "simpleAction")));
+	}
+}
+function controller_HomeController_7(&$id, $result) {
+	{
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_10($id, $result), _hx_anonymous(array("title" => "Portfolio Item", "viewContent" => "Better!", "content" => "", "portfolioItem" => $result))), null, null), controller_HomeController_11($id, $result), _hx_anonymous(array("msg" => "simpleAction")));
+	}
+}
+function controller_HomeController_8(&$path, &$result) {
 	{
 		$obj = _hx_anonymous(array());
 		return (($obj !== null) ? $obj : _hx_anonymous(array()));
 	}
 }
-function controller_HomeController_11(&$args, &$result) {
+function controller_HomeController_9(&$path, &$result) {
 	{
 		$className = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
 		return $className;
 	}
 }
-function controller_HomeController_12(&$args, &$d, &$i, &$navItems, &$ni) {
+function controller_HomeController_10(&$id, &$result) {
 	{
 		$obj = _hx_anonymous(array());
 		return (($obj !== null) ? $obj : _hx_anonymous(array()));
+	}
+}
+function controller_HomeController_11(&$id, &$result) {
+	{
+		$className = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
+		return $className;
 	}
 }

@@ -4,8 +4,11 @@ class api_AsyncTestApi extends ufront_api_UFAsyncApi {
 	public function __construct() { if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public function test($param) {
-		return $this->_makeApiCall("test", (new _hx_array(array($param))), 3, _hx_anonymous(array("methodName" => "test", "lineNumber" => 0, "customParams" => null, "fileName" => "src/api/TestApi.hx", "className" => "AsyncTestApi")));
+	public function getJson($path) {
+		return $this->_makeApiCall("getJson", (new _hx_array(array($path))), 3, _hx_anonymous(array("methodName" => "getJson", "lineNumber" => 0, "customParams" => null, "fileName" => "src/api/TestApi.hx", "className" => "AsyncTestApi")));
+	}
+	public function getItem($id) {
+		return $this->_makeApiCall("getItem", (new _hx_array(array($id))), 3, _hx_anonymous(array("methodName" => "getItem", "lineNumber" => 0, "customParams" => null, "fileName" => "src/api/TestApi.hx", "className" => "AsyncTestApi")));
 	}
 	public function injectApi($injector) {
 		try {
