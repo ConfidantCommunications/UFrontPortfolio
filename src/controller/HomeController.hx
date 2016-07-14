@@ -90,33 +90,47 @@ class HomeController extends Controller
 		//.addPartialString( "btn", "<a href='::link::' class='btn'>::name::</a>", TemplatingEngines.haxe );
 	}
 	@:route(GET, "/portfolio/$id")
-	public function portfolioNavPartialShell(id:String)
+	public function returnPortfolioItem(id:String)
 	{
-		/*
-		return new PartialViewResult({
-			title:"Portfolio Item",
-			random:"not really random"
-		})
-		
-		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
-		
-		*/
-		
 		
 		return testApi.getItem(id) >>
 			function(result:String) return new PartialViewResult({
 				title: "Portfolio Item",
-				viewContent:"Better!",
 				content:"",
 				portfolioItem: result
 				//portfolioItem: 'Result: $result'//, // print the result of the API call
 				//random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
-			})
+			},"portfolio.html")
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//	untyped __js__('alert("yes")');
 		
 		
 	}
+/*	
+	@:route(GET, "/portfolio2")
+	public function whatever()
+	{
+
 	
-	
+		var path="portfolio.json";	
+		return testApi.getJson(path) >>
+			function(result:String) return new ViewResult({
+				title: "Portfolio2",
+				content:"howdy",
+				portfolioItem:"from controller",
+				mytest:"Test partial from controller!"
+			},"portfolio2.html")
+	//		.addPartial("testPartial","testPartialOutside.html")
+			.addPartialString( "testPartial", "<p>::mytest:: From string</p>", TemplatingEngines.haxe )
+			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+		//	untyped __js__('alert("yes")');
+		
+		
+		
+		//.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
+		
+		//.withLayout("layoutE.html",TemplatingEngines.erazorHtml)
+		//.addPartialString( "btn", "<a href='::link::' class='btn'>::name::</a>", TemplatingEngines.haxe );
+	}*/
 }

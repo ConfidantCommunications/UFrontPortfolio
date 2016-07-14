@@ -903,14 +903,14 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			}(this)),{ msg : "simpleAction"});
 		});
 	}
-	,portfolioNavPartialShell: function(id) {
+	,returnPortfolioItem: function(id) {
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getItem(id),function(result) {
 			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 				var $r;
 				var obj = { };
 				$r = obj != null?obj:{ };
 				return $r;
-			}(this)),{ title : "Portfolio Item", viewContent : "Better!", content : "", portfolioItem : result})),(function($this) {
+			}(this)),{ title : "Portfolio Item", content : "", portfolioItem : result}),"portfolio.html"),(function($this) {
 				var $r;
 				var className = Type.getClassName(actions_ConfidantInterface);
 				$r = className;
@@ -967,13 +967,13 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				return result3;
 			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "portfolio" && uriParts[1].length > 0) {
 				var id = uriParts[1];
-				this.context.actionContext.action = "portfolioNavPartialShell";
+				this.context.actionContext.action = "returnPortfolioItem";
 				this.context.actionContext.args = [id];
 				this.context.actionContext.get_uriParts().splice(0,2);
 				var wrappingRequired4;
-				var i4 = haxe_rtti_Meta.getFields(controller_HomeController).portfolioNavPartialShell.wrapResult[0];
+				var i4 = haxe_rtti_Meta.getFields(controller_HomeController).returnPortfolioItem.wrapResult[0];
 				wrappingRequired4 = i4;
-				var result4 = this.wrapResult(this.portfolioNavPartialShell(id),wrappingRequired4);
+				var result4 = this.wrapResult(this.returnPortfolioItem(id),wrappingRequired4);
 				this.setContextActionResultWhenFinished(result4);
 				return result4;
 			}
@@ -10533,7 +10533,7 @@ api_TestApi.__meta__ = { obj : { asyncApi : ["api.AsyncTestApi"]}, fields : { ge
 ufront_api_UFAsyncApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.AsyncConnection",""]]}};
 api_AsyncTestApi.__meta__ = { obj : { rtti : [["injectApi","minject.Injector","",""]]}};
 ufront_web_Controller.__meta__ = { obj : { rtti : [["injectContext","ufront.web.context.HttpContext","",""]]}};
-controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [3]}, about : { wrapResult : [3]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [4]}, portfolioNavPartialShell : { wrapResult : [4]}}};
+controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [3]}, about : { wrapResult : [3]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [4]}, returnPortfolioItem : { wrapResult : [4]}}};
 haxe_IMap.__meta__ = { obj : { 'interface' : null}};
 haxe_Serializer.USE_CACHE = false;
 haxe_Serializer.USE_ENUM_INDEX = false;
