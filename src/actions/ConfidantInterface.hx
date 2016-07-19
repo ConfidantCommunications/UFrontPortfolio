@@ -87,7 +87,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     var tim = haxe.Timer.delay(fn,100);
   }
 
-
+/*
 
   function next(e:Dynamic){
     document.querySelector("#stage").className="";
@@ -95,7 +95,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     
     /*currentLevel++;
     //ufTrace(currentLevel);
-    updateClasses();*/ 
+    updateClasses();* / 
   }
   function prev(e:Dynamic){
     document.querySelector("#stage").className="reversed";
@@ -112,7 +112,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     //updateClasses();
 
   }
-
+*/
   
 
 }

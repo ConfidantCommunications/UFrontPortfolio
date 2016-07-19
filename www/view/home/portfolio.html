@@ -1,7 +1,12 @@
 ﻿<h1>::title::</h1>
 <div id="copy">
 	<div>
-		::content::
+		<ul>
+		::foreach content::
+			    ::if (group == 0)::<h2>::title::</h2>
+			    ::else::<li><a href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
+			    ::end::
+		::end::
+		</ul>
 	</div>
-	
 </div>

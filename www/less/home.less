@@ -37,8 +37,9 @@ h1{
         line-height:1em;
         text-align:center;
 }
-.bbq-content{margin:0 10%;}
+.content{margin:0 10%;}
 .bbq-item{max-width: 40em;margin:0 auto;width:100%;}
+.limitWidth{max-width:30em;margin:0 auto;}
 dt{
     display:block;
     float:left;
@@ -87,6 +88,23 @@ nav{
         height:100px;
         line-height:.5em;
     }
+#portfolioPrev,#portfolioNext{
+    display:table;
+    position:absolute;
+    top:0;
+    height:100%;
+    width:10%;
+    color:@brand-primary;
+    font-size:8em;
+    font-weight:bold;
+        z-index:98;
+    a{
+        display:table-cell;
+        vertical-align:middle;
+    }
+}
+#portfolioPrev{left:0;}
+#portfolioNext{right:0;text-align:right;}
 #panel1 { //homepage logo
     position: absolute;
     top: 50%;

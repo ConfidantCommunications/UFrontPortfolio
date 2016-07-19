@@ -5,43 +5,58 @@ class api_TestApi extends ufront_api_UFApi {
 		parent::__construct();
 	}}
 	public function getJson($path) {
-		$pJson = "nothing";
+		$theJson = "nothing";
 		if(file_exists($path)) {
-			$pJson = sys_io_File::getContent($path);
+			$theJson = sys_io_File::getContent($path);
 		}
-		$parsed = haxe_Json::phpJsonDecode($pJson);
-		$navItems = new _hx_array(array());
-		$i = 1;
-		$arr = $parsed->items;
+		return ufront_core_SurpriseTools::asGoodSurprise($theJson);
+	}
+	public function getItem($slug) {
+		$path = "portfolioStuff/" . _hx_string_or_null($slug) . ".html";
+		$jsonPath = "portfolio.json";
+		$portfolioItemHtml = "nothing";
+		$portfolioJson = "";
+		if(file_exists($path)) {
+			$portfolioItemHtml = sys_io_File::getContent($path);
+		}
+		if(file_exists($path)) {
+			$portfolioJson = sys_io_File::getContent($jsonPath);
+		}
+		$pj = haxe_Json::phpJsonDecode($portfolioJson);
 		{
-			$_g = 0;
-			while($_g < $arr->length) {
-				$thisItem = $arr[$_g];
-				++$_g;
-				if(_hx_equal($thisItem[0], 0) && $i === 1) {
-					$navItems->push("<h2>" . Std::string($thisItem[1]) . "</h2><ul>");
-				} else {
-					if(_hx_equal($thisItem[0], 0)) {
-						$navItems->push("</ul><h2>" . Std::string($thisItem[1]) . "</h2><ul>");
+			$_g1 = 0;
+			$_g = $pj->items->length;
+			while($_g1 < $_g) {
+				$i = $_g1++;
+				haxe_Log::trace(_hx_string_rec($i, "") . ":" . _hx_string_or_null(_hx_array_get($pj->items, $i)->slug) . ":" . _hx_string_or_null($slug), _hx_anonymous(array("fileName" => "TestApi.hx", "lineNumber" => 57, "className" => "api.TestApi", "methodName" => "getItem")));
+				if(_hx_array_get($pj->items, $i)->slug === $slug) {
+					$back = null;
+					if($i === 0) {
+						$back = 0;
 					} else {
-						$navItems->push("<li><a href=\"/portfolio/" . Std::string($thisItem[2]) . "/\" rel=\"pushstate\">" . Std::string($thisItem[1]) . "</a></li>");
+						$back = $i - 1;
 					}
+					$fwd = null;
+					if($i >= $pj->items->length - 1) {
+						$fwd = $i;
+					} else {
+						$fwd = $i + 1;
+					}
+					$portfolioItem = new api_PortfolioItem($portfolioItemHtml, "/portfolio/" . _hx_string_or_null(_hx_array_get($pj->items, $back)->slug) . "/", "/portfolio/" . _hx_string_or_null(_hx_array_get($pj->items, $fwd)->slug) . "/");
+					return ufront_core_SurpriseTools::asGoodSurprise($portfolioItem);
+					unset($portfolioItem,$fwd,$back);
 				}
-				$i++;
-				unset($thisItem);
+				unset($i);
 			}
 		}
-		$navItems->push("</ul>");
-		$sp = $navItems->join("");
-		return ufront_core_SurpriseTools::asGoodSurprise($sp);
+		return ufront_core_SurpriseTools::asGoodSurprise(new api_PortfolioItem($portfolioItemHtml, "error", "error"));
 	}
-	public function getItem($id) {
-		$path = "portfolioStuff/" . _hx_string_or_null($id) . ".html";
-		$result = "nothing";
-		if(file_exists($path)) {
-			$result = sys_io_File::getContent($path);
+	public function portfolioNavLink($id, $forward = null) {
+		if($forward === null) {
+			$forward = true;
 		}
-		return ufront_core_SurpriseTools::asGoodSurprise($result);
+		if($forward) {} else {}
+		return "";
 	}
 	static function __meta__() { $args = func_get_args(); return call_user_func_array(self::$__meta__, $args); }
 	static $__meta__;

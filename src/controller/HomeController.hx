@@ -1,12 +1,22 @@
 package controller;
 
 import api.TestApi;
+import api.PortfolioItem;
 import actions.ConfidantInterface;
 //import tink.core.Future;
 using ufront.MVC;
 using ufront.web.result.AddClientActionResult;
 
+typedef MyItem={
+	var group:Int;
+	var title:String;
+	var slug:String;
+}
 
+typedef MyData = {
+  //var name:String;
+  var items:Array<MyItem>;
+}
 class HomeController extends Controller
 {
 	@inject
@@ -66,27 +76,14 @@ class HomeController extends Controller
 		return testApi.getJson(path) >>
 			function(result:String) return new PartialViewResult({
 				title: "Portfolio",
-				content:result,
+				content:processJson(result),
 				portfolioItem:"",
 				random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			})
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
-		//	untyped __js__('alert("yes")');
-		
-		
-		
 		//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
 		//.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
-		
-		/*
-		return new ViewResult({
-			title: "Blog Admin",
-			description: "Take care of all the things",
-			posts: ni
-		})
-		.addPartial( "nav", "nav.html", TemplatingEngines.erazorHtml );*/
-		//.withLayout("layoutE.html",TemplatingEngines.erazorHtml)
 		//.addPartialString( "btn", "<a href='::link::' class='btn'>::name::</a>", TemplatingEngines.haxe );
 	}
 	@:route(GET, "/portfolio/$id")
@@ -94,43 +91,19 @@ class HomeController extends Controller
 	{
 		
 		return testApi.getItem(id) >>
-			function(result:String) return new PartialViewResult({
+			function(result:PortfolioItem) return new PartialViewResult({
 				title: "Portfolio Item",
-				content:"",
+				content:new Array<MyItem>(),
 				portfolioItem: result
 				//portfolioItem: 'Result: $result'//, // print the result of the API call
 				//random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			},"portfolio.html")
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
-		//	untyped __js__('alert("yes")');
-		
-		
 	}
-/*	
-	@:route(GET, "/portfolio2")
-	public function whatever()
-	{
 
+	private function processJson(pJson:String):Array<MyItem>{
+		var parsed:MyData=haxe.Json.parse(pJson);
+		return parsed.items;
+	}
 	
-		var path="portfolio.json";	
-		return testApi.getJson(path) >>
-			function(result:String) return new ViewResult({
-				title: "Portfolio2",
-				content:"howdy",
-				portfolioItem:"from controller",
-				mytest:"Test partial from controller!"
-			},"portfolio2.html")
-	//		.addPartial("testPartial","testPartialOutside.html")
-			.addPartialString( "testPartial", "<p>::mytest:: From string</p>", TemplatingEngines.haxe )
-			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
-		//	untyped __js__('alert("yes")');
-		
-		
-		
-		//.addClientAction(ConfidantInterface,{msg:"simpleAction"});
-		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
-		
-		//.withLayout("layoutE.html",TemplatingEngines.erazorHtml)
-		//.addPartialString( "btn", "<a href='::link::' class='btn'>::name::</a>", TemplatingEngines.haxe );
-	}*/
 }

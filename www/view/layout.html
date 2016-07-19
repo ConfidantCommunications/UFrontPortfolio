@@ -7,16 +7,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<title>::title::</title>  
 	<link rel="stylesheet" href="/css/home.css" media="screen" />
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
 </head>
 <body data-uf-layout="confidantlayout">
 	<div class="container">
 		
 		<div id="stage" class="">
-			<div id="panel1">
+			<div id="panel1" class="::panel1classes::">
 				<h1><img src="/images/confidantLogo.jpg" alt="Confidant Communications" /></h1>
 			
-				<ul id="nav" class="bbq-nav">
+				<ul id="nav">
 					<li id="about"><a rel="pushstate" href="/about/" title="Award-winning freelance graphic design in Saskatoon">About&#8239;Us</a></li>
 					<li id="portfolio"><a rel="pushstate" href="/portfolio/" title="View my websites, print design, interactive programming, web applications">Portfolio</a></li>
 					<li id="blog"><a href="http://confidant.ca/blog/" title="Thoughts on creativity, coding, and life.">Blog</a></li>
@@ -24,19 +23,32 @@
 				</ul>
 			</div>
 			
-			<div id="panel2" class="bbq">
-				<div class="bbq-content" data-uf-partial="panel2Partial">
+			<div id="panel2" class="::panel2classes::">
+				<div class="content" data-uf-partial="panel2Partial">
 					::viewContent::
 				</div>
 			
 			</div>
-			<div id="panel3">
-				<div class="bbq-content">
+			<div id="panel3" class="::panel3classes::">
+				<div class="content">
 					<div data-uf-partial="portfolioNavPartial" style="">
-						::portfolioItem::
+						::portfolioItem.html::
 					</div>
 				</div>
 			</div>
+		</div>
+		<div data-uf-partial="nextLinkPartial" id="portfolioPrev">
+			::if (portfolioItem.prevLink)::
+				<a href="::portfolioItem.prevLink::" rel="pushstate" title="">&lt;</a>
+			::end::
+			
+		</div>
+		<div data-uf-partial="prevLinkPartial" id="portfolioNext">
+			::if (portfolioItem.nextLink)::
+				<a href="::portfolioItem.nextLink::" rel="pushstate" title="">&gt;</a>		
+			::end::
+		</div>
+		<div id="gobackdiv">
 			<a id="goback" href="#" rel="pushstate" title="Go Back One Level">^</a>
 		</div>
 	</div>

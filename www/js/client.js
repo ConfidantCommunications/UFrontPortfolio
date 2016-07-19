@@ -636,19 +636,21 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	,delay: function(fn) {
 		var tim = haxe_Timer.delay(fn,100);
 	}
-	,next: function(e) {
-		window.document.querySelector("#stage").className = "";
-	}
-	,prev: function(e) {
-		window.document.querySelector("#stage").className = "reversed";
-		if(this.currentLevel > 0) {
-			var a = pushstate_PushState.currentPath.split("/");
-			a.pop();
-			pushstate_PushState.push(a.join("/"));
-		} else pushstate_PushState.push("/");
-	}
 	,__class__: actions_ConfidantInterface
 });
+var api_PortfolioItem = function(html,prev,next) {
+	this.html = html;
+	this.prevLink = prev;
+	this.nextLink = next;
+};
+$hxClasses["api.PortfolioItem"] = api_PortfolioItem;
+api_PortfolioItem.__name__ = ["api","PortfolioItem"];
+api_PortfolioItem.prototype = {
+	html: null
+	,prevLink: null
+	,nextLink: null
+	,__class__: api_PortfolioItem
+};
 var ufront_api_UFApi = function() {
 };
 $hxClasses["ufront.api.UFApi"] = ufront_api_UFApi;
@@ -688,8 +690,8 @@ api_TestApi.prototype = $extend(ufront_api_UFApi.prototype,{
 	getJson: function(path) {
 		return this._makeApiCall("getJson",[path]);
 	}
-	,getItem: function(id) {
-		return this._makeApiCall("getItem",[id]);
+	,getItem: function(slug) {
+		return this._makeApiCall("getItem",[slug]);
 	}
 	,__class__: api_TestApi
 });
@@ -749,8 +751,8 @@ api_AsyncTestApi.prototype = $extend(ufront_api_UFAsyncApi.prototype,{
 	getJson: function(path) {
 		return this._makeApiCall("getJson",[path],3,{ methodName : "getJson", lineNumber : 0, customParams : null, fileName : "src/api/TestApi.hx", className : "AsyncTestApi"});
 	}
-	,getItem: function(id) {
-		return this._makeApiCall("getItem",[id],3,{ methodName : "getItem", lineNumber : 0, customParams : null, fileName : "src/api/TestApi.hx", className : "AsyncTestApi"});
+	,getItem: function(slug) {
+		return this._makeApiCall("getItem",[slug],3,{ methodName : "getItem", lineNumber : 0, customParams : null, fileName : "src/api/TestApi.hx", className : "AsyncTestApi"});
 	}
 	,injectApi: function(injector) {
 		this.className = "api.TestApi";
@@ -888,14 +890,20 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		}(this)),{ msg : "simpleAction"});
 	}
 	,portfolio: function() {
+		var _g = this;
 		var path = "portfolio.json";
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getJson(path),function(result) {
-			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 				var $r;
-				var obj = { };
-				$r = obj != null?obj:{ };
+				var d = { title : "Portfolio", content : _g.processJson(result), portfolioItem : "", random : "Client"};
+				$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+					var $r;
+					var obj = { };
+					$r = obj != null?obj:{ };
+					return $r;
+				}($this)),d);
 				return $r;
-			}(this)),{ title : "Portfolio", content : result, portfolioItem : "", random : "Client"})),(function($this) {
+			}(this))),(function($this) {
 				var $r;
 				var className = Type.getClassName(actions_ConfidantInterface);
 				$r = className;
@@ -905,18 +913,27 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 	}
 	,returnPortfolioItem: function(id) {
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getItem(id),function(result) {
-			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 				var $r;
-				var obj = { };
-				$r = obj != null?obj:{ };
+				var d = { title : "Portfolio Item", content : [], portfolioItem : result};
+				$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+					var $r;
+					var obj = { };
+					$r = obj != null?obj:{ };
+					return $r;
+				}($this)),d);
 				return $r;
-			}(this)),{ title : "Portfolio Item", content : "", portfolioItem : result}),"portfolio.html"),(function($this) {
+			}(this)),"portfolio.html"),(function($this) {
 				var $r;
 				var className = Type.getClassName(actions_ConfidantInterface);
 				$r = className;
 				return $r;
 			}(this)),{ msg : "simpleAction"});
 		});
+	}
+	,processJson: function(pJson) {
+		var parsed = JSON.parse(pJson);
+		return parsed.items;
 	}
 	,execute: function() {
 		var uriParts = this.context.actionContext.get_uriParts();
@@ -977,11 +994,11 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				this.setContextActionResultWhenFinished(result4);
 				return result4;
 			}
-			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 10, className : "controller.HomeController", methodName : "execute"}));
+			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 20, className : "controller.HomeController", methodName : "execute"}));
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
 			if (e instanceof js__$Boot_HaxeError) e = e.val;
-			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 10, className : "controller.HomeController", methodName : "execute"});
+			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 20, className : "controller.HomeController", methodName : "execute"});
 		}
 	}
 	,__class__: controller_HomeController
