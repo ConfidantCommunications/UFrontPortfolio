@@ -1,12 +1,12 @@
 ﻿<h1>::title::</h1>
-<div id="copy">
-	<div>
-		<ul>
+<div class="portfolioGroups">
+		
 		::foreach content::
-			    ::if (group == 0)::<h2>::title::</h2>
+			    ::if (group == 1)::<div class="portfolioGroup"><h2>Interactive Development</h2><ul><li><a href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
+			    ::elseif (group == 2)::</ul></div><div class="portfolioGroup"><h2>Print / Miscellaneous</h2><ul><li><a href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
+			    ::elseif (group == 3)::</ul></div><div class="portfolioGroup"><h2>Websites</h2><ul><li><a href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
+			    ::elseif (group == 999)::<li><a href="/portfolio/::slug::/" rel="pushstate">::title::</a></li></ul></div>
 			    ::else::<li><a href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
 			    ::end::
 		::end::
-		</ul>
-	</div>
 </div>

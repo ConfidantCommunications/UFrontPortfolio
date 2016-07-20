@@ -601,11 +601,11 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	}
 	,listen: function() {
 		var _g = this;
-		window.document.querySelector("#stage").className = "";
 		var goback = window.document.querySelector("#goback");
 		var a = pushstate_PushState.currentPath.split("/");
 		a = a.splice(0,a.length - 2);
-		var newHash = "http://localhost:2987" + a.join("/") + "/";
+		window.document.querySelector("#stage").className = "";
+		var newHash = "http://" + window.location.host + a.join("/") + "/";
 		goback.setAttribute("href",newHash);
 		goback.addEventListener("click",function() {
 			window.document.querySelector("#stage").className = "reversed";

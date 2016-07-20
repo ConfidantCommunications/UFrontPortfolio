@@ -13,14 +13,15 @@
 		
 		<div id="stage" class="">
 			<div id="panel1" class="::panel1classes::">
-				<h1><img src="/images/confidantLogo.jpg" alt="Confidant Communications" /></h1>
-			
-				<ul id="nav">
-					<li id="about"><a rel="pushstate" href="/about/" title="Award-winning freelance graphic design in Saskatoon">About&#8239;Us</a></li>
-					<li id="portfolio"><a rel="pushstate" href="/portfolio/" title="View my websites, print design, interactive programming, web applications">Portfolio</a></li>
-					<li id="blog"><a href="http://confidant.ca/blog/" title="Thoughts on creativity, coding, and life.">Blog</a></li>
-					<li id="contact"><a rel="pushstate" href="/contact/" title="Phone numbers, email, etc.">Contact&#8239;Us</a></li>
-				</ul>
+				<img id="confidantLogo" src="/images/confidantLogo.jpg" alt="Confidant Communications" />
+				<nav id="nav">
+					<ul>
+						<li id="about"><a rel="pushstate" href="/about/" title="Award-winning freelance graphic design in Saskatoon">About&#8239;Us</a></li>
+						<li id="portfolio"><a rel="pushstate" href="/portfolio/" title="View my websites, print design, interactive programming, web applications">Portfolio</a></li>
+						<li id="blog"><a href="http://confidant.ca/blog/" title="Thoughts on creativity, coding, and life.">Blog</a></li>
+						<li id="contact"><a rel="pushstate" href="/contact/" title="Phone numbers, email, etc.">Contact&#8239;Us</a></li>
+					</ul>
+				</nav>
 			</div>
 			
 			<div id="panel2" class="::panel2classes::">
@@ -32,7 +33,9 @@
 			<div id="panel3" class="::panel3classes::">
 				<div class="content">
 					<div data-uf-partial="portfolioNavPartial" style="">
+						::if (portfolioItem.html)::
 						::portfolioItem.html::
+						::end::
 					</div>
 				</div>
 			</div>

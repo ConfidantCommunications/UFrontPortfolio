@@ -7,7 +7,7 @@ import ufront.MVC;
 import pushstate.PushState;
 import js.html.History;
 import js.Browser.document;
-
+import js.Browser.window;
 #end
 
 class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> {
@@ -26,12 +26,13 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
   }
 
   function listen():Void {
-    document.querySelector("#stage").className="";//remove reversal
 	//change the goback link
     var goback = document.querySelector('#goback');
     var a = PushState.currentPath.split("/");
     a=a.splice(0, a.length-2);
-	var newHash:String="http://localhost:2987"+a.join("/")+"/";
+    //if(a.length<1) 
+	document.querySelector("#stage").className="";//remove reversal
+	var newHash:String="http://"+window.location.host+a.join("/")+"/"; //"http://localhost:2987"+a.join("/")+"/";
     goback.setAttribute("href",newHash);
      
     goback.addEventListener("click",function(){
