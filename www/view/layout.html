@@ -4,7 +4,11 @@
 	<link rel="shortcut icon" href="favicon.ico" />
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 	<meta content="utf-8" http-equiv="encoding">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	
 	<title>::title::</title>  
 	<link rel="stylesheet" href="/css/home.css" media="screen" />
 </head>
@@ -51,8 +55,10 @@
 				<a href="::portfolioItem.nextLink::" rel="pushstate" title="">&gt;</a>		
 			::end::
 		</div>
-		<div id="gobackdiv">
-			<a id="goback" href="#" rel="pushstate" title="Go Back One Level">^</a>
+		<div id="gobackdiv" data-uf-partial="gobackPartial">
+		::if (gobackLink)::
+			<a id="goback" href="::gobackLink::" rel="pushstate" title="Go Back One Level">^</a>
+		::end::
 		</div>
 	</div>
 	<script type="text/javascript" src="/js/client.js"></script>

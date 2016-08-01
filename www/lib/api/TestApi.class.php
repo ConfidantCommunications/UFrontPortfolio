@@ -28,7 +28,7 @@ class api_TestApi extends ufront_api_UFApi {
 			$_g = $pj->items->length;
 			while($_g1 < $_g) {
 				$i = $_g1++;
-				haxe_Log::trace(_hx_string_rec($i, "") . ":" . _hx_string_or_null(_hx_array_get($pj->items, $i)->slug) . ":" . _hx_string_or_null($slug), _hx_anonymous(array("fileName" => "TestApi.hx", "lineNumber" => 57, "className" => "api.TestApi", "methodName" => "getItem")));
+				haxe_Log::trace(_hx_string_rec($i, "") . ":" . _hx_string_or_null(_hx_array_get($pj->items, $i)->slug) . ":" . _hx_string_or_null($slug), _hx_anonymous(array("fileName" => "TestApi.hx", "lineNumber" => 53, "className" => "api.TestApi", "methodName" => "getItem")));
 				if(_hx_array_get($pj->items, $i)->slug === $slug) {
 					$back = null;
 					if($i === 0) {
@@ -42,14 +42,14 @@ class api_TestApi extends ufront_api_UFApi {
 					} else {
 						$fwd = $i + 1;
 					}
-					$portfolioItem = new api_PortfolioItem($portfolioItemHtml, "/portfolio/" . _hx_string_or_null(_hx_array_get($pj->items, $back)->slug) . "/", "/portfolio/" . _hx_string_or_null(_hx_array_get($pj->items, $fwd)->slug) . "/");
+					$portfolioItem = new api_PortfolioItem($portfolioItemHtml, _hx_array_get($pj->items, $i)->title, "/portfolio/" . _hx_string_or_null(_hx_array_get($pj->items, $back)->slug) . "/", "/portfolio/" . _hx_string_or_null(_hx_array_get($pj->items, $fwd)->slug) . "/");
 					return ufront_core_SurpriseTools::asGoodSurprise($portfolioItem);
 					unset($portfolioItem,$fwd,$back);
 				}
 				unset($i);
 			}
 		}
-		return ufront_core_SurpriseTools::asGoodSurprise(new api_PortfolioItem($portfolioItemHtml, "error", "error"));
+		return ufront_core_SurpriseTools::asGoodSurprise(new api_PortfolioItem($portfolioItemHtml, "error", "error", "error"));
 	}
 	public function portfolioNavLink($id, $forward = null) {
 		if($forward === null) {

@@ -12,7 +12,8 @@ import js.Browser.window;
 
 class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> {
 
-
+	//TODO: add finger swipe:http://stackoverflow.com/questions/15084675/how-to-implement-swipe-gestures-for-mobile-devices
+	//http://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android/23230280#23230280
   //@expose
   public var currentLevel=1;
   public var currentPath="";
@@ -27,33 +28,31 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 
   function listen():Void {
 	//change the goback link
-    var goback = document.querySelector('#goback');
     var a = PushState.currentPath.split("/");
     a=a.splice(0, a.length-2);
-    //if(a.length<1) 
-	document.querySelector("#stage").className="";//remove reversal
-	var newHash:String="http://"+window.location.host+a.join("/")+"/"; //"http://localhost:2987"+a.join("/")+"/";
-    goback.setAttribute("href",newHash);
-     
-    goback.addEventListener("click",function(){
-      document.querySelector("#stage").className="reversed";
-      
-    });
-
+    if(a.length<1) document.querySelector("#stage").className="";//remove reversal
+	//var newHash:String="http://"+window.location.host+a.join("/")+"/"; //"http://localhost:2987"+a.join("/")+"/";
+    //goback.setAttribute("href",newHash);
+    var goback = document.querySelector('#goback');
+    if(goback!=null){
+	    goback.addEventListener("click",function(){
+	      document.querySelector("#stage").className="reversed";
+	      
+	    });
+	}
     //document.querySelector("#previous").addEventListener("click",prev);
     //document.querySelector("#next").addEventListener("click",next);
     
     PushState.addEventListener(function(url,state) {
-      // The URL of the request (eg. "/uploads")
       //ufTrace( 'Visiting $url and $state' );
-      //untyped __js__('console.log(state);');
-      
-      
       updateClasses();
     } );
     
     updateClasses();
   }
+  /*
+   * This function remedies the fact that when javascript is enabled, the partials only redraw portions of the template.
+   */
   function updateClasses(){
     var a=PushState.currentPath.split("/");
     currentLevel=a.length-1;
@@ -70,50 +69,13 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
       document.querySelector(thisLevel).className=classes.join(" ");
       classes.pop();
     }
-    if (currentLevel!=1){
-      document.querySelector("#goback").setAttribute("style","display:block;");
-    } else {
-      document.querySelector("#goback").setAttribute("style","display:none;");
-    }
   }
   
-//  function onClick(e):Void
-  //{
-    //e.currentTarget.style.opacity=".5";
-  //}
-
 
   // because Dom is not always ready when execute action occurs
   private function delay(fn:Void->Void){
     var tim = haxe.Timer.delay(fn,100);
   }
 
-/*
-
-  function next(e:Dynamic){
-    document.querySelector("#stage").className="";
-    
-    
-    /*currentLevel++;
-    //ufTrace(currentLevel);
-    updateClasses();* / 
-  }
-  function prev(e:Dynamic){
-    document.querySelector("#stage").className="reversed";
-    if(currentLevel>0){
-      var a=PushState.currentPath.split("/");
-      a.pop();
-      
-      PushState.push(a.join("/"));
-      //currentLevel--;
-    } else {
-      PushState.push("/");
-    }
-    //ufTrace(currentLevel);
-    //updateClasses();
-
-  }
-*/
-  
 
 }

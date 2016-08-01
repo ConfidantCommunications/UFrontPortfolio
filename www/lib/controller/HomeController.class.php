@@ -7,13 +7,13 @@ class controller_HomeController extends ufront_web_Controller {
 	}}
 	public $testApi;
 	public function main() {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan"))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", "panel1classes" => "recessed0", "panel2classes" => "", "panel3classes" => ""))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function about() {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this), _hx_anonymous(array("title" => "Confidant Communications : About Us", "portfolioItem" => ""))), null, null), controller_HomeController_3($this), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this), _hx_anonymous(array("title" => "Confidant Communications : About Us", "portfolioItem" => "", "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"))), null, null), controller_HomeController_3($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function contact() {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_4($this), _hx_anonymous(array("title" => "Contact Us", "portfolioItem" => ""))), null, null), controller_HomeController_5($this), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_4($this), _hx_anonymous(array("title" => "Confidant Communications : Contact Us", "portfolioItem" => "", "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"))), null, null), controller_HomeController_5($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function portfolio() {
 		$_g = $this;
@@ -176,7 +176,7 @@ function controller_HomeController_7(&$id, $result) {
 }
 function controller_HomeController_8(&$_g, &$path, &$result) {
 	{
-		$d = _hx_anonymous(array("title" => "Portfolio", "content" => $_g->processJson($result), "portfolioItem" => "", "random" => "Server"));
+		$d = _hx_anonymous(array("title" => "Confidant Communications : Portfolio", "content" => $_g->processJson($result), "portfolioItem" => "", "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"));
 		return ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_12($_g, $d, $path, $result), $d);
 	}
 }
@@ -188,7 +188,7 @@ function controller_HomeController_9(&$_g, &$path, &$result) {
 }
 function controller_HomeController_10(&$id, &$result) {
 	{
-		$d = _hx_anonymous(array("title" => "Portfolio Item", "content" => new _hx_array(array()), "portfolioItem" => $result));
+		$d = _hx_anonymous(array("title" => "Confidant Communications : Portfolio : " . _hx_string_or_null($result->title), "content" => new _hx_array(array()), "portfolioItem" => $result, "panel1classes" => "recessed0 recessed1 recessed2", "panel2classes" => "recessed0 recessed1", "panel3classes" => "recessed0", "gobackLink" => "/portfolio/"));
 		return ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_13($d, $id, $result), $d);
 	}
 }

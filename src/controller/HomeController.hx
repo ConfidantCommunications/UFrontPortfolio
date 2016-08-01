@@ -26,7 +26,10 @@ class HomeController extends Controller
 	public function main()
 	{
 		return new PartialViewResult({
-				title: "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan"
+				title: "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan",
+				panel1classes:"recessed0",
+				panel2classes:"",
+				panel3classes:""
 			})
 			//.addPartial("panel2Partial","home.html")
 			//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
@@ -42,7 +45,11 @@ class HomeController extends Controller
 	{
 		return new PartialViewResult({
 				title: "Confidant Communications : About Us",
-				portfolioItem:""
+				portfolioItem:"",
+				panel1classes:"recessed0 recessed1",
+				panel2classes:"recessed0",
+				panel3classes:"",
+				gobackLink:"/"
 			})
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});		
 	}
@@ -51,8 +58,12 @@ class HomeController extends Controller
 	public function contact()
 	{
 		return new PartialViewResult({ 
-			title:'Contact Us',
-			portfolioItem:""
+			title:'Confidant Communications : Contact Us',
+			portfolioItem:"",
+				panel1classes:"recessed0 recessed1",
+				panel2classes:"recessed0",
+				panel3classes:"",
+				gobackLink:"/"
 		})
 		
 		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
@@ -61,24 +72,19 @@ class HomeController extends Controller
 	@:route(GET, "/portfolio")
 	public function portfolio()
 	{
-		/*return testApi.test(args.param) >>
-			function(result:String) return new ViewResult({
-				title: "Confidant Communications : Portfolio",
-				message: 'Result: $result', // print the result of the API call
-				renderedBy: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
-			});*/
-		//	untyped __js__('alert("yes")');
-		
 		//ufLog('Custom id ${args.id} entered');
 //		var path=context.contentDirectory+"portfolio.json";
 	
 		var path="portfolio.json";	
 		return testApi.getJson(path) >>
 			function(result:String) return new PartialViewResult({
-				title: "Portfolio",
+				title: "Confidant Communications : Portfolio",
 				content:processJson(result),
 				portfolioItem:"",
-				random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
+				panel1classes:"recessed0 recessed1",
+				panel2classes:"recessed0",
+				panel3classes:"",
+				gobackLink:"/"
 			})
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
@@ -92,9 +98,13 @@ class HomeController extends Controller
 		
 		return testApi.getItem(id) >>
 			function(result:PortfolioItem) return new PartialViewResult({
-				title: "Portfolio Item",
+				title: "Confidant Communications : Portfolio : "+result.title,
 				content:new Array<MyItem>(),
-				portfolioItem: result
+				portfolioItem: result,
+				panel1classes:"recessed0 recessed1 recessed2",
+				panel2classes:"recessed0 recessed1",
+				panel3classes:"recessed0",
+				gobackLink:"/portfolio/"
 				//portfolioItem: 'Result: $result'//, // print the result of the API call
 				//random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			},"portfolio.html")

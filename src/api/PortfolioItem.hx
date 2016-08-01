@@ -1,11 +1,13 @@
 package api;
 
 class PortfolioItem {
-	var html : String;
-    var prevLink : String;
-	var nextLink : String;
-    public function new(html,prev,next) {
+	public var html : String;
+    public var prevLink : String;
+	public var nextLink : String;
+	public var title : String;
+    public function new(html,title,prev,next) {
 		this.html=html;
+		this.title=title;
         this.prevLink = prev;
         this.nextLink = next;    
     }

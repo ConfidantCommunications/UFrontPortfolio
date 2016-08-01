@@ -1,11 +1,7 @@
 package api;
-//import api.PortfolioItem;
 using ufront.MVC;
 using tink.CoreApi;
 
-//    trace(o.name); // Haxe (a string)
-    // awesome (a string in an array)
-  //  trace(o.tags[0]);
 typedef PjItem = {
 	var group:String;
 	var title:String;
@@ -58,12 +54,12 @@ class TestApi extends UFApi
 			if(pj.items[i].slug==slug){
 				var back=(i==0)?0:i-1;
 				var fwd=(i>=pj.items.length-1)?i:i+1;
-				var portfolioItem=new PortfolioItem(portfolioItemHtml,"/portfolio/"+pj.items[back].slug+"/","/portfolio/"+pj.items[fwd].slug+"/");
+				var portfolioItem=new PortfolioItem(portfolioItemHtml,pj.items[i].title,"/portfolio/"+pj.items[back].slug+"/","/portfolio/"+pj.items[fwd].slug+"/");
 				return portfolioItem.asGoodSurprise();
 				
 			}
 		}
-		return new PortfolioItem(portfolioItemHtml,"error","error").asGoodSurprise();
+		return new PortfolioItem(portfolioItemHtml,"error","error","error").asGoodSurprise();
 		
 		
 		//return portfolioItemHtml.asGoodSurprise();

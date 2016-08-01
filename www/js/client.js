@@ -601,13 +601,11 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	}
 	,listen: function() {
 		var _g = this;
-		var goback = window.document.querySelector("#goback");
 		var a = pushstate_PushState.currentPath.split("/");
 		a = a.splice(0,a.length - 2);
-		window.document.querySelector("#stage").className = "";
-		var newHash = "http://" + window.location.host + a.join("/") + "/";
-		goback.setAttribute("href",newHash);
-		goback.addEventListener("click",function() {
+		if(a.length < 1) window.document.querySelector("#stage").className = "";
+		var goback = window.document.querySelector("#goback");
+		if(goback != null) goback.addEventListener("click",function() {
 			window.document.querySelector("#stage").className = "reversed";
 		});
 		pushstate_PushState.addEventListener(null,function(url,state) {
@@ -631,15 +629,15 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 			window.document.querySelector(thisLevel).className = classes.join(" ");
 			classes.pop();
 		}
-		if(this.currentLevel != 1) window.document.querySelector("#goback").setAttribute("style","display:block;"); else window.document.querySelector("#goback").setAttribute("style","display:none;");
 	}
 	,delay: function(fn) {
 		var tim = haxe_Timer.delay(fn,100);
 	}
 	,__class__: actions_ConfidantInterface
 });
-var api_PortfolioItem = function(html,prev,next) {
+var api_PortfolioItem = function(html,title,prev,next) {
 	this.html = html;
+	this.title = title;
 	this.prevLink = prev;
 	this.nextLink = next;
 };
@@ -649,6 +647,7 @@ api_PortfolioItem.prototype = {
 	html: null
 	,prevLink: null
 	,nextLink: null
+	,title: null
 	,__class__: api_PortfolioItem
 };
 var ufront_api_UFApi = function() {
@@ -856,7 +855,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan"})),(function($this) {
+		}(this)),{ title : "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", panel1classes : "recessed0", panel2classes : "", panel3classes : ""})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -869,7 +868,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Confidant Communications : About Us", portfolioItem : ""})),(function($this) {
+		}(this)),{ title : "Confidant Communications : About Us", portfolioItem : "", panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -882,7 +881,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Contact Us", portfolioItem : ""})),(function($this) {
+		}(this)),{ title : "Confidant Communications : Contact Us", portfolioItem : "", panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -895,7 +894,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getJson(path),function(result) {
 			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 				var $r;
-				var d = { title : "Portfolio", content : _g.processJson(result), portfolioItem : "", random : "Client"};
+				var d = { title : "Confidant Communications : Portfolio", content : _g.processJson(result), portfolioItem : "", panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"};
 				$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 					var $r;
 					var obj = { };
@@ -915,7 +914,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getItem(id),function(result) {
 			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 				var $r;
-				var d = { title : "Portfolio Item", content : [], portfolioItem : result};
+				var d = { title : "Confidant Communications : Portfolio : " + result.title, content : [], portfolioItem : result, panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/portfolio/"};
 				$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 					var $r;
 					var obj = { };
