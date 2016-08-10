@@ -8,6 +8,7 @@ import pushstate.PushState;
 import js.html.History;
 import js.Browser.document;
 import js.Browser.window;
+import js.html.svg.SVGElement;
 #end
 
 class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> {
@@ -49,7 +50,31 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     } );
     
     updateClasses();
+	
+	if(!supportsSVG()){
+		//trace("this doesn't support SVG");
+		document.querySelector("#nav").className="no-svg";
+	}
+	
+	
+	
   }
+  function supportsSVG():Bool {
+	#if js
+	try{
+		document.createElementNS;
+		var n:SVGElement=cast(document.createElementNS('http://www.w3.org/2000/svg', "svg"),SVGElement);
+		n.createSVGRect;
+		return true;
+	} catch (e:Dynamic){
+		return false;
+	}
+	#end
+	return false;
+	//return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect;
+  }
+
+
   /*
    * This function remedies the fact that when javascript is enabled, the partials only redraw portions of the template.
    */

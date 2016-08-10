@@ -20,7 +20,7 @@ class Client
 		/*var ufrontApp = new ClientJsApplication({
 			indexController: HomeController,
 			defaultLayout: "layout.html",
-		});*/
+		});*/ 
 		
 		PushState.init();
 		var ufrontApp = new ClientJsApplication({ 

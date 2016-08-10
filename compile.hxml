@@ -3,9 +3,9 @@
 -D client
 -dce std
 -cp src
+--no-traces
 -main Client
 -js www/js/client.js
-
 --next
 
 -lib ufront-mvc

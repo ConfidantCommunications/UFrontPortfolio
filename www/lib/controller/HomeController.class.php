@@ -10,10 +10,10 @@ class controller_HomeController extends ufront_web_Controller {
 		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", "panel1classes" => "recessed0", "panel2classes" => "", "panel3classes" => ""))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function about() {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this), _hx_anonymous(array("title" => "Confidant Communications : About Us", "portfolioItem" => "", "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"))), null, null), controller_HomeController_3($this), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_2($this), _hx_anonymous(array("title" => "Confidant Communications : About Us", "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"))), null, null), controller_HomeController_3($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function contact() {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_4($this), _hx_anonymous(array("title" => "Confidant Communications : Contact Us", "portfolioItem" => "", "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"))), null, null), controller_HomeController_5($this), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_4($this), _hx_anonymous(array("title" => "Confidant Communications : Contact Us", "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"))), null, null), controller_HomeController_5($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function portfolio() {
 		$_g = $this;
@@ -104,12 +104,12 @@ class controller_HomeController extends ufront_web_Controller {
 					}
 				}
 			}
-			throw new HException(ufront_web_HttpError::pageNotFound(_hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 20, "className" => "controller.HomeController", "methodName" => "execute"))));
+			throw new HException(ufront_web_HttpError::pageNotFound(_hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 19, "className" => "controller.HomeController", "methodName" => "execute"))));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) ? $__hx__e->e : $__hx__e;
 			$e = $_ex_;
 			{
-				return ufront_core_SurpriseTools::asSurpriseError($e, "Uncaught error while executing " . Std::string($this->context->actionContext->controller) . "." . _hx_string_or_null($this->context->actionContext->action) . "()", _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 20, "className" => "controller.HomeController", "methodName" => "execute")));
+				return ufront_core_SurpriseTools::asSurpriseError($e, "Uncaught error while executing " . Std::string($this->context->actionContext->controller) . "." . _hx_string_or_null($this->context->actionContext->action) . "()", _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 19, "className" => "controller.HomeController", "methodName" => "execute")));
 			}
 		}
 	}
@@ -176,7 +176,7 @@ function controller_HomeController_7(&$id, $result) {
 }
 function controller_HomeController_8(&$_g, &$path, &$result) {
 	{
-		$d = _hx_anonymous(array("title" => "Confidant Communications : Portfolio", "content" => $_g->processJson($result), "portfolioItem" => "", "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"));
+		$d = _hx_anonymous(array("title" => "Confidant Communications : Portfolio", "content" => $_g->processJson($result), "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "/"));
 		return ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_12($_g, $d, $path, $result), $d);
 	}
 }

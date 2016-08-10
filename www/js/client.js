@@ -612,6 +612,21 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 			_g.updateClasses();
 		});
 		this.updateClasses();
+		if(!this.supportsSVG()) window.document.querySelector("#nav").className = "no-svg";
+	}
+	,supportsSVG: function() {
+		try {
+			($_=window.document,$bind($_,$_.createElementNS));
+			var n;
+			n = js_Boot.__cast(window.document.createElementNS("http://www.w3.org/2000/svg","svg") , SVGSVGElement);
+			$bind(n,n.createSVGRect);
+			return true;
+		} catch( e ) {
+			haxe_CallStack.lastException = e;
+			if (e instanceof js__$Boot_HaxeError) e = e.val;
+			return false;
+		}
+		return false;
 	}
 	,updateClasses: function() {
 		var a = pushstate_PushState.currentPath.split("/");
@@ -868,7 +883,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Confidant Communications : About Us", portfolioItem : "", panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
+		}(this)),{ title : "Confidant Communications : About Us", portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -881,7 +896,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Confidant Communications : Contact Us", portfolioItem : "", panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
+		}(this)),{ title : "Confidant Communications : Contact Us", portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -894,7 +909,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getJson(path),function(result) {
 			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 				var $r;
-				var d = { title : "Confidant Communications : Portfolio", content : _g.processJson(result), portfolioItem : "", panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"};
+				var d = { title : "Confidant Communications : Portfolio", content : _g.processJson(result), portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"};
 				$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 					var $r;
 					var obj = { };
@@ -993,11 +1008,11 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				this.setContextActionResultWhenFinished(result4);
 				return result4;
 			}
-			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 20, className : "controller.HomeController", methodName : "execute"}));
+			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 19, className : "controller.HomeController", methodName : "execute"}));
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
 			if (e instanceof js__$Boot_HaxeError) e = e.val;
-			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 20, className : "controller.HomeController", methodName : "execute"});
+			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 19, className : "controller.HomeController", methodName : "execute"});
 		}
 	}
 	,__class__: controller_HomeController
@@ -4119,10 +4134,7 @@ pushstate_PushState.setUploadsForState = function(url,state,uploads) {
 pushstate_PushState.getUploadsForState = function(state) {
 	if(state == null || Object.prototype.hasOwnProperty.call(state,"__postFilesCacheID") == false) return null;
 	var uploadCacheID = state.__postFilesCacheID;
-	if(pushstate_PushState.uploadCache.exists(uploadCacheID) == false) {
-		haxe_Log.trace("Upload files with cache ID " + uploadCacheID + " is not available anymore",{ fileName : "PushState.hx", lineNumber : 214, className : "pushstate.PushState", methodName : "getUploadsForState"});
-		return null;
-	} else return pushstate_PushState.uploadCache.get(uploadCacheID);
+	if(pushstate_PushState.uploadCache.exists(uploadCacheID) == false) return null; else return pushstate_PushState.uploadCache.get(uploadCacheID);
 };
 pushstate_PushState.handleOnPopState = function(e) {
 	var path = pushstate_PushState.stripURL(window.document.location.pathname + window.document.location.search + window.document.location.hash);
@@ -5464,7 +5476,7 @@ var ufront_app_ClientJsApplication = function(optionsIn) {
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
 			if (e instanceof js__$Boot_HaxeError) e = e.val;
-			haxe_Log.trace("Failed to load view engine " + Type.getClassName(this.configuration.viewEngine) + ": " + Std.string(e),{ fileName : "ClientJsApplication.hx", lineNumber : 161, className : "ufront.app.ClientJsApplication", methodName : "new"});
+			null;
 		}
 	}
 	if(this.configuration.clientActions != null) {
@@ -7412,49 +7424,43 @@ ufront_remoting_RemotingUtil.defaultErrorHandler = function(error) {
 		var responseData = error[4];
 		var responseCode = error[3];
 		var remotingCallString = error[2];
-		haxe_Log.trace("Error during remoting call " + remotingCallString + ": The HTTP Request returned status [" + responseCode + "].",{ fileName : "RemotingUtil.hx", lineNumber : 125, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
-		haxe_Log.trace("Returned data: " + responseData,{ fileName : "RemotingUtil.hx", lineNumber : 126, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	case 1:
 		var err = error[3];
 		var remotingCallString1 = error[2];
-		haxe_Log.trace("Error during remoting call " + remotingCallString1 + ": API or Method is not found or not available in the remoting context.",{ fileName : "RemotingUtil.hx", lineNumber : 128, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
-		haxe_Log.trace("Error message: " + err,{ fileName : "RemotingUtil.hx", lineNumber : 129, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	case 2:
 		var stack = error[4];
 		var e = error[3];
 		var remotingCallString2 = error[2];
-		haxe_Log.trace("Error during remoting call " + remotingCallString2 + ": The server threw an error \"" + Std.string(e) + "\".",{ fileName : "RemotingUtil.hx", lineNumber : 131, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
-		haxe_Log.trace(stack,{ fileName : "RemotingUtil.hx", lineNumber : 132, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	case 3:
 		var e1 = error[3];
 		var remotingCallString3 = error[2];
-		haxe_Log.trace("Error during remoting call " + remotingCallString3 + ": The client throw an error \"" + Std.string(e1) + "\" during the remoting callback.",{ fileName : "RemotingUtil.hx", lineNumber : 134, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
-		haxe_Log.trace("Compiling with \"-debug\" will prevent this error being caught, so you can use your browser's debugger to collect more information.",{ fileName : "RemotingUtil.hx", lineNumber : 135, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	case 4:
 		var err1 = error[4];
 		var troubleLine = error[3];
 		var remotingCallString4 = error[2];
-		haxe_Log.trace("Error during remoting call " + remotingCallString4 + ": Failed to unserialize this line in the response: \"" + err1 + "\"",{ fileName : "RemotingUtil.hx", lineNumber : 137, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
-		haxe_Log.trace("The line that failed: \"" + err1 + "\"",{ fileName : "RemotingUtil.hx", lineNumber : 138, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	case 5:
 		var responseData1 = error[3];
 		var remotingCallString5 = error[2];
-		haxe_Log.trace("Error during remoting call " + remotingCallString5 + ": No remoting result in data.",{ fileName : "RemotingUtil.hx", lineNumber : 140, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
-		haxe_Log.trace("Returned data: " + responseData1,{ fileName : "RemotingUtil.hx", lineNumber : 141, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	case 6:
 		var data = error[3];
 		var remotingCallString6 = error[2];
-		haxe_Log.trace("The remoting call " + remotingCallString6 + " functioned correctly, but the API returned a failure: " + Std.string(data),{ fileName : "RemotingUtil.hx", lineNumber : 143, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	case 7:
 		var e2 = error[2];
-		haxe_Log.trace("Unknown error encountered during remoting call: " + Std.string(e2),{ fileName : "RemotingUtil.hx", lineNumber : 145, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		null;
 		break;
 	}
 };

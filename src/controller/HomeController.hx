@@ -3,7 +3,6 @@ package controller;
 import api.TestApi;
 import api.PortfolioItem;
 import actions.ConfidantInterface;
-//import tink.core.Future;
 using ufront.MVC;
 using ufront.web.result.AddClientActionResult;
 
@@ -45,7 +44,7 @@ class HomeController extends Controller
 	{
 		return new PartialViewResult({
 				title: "Confidant Communications : About Us",
-				portfolioItem:"",
+				portfolioItem:null,
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
 				panel3classes:"",
@@ -59,7 +58,7 @@ class HomeController extends Controller
 	{
 		return new PartialViewResult({ 
 			title:'Confidant Communications : Contact Us',
-			portfolioItem:"",
+			portfolioItem:null,
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
 				panel3classes:"",
@@ -80,7 +79,7 @@ class HomeController extends Controller
 			function(result:String) return new PartialViewResult({
 				title: "Confidant Communications : Portfolio",
 				content:processJson(result),
-				portfolioItem:"",
+				portfolioItem:null,
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
 				panel3classes:"",

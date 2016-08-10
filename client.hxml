@@ -5,3 +5,4 @@
 -cp src
 -main Client
 -js www/js/client.js
+--no-traces
