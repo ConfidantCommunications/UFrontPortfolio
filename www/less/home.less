@@ -54,14 +54,8 @@ dd{
     width:70%;
     margin:0;
 }
-
-.list-divider{list-style-type:none;}
-#stage {
-    width: 100%;//600px;
-    height: 100%;//510px;
-    //border: 1px solid #CCC;
-    margin: 0 auto;
-    position: absolute;
+.applyPerspective(){
+    
     -webkit-perspective: 300px;
     -moz-perspective: 300px;
     -o-perspective: 300px;
@@ -71,9 +65,18 @@ dd{
     -o-perspective-origin: 50% 0%;
     perspective-origin: 50% 0%;
 }
+.list-divider{list-style-type:none;}
+#stage {
+    width: 100%;//600px;
+    height: 100%;//510px;
+    //border: 1px solid #CCC;
+    margin: 0 auto;
+    position: absolute;
+    .applyPerspective();
+}
 #goback{
         display:block;
-        position:absolute;
+        position:fixed;
         background-color:transparent;
         top:0;
         left:0;
@@ -87,7 +90,7 @@ dd{
     }
 #portfolioPrev,#portfolioNext{
     display:table;
-    position:absolute;
+    position:fixed;
     top:0;
     height:100%;
     width:65px; height:100%;
@@ -140,6 +143,12 @@ nav{
 @media screen and (max-width:780px){
     nav{
         margin-top:-15%;
+        svg{
+            //width:100%;
+            //height:auto;
+            max-width:566px;
+            max-height:190px;
+        }
     }
     .portfolioGroup{float:none;width:100%;margin:0;}
     .content{margin: 0 100px;}
@@ -186,13 +195,13 @@ nav{
         -o-transform: translateX(-50%) translateY(-125%) translateZ(-800px);
     }*/
     #confidantLogo{
-        margin-top:-10%;
+        margin-top:0;
         max-width:160px;
     }
-    nav{max-width:400px;margin-top:-80px;}
+    //nav{max-width:400px;margin-top:-80px;}
 }
 #panel1 { //homepage logo
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;//250px; //container width / 2 minus half of panel width
     width: 100%;
@@ -241,8 +250,8 @@ nav{
     }
     
 }
-#panel2,#panel3 { //main navigation
-    position: absolute;
+#panel2 { //main navigation
+    position: fixed;
     width: 100%;
     height: 100%;
     top: 50%;
@@ -257,18 +266,23 @@ nav{
         margin:1em auto 0;
     }
 }
+#panel3{
+}
 
 .scrolldown {   
     text-align:center;
     font-size:2em;
 }
 #panel3{
+    position:relative;
+    top:0;left:0;
+    //background-color:#fff;
     .content{
         *{max-width:600px;margin-left:auto;margin-right:auto;}
-
+        padding-bottom:30px;
     }
     h2,h3{text-align:center;}
-    .loading{text-align:center;}
+    .loading{text-align:center;display:none;}
 }
 @zDepthHidden: -2000px;
 @zDepth0: 0px;
@@ -279,102 +293,71 @@ nav{
 @zOpacity2: .1;
 @zDepth3: -1600px;
 @zOpacity3: 0;
-
+.mytransform(@d) {
+        transform: translateX( -50% ) translateY( -50% ) translateZ(@d);
+        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@d);
+        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@d);
+        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@d);
+}
 @keyframes zoom3to2 { //recessed3 to recessed2
     from {
         opacity:@zOpacity3;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
+        .mytransform(@zDepth3);
     }
     to {
         opacity:@zOpacity2;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
+        .mytransform(@zDepth2);
     }
 }
 @keyframes zoom2to1 { //recessed2 to recessed1
     from {
         opacity:@zOpacity2;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
+        .mytransform(@zDepth2);
         }
     to {
         opacity:@zOpacity1;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
+        .mytransform(@zDepth1);
         }
 }
 @keyframes zoom1to0 { //recessed1 to normal
     from {
         opacity:@zOpacity1;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
+        .mytransform(@zDepth1);
         }
     to {
         opacity:@zOpacity0;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
+        .mytransform(@zDepth0);
         }
 }
 
 @keyframes zoom0to1 { //normal to recessed1
     from {
         opacity:@zOpacity0;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(0px);
+        .mytransform(@zDepth0);
         }
     to {
         opacity:@zOpacity1;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
+        .mytransform(@zDepth1);
         }
 }
 @keyframes zoom1to2 { //recessed1 to recessed 2
     from {
         opacity:@zOpacity1;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
+        .mytransform(@zDepth1);
         }
     to {
         opacity:@zOpacity2;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
+        .mytransform(@zDepth2);
         }
 }
 @keyframes zoom2to3 { //recessed2 to recessed 3
     from {
         opacity:@zOpacity2;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
+        .mytransform(@zDepth2);
         }
     to {
         opacity:@zOpacity3;
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
+        .mytransform(@zDepth3);
         }
 }
 @keyframes fadein0to1{
@@ -391,38 +374,35 @@ nav{
 }
 #stage {
     .recessed0 {
-        display:block;
-        transform: translateX(-50%) translateY( -50% ) translateZ(0px);
-        -webkit-transform: translateX(-50%) translateY( -50% ) translateZ(0px);
-        -moz-transform: translateX(-50%) translateY( -50% ) translateZ(0px);
-        -o-transform: translateX(-50%) translateY( -50% ) translateZ(0px);
+        display:block;  //was none before
+        .mytransform(@zDepth0);
         opacity:1;
         
     }
+    //this rule was added because webkit was badly displaying text when the transforms were applied
+    #panel3.recessed0{
+        transform:none;
+        -webkit-transform:none;
+        -moz-transform:none;
+        -o-transform:none;
+        
+        .loading{display:block;}
+    }
     
     .recessed1 {
-        transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
-        -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth1);
+        .mytransform(@zDepth1);
         opacity: @zOpacity1;
     	animation-name: zoom0to1;
     	animation-duration: 0.5s;
     	overflow:hidden;
     	
         &.recessed2{
-            transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-            -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-            -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
-            -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth2);
+            .mytransform(@zDepth2);
             opacity: @zOpacity2;
         	animation-name: zoom1to2;
         	animation-duration: 0.5s;
             &.recessed3{
-                transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-                -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-                -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
-                -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth3);
+                .mytransform(@zDepth3);
                 opacity: @zOpacity3;
             	animation-name: zoom2to3;
             	animation-duration: 0.5s;
@@ -437,7 +417,7 @@ nav{
     }
     
     &.reversed{ //reversed animation
-        #panel1,#panel2,#panel3{ 
+        #panel1,#panel2{  //#panel3 
             animation-name: zoom1to0;
     	    animation-duration: 0.5s;
     	    

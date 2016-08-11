@@ -32,17 +32,14 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     var a = PushState.currentPath.split("/");
     a=a.splice(0, a.length-2);
     if(a.length<1) document.querySelector("#stage").className="";//remove reversal
-	//var newHash:String="http://"+window.location.host+a.join("/")+"/"; //"http://localhost:2987"+a.join("/")+"/";
-    //goback.setAttribute("href",newHash);
-    var goback = document.querySelector('#goback');
+	
+	var goback = document.querySelector('#goback');
     if(goback!=null){
 	    goback.addEventListener("click",function(){
 	      document.querySelector("#stage").className="reversed";
 	      
 	    });
 	}
-    //document.querySelector("#previous").addEventListener("click",prev);
-    //document.querySelector("#next").addEventListener("click",next);
     
     PushState.addEventListener(function(url,state) {
       //ufTrace( 'Visiting $url and $state' );
@@ -88,18 +85,20 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     
     var newlen=(currentLevel>=0)?currentLevel+1:1;
     classes=classes.slice(0,newlen-1);    //removes unwanted items from end
-    //for (i=0;i<levels.length;i++){ //loop thru levels
+		
     for(thisLevel in levels){
-      document.querySelector(thisLevel).className="";
-      document.querySelector(thisLevel).className=classes.join(" ");
-      classes.pop();
+		var div=document.querySelector(thisLevel);
+		div.className="";
+		div.className=classes.join(" ");
+		classes.pop();
+		
     }
   }
   
 
   // because Dom is not always ready when execute action occurs
   private function delay(fn:Void->Void){
-    var tim = haxe.Timer.delay(fn,100);
+    var tim = haxe.Timer.delay(fn,500); //don't go lower than this—it's too quick for iOS Safari.
   }
 
 

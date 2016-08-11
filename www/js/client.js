@@ -640,13 +640,14 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 		while(_g < levels.length) {
 			var thisLevel = levels[_g];
 			++_g;
-			window.document.querySelector(thisLevel).className = "";
-			window.document.querySelector(thisLevel).className = classes.join(" ");
+			var div = window.document.querySelector(thisLevel);
+			div.className = "";
+			div.className = classes.join(" ");
 			classes.pop();
 		}
 	}
 	,delay: function(fn) {
-		var tim = haxe_Timer.delay(fn,100);
+		var tim = haxe_Timer.delay(fn,500);
 	}
 	,__class__: actions_ConfidantInterface
 });
