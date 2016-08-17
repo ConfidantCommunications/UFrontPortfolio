@@ -597,7 +597,7 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	currentLevel: null
 	,currentPath: null
 	,execute: function(context,data) {
-		this.delay($bind(this,this.listen));
+		this.delay($bind(this,this.listen),500);
 	}
 	,listen: function() {
 		var _g = this;
@@ -640,22 +640,28 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 		while(_g < levels.length) {
 			var thisLevel = levels[_g];
 			++_g;
-			var div = window.document.querySelector(thisLevel);
-			div.className = "";
-			div.className = classes.join(" ");
+			window.document.querySelector(thisLevel).className = "";
+			window.document.querySelector(thisLevel).className = classes.join(" ");
 			classes.pop();
 		}
+		var c = window.document.querySelector("body").className;
+		if(this.currentLevel > 1 && c == "revealGobackOnNextLoad") this.delay(function() {
+			window.document.querySelector("body").className = "";
+		},1000);
+		if(this.currentLevel == 1) window.document.querySelector("body").className = "revealGobackOnNextLoad";
 	}
-	,delay: function(fn) {
-		var tim = haxe_Timer.delay(fn,500);
+	,delay: function(fn,d) {
+		var tim = haxe_Timer.delay(fn,d);
 	}
 	,__class__: actions_ConfidantInterface
 });
-var api_PortfolioItem = function(html,title,prev,next) {
+var api_PortfolioItem = function(html,title,prev,next,pll,nll) {
 	this.html = html;
 	this.title = title;
 	this.prevLink = prev;
 	this.nextLink = next;
+	this.nextLinkLabel = nll;
+	this.prevLinkLabel = pll;
 };
 $hxClasses["api.PortfolioItem"] = api_PortfolioItem;
 api_PortfolioItem.__name__ = ["api","PortfolioItem"];
@@ -663,6 +669,8 @@ api_PortfolioItem.prototype = {
 	html: null
 	,prevLink: null
 	,nextLink: null
+	,prevLinkLabel: null
+	,nextLinkLabel: null
 	,title: null
 	,__class__: api_PortfolioItem
 };
@@ -878,13 +886,21 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			return $r;
 		}(this)),{ msg : "simpleAction"});
 	}
+	,getHostName: function() {
+		return window.location.hostname;
+	}
 	,about: function() {
-		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 			var $r;
-			var obj = { };
-			$r = obj != null?obj:{ };
+			var d = { title : "Confidant Communications : About Us", portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "http://" + $this.getHostName() + "/"};
+			$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+				var $r;
+				var obj = { };
+				$r = obj != null?obj:{ };
+				return $r;
+			}($this)),d);
 			return $r;
-		}(this)),{ title : "Confidant Communications : About Us", portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
+		}(this))),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -892,12 +908,17 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		}(this)),{ msg : "simpleAction"});
 	}
 	,contact: function() {
-		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+		return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 			var $r;
-			var obj = { };
-			$r = obj != null?obj:{ };
+			var d = { title : "Confidant Communications : Contact Us", portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "http://" + $this.getHostName() + "/"};
+			$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
+				var $r;
+				var obj = { };
+				$r = obj != null?obj:{ };
+				return $r;
+			}($this)),d);
 			return $r;
-		}(this)),{ title : "Confidant Communications : Contact Us", portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"})),(function($this) {
+		}(this))),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -910,7 +931,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getJson(path),function(result) {
 			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 				var $r;
-				var d = { title : "Confidant Communications : Portfolio", content : _g.processJson(result), portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "/"};
+				var d = { title : "Confidant Communications : Portfolio", content : _g.processJson(result), portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "http://" + _g.getHostName() + "/"};
 				$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 					var $r;
 					var obj = { };

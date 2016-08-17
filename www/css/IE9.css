@@ -1,0 +1,7 @@
+#panel1,#panel2 {
+    top: auto;
+    left: auto;
+}
+#panel2.recessed1{
+	opacity:0.1;
+}

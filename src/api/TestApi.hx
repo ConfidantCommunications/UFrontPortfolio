@@ -15,7 +15,6 @@ typedef PortfolioJson = {
   
 class TestApi extends UFApi
 {
-
 	public function getJson(path:String):Surprise<String, Error> {
 		// make sure this piece of code is compiled in the server only
 		// to demonstrate that the code is actually run in the server,
@@ -52,27 +51,33 @@ class TestApi extends UFApi
 		for(i in 0...pj.items.length){
 			trace(i+":"+pj.items[i].slug+":"+slug);
 			if(pj.items[i].slug==slug){
-				var back=(i==0)?0:i-1;
-				var fwd=(i>=pj.items.length-1)?i:i+1;
-				var portfolioItem=new PortfolioItem(portfolioItemHtml,pj.items[i].title,"/portfolio/"+pj.items[back].slug+"/","/portfolio/"+pj.items[fwd].slug+"/");
+				var prevLink:String;
+				var nextLink:String;
+				var pll:String;
+				var nll:String;
+				if(i==0){
+					prevLink="#";
+					pll="You are at the first item in the portfolio.";
+				} else {
+					prevLink="/portfolio/"+pj.items[i-1].slug+"/";
+					pll=pj.items[i-1].title;
+				}
+				if (i>=pj.items.length-1){
+					nextLink="#";
+					nll="You are at the last item in the portfolio.";
+				} else {
+					nextLink="/portfolio/"+pj.items[i+1].slug+"/";
+					nll=pj.items[i+1].title;
+				}
+				var portfolioItem=new PortfolioItem(portfolioItemHtml,pj.items[i].title,prevLink,nextLink,pll,nll);
 				return portfolioItem.asGoodSurprise();
 				
 			}
 		}
-		return new PortfolioItem(portfolioItemHtml,"error","error","error").asGoodSurprise();
+		return new PortfolioItem(portfolioItemHtml,"error","error","error","error","error").asGoodSurprise();
 		
 		
 		//return portfolioItemHtml.asGoodSurprise();
-	}
-	
-	
-	private function portfolioNavLink(id:String,forward:Bool=true):String{
-		if(forward){
-			
-		} else {
-			//must be a backward link
-		}
-		return "";
 	}
 }
 

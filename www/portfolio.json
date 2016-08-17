@@ -1,0 +1,24 @@
+{
+	"items": [
+		{"group":1,"title":"Overview","slug":"overview"},
+		{"group":0,"title":"ThinkSask.ca","slug":"thinksask"},
+		{"group":0,"title":"Wapos Bay Flash Site","slug":"waposbay"},
+		{"group":0,"title":"PotashCorp Slideshow Player","slug":"potashcorp"},
+		{"group":0,"title":"Shelterbelt Design Tool","slug":"shelterbelt"},
+		{"group":0,"title":"Lentil Hunter Map","slug":"lentilhunter"},
+		
+		{"group":2,"title":"Book Cover Designs","slug":"bookcovers"},
+		{"group":0,"title":"T-Shirt Design","slug":"tshirts"},
+		{"group":0,"title":"Product Packaging and Corporate Identity","slug":"packaging-corporate-identity"},
+		{"group":0,"title":"Logo Designs","slug":"logos"},
+		
+		{"group":3,"title":"Agtron","slug":"agtron"},
+		{"group":0,"title":"Faith River","slug":"faithriver"},
+		{"group":0,"title":"All-West Dental","slug":"allwest"},
+		{"group":0,"title":"Mable Elliott Guest Ranch","slug":"mableelliott"},
+		{"group":0,"title":"J.B. Black Estates","slug":"jbblack"},
+		{"group":0,"title":"ICR Commercial Real Estate","slug":"icr"},
+		{"group":999,"title":"Transforming Teachers","slug":"transforming"}
+	]
+}
+		

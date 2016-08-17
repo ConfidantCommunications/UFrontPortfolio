@@ -1,0 +1,5 @@
+#nav{background-image:url('/images/navAltBg.png') 0 0 no-repeat;}
+#panel1 ul {text-indent:0;position:relative;}
+#panel1 ul li{text-indent:0;position:relative;display:block;width:100%;}
+#panel1 a{text-indent:0;}
+svg{display:none;}

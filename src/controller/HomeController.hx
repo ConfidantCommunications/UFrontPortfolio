@@ -34,6 +34,16 @@ class HomeController extends Controller
 			//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 	} 
+	public function getHostName():String {
+		
+		#if server
+			return php.Web.getHostName();
+		#else
+			return js.Browser.window.location.hostname;
+		#end
+		
+	}
+	
 	
 	//@:route(GET, "/portfolio/*")
 	//public var portfolioController:PortfolioController;
@@ -48,7 +58,7 @@ class HomeController extends Controller
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
 				panel3classes:"",
-				gobackLink:"/"
+				gobackLink:"http://"+getHostName()+"/"
 			})
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});		
 	}
@@ -62,7 +72,7 @@ class HomeController extends Controller
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
 				panel3classes:"",
-				gobackLink:"/"
+				gobackLink:"http://"+getHostName()+"/"
 		})
 		
 		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
@@ -83,7 +93,7 @@ class HomeController extends Controller
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
 				panel3classes:"",
-				gobackLink:"/"
+				gobackLink:"http://"+getHostName()+"/"
 			})
 			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.addPartial("portfolioNavPartial","portfolioNavPartial.html")

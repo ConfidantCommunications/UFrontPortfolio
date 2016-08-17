@@ -22,7 +22,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
   override public function execute( context:HttpContext, ?data:Dynamic):Void {
 
     //ufTrace("Executing Confidant Interface");//+data.msg
-    delay(listen); //ensures dom is ready after a partialViewResult
+    delay(listen,500); //ensures dom is ready after a partialViewResult
     
     
   }
@@ -87,18 +87,26 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     classes=classes.slice(0,newlen-1);    //removes unwanted items from end
 		
     for(thisLevel in levels){
-		var div=document.querySelector(thisLevel);
-		div.className="";
-		div.className=classes.join(" ");
+		//var div=document.querySelector(thisLevel);
+		document.querySelector(thisLevel).className="";
+		document.querySelector(thisLevel).className=classes.join(" ");
 		classes.pop();
 		
     }
+	var c=document.querySelector("body").className;
+	if((currentLevel>1)&&(c=="revealGobackOnNextLoad")){
+		//let the animation play, then remove the class
+		delay(function(){document.querySelector("body").className="";},1000);
+	}
+	if(currentLevel==1){
+		document.querySelector("body").className="revealGobackOnNextLoad";
+	}
   }
   
 
   // because Dom is not always ready when execute action occurs
-  private function delay(fn:Void->Void){
-    var tim = haxe.Timer.delay(fn,500); //don't go lower than this—it's too quick for iOS Safari.
+  private function delay(fn:Void->Void,d:Int){
+    var tim = haxe.Timer.delay(fn,d); //don't go lower than this—it's too quick for iOS Safari.
   }
 
 

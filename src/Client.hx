@@ -17,16 +17,12 @@ class Client
 	{
 		//UFViewEngine.engines.add(new erazor.Template()); // <-- Adding Erazor view engine
 		
-		/*var ufrontApp = new ClientJsApplication({
-			indexController: HomeController,
-			defaultLayout: "layout.html",
-		});*/ 
-		
 		PushState.init();
 		var ufrontApp = new ClientJsApplication({ 
 			indexController: HomeController, 
 			//templatingEngines: [TemplatingEngines.erazor], 
 			defaultLayout: "layout.html", 
+			//some stuff from @postite, never mind
 			//requestMiddleware:[new BrowserFileUploadMiddleware(),new middleware.SignalMiddleWare()], 
 			//responseMiddleware:[new middleware.SignalMiddleWare()], 
 			clientActions:[actions.ConfidantInterface ]

@@ -17,14 +17,6 @@ function prev(){
 
 
 $(document).ready(function(){
-/*	$("#next").click(
-		next();
-	);
-	$("#previous").click(
-		prev();
-	);
-	
-	*/
 	$(".goback").click(
 		function(){
 			if(currentLevel>0)currentLevel--;
@@ -32,16 +24,7 @@ $(document).ready(function(){
 			updateClasses();
 		}
 	);
-	return; ////   disables the parts below
-	/*$('#nav a').click(function(e){
-		//e.preventDefault();
-			currentLevel++;
-			$("#stage").removeClass("reversed");
-			updateClasses();
-	});*/
-	
-
-	
+	return; 
 });
 
 
