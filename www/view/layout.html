@@ -916,6 +916,7 @@
 					</ul>
 					
 				</nav>
+				
 			</div>
 			
 			<div id="panel2" class="::panel2classes::">
@@ -938,13 +939,13 @@
 		</div>
 		<div data-uf-partial="nextLinkPartial" id="portfolioPrev">
 			::if (portfolioItem.prevLink)::
-				<a href="::portfolioItem.prevLink::" rel="pushstate" aria-label="::portfolioItem.prevLinkLabel::" title="::portfolioItem.prevLinkLabel::">&lt;</a>
+				<a href="::portfolioItem.prevLink::" rel="pushstate" aria-label="::portfolioItem.prevLinkLabel::" title="::portfolioItem.prevLinkLabel::"><em class="leftArrow"></em></a>
 			::end::
 			
 		</div>
 		<div data-uf-partial="prevLinkPartial" id="portfolioNext">
 			::if (portfolioItem.nextLink)::
-				<a href="::portfolioItem.nextLink::" rel="pushstate" aria-label="::portfolioItem.nextLinkLabel::" title="::portfolioItem.nextLinkLabel::">&gt;</a>		
+				<a href="::portfolioItem.nextLink::" rel="pushstate" aria-label="::portfolioItem.nextLinkLabel::" title="::portfolioItem.nextLinkLabel::"><em class="rightArrow"></em></a>		
 			::end::
 		</div>
 		<div id="gobackdiv" data-uf-partial="gobackPartial">
@@ -953,7 +954,6 @@
 		::end::
 		</div>
 	</div>
-	<!-- script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script-->
 	<script type="text/javascript" src="/js/client.min.js"></script>
 </body>
 </html>

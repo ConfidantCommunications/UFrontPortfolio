@@ -1,5 +1,5 @@
 @brand-primary:#caba9c;
-@import url(https://fonts.googleapis.com/css?family=Catamaran:400,700);
+@import url(https://fonts.googleapis.com/css?family=Catamaran:400,700|Nothing+You+Could+Do);
 //|Allura
 html{
     margin:0;padding:0;
@@ -33,7 +33,12 @@ h1{
         text-align:center;
         margin:80px auto 0;
 }
-h2{font-size:24px;margin:2em auto 0;}
+h2{
+    
+    font-size:24px;
+    margin:1.2em auto 0;
+    font-family:"Nothing You Could Do";
+}
 .content{
     margin:0 10%;
 }
@@ -109,10 +114,10 @@ body.revealGobackOnNextLoad #goback{
     position:fixed;
     top:0;
     height:100%;
-    width:65px; height:100%;
+    width:45px; height:100%;
     color:@brand-primary;
-    font-size:8em;
-    font-weight:bold;
+    //font-size:8em;
+    //font-weight:bold;
     z-index:98;
     line-height:70px;
     a{
@@ -122,18 +127,59 @@ body.revealGobackOnNextLoad #goback{
         top:50%;
         left:0;
         margin-top:-40px;
-        padding:5px;
+        //padding:5px;
         border:2px solid @brand-primary;
         background-color:#fff;
         height:80px;
-        &[href="#"]{color:lighten(@brand-primary,20%);}
+        width:40px;
+        &[href="#"] em.rightArrow{
+            color:lighten(@brand-primary,20%);
+            border-left: 24px dashed lighten(@brand-primary,20%) !important;
+        }
+        &:hover em.rightArrow{
+            border-left: 24px dashed #000;
+        }
+        
+        &[href="#"] em.leftArrow{
+            color:lighten(@brand-primary,20%);
+            border-right: 24px dashed lighten(@brand-primary,20%) !important;
+        }
+        &:hover em.leftArrow{
+            border-right: 24px dashed #000;
+        }
     }
 }
-#portfolioPrev{left:-3px;a{border-radius:0 15px 15px 0;}}
+#portfolioPrev{
+    left:-3px;
+    a{border-radius:0 15px 15px 0;}
+}
 #portfolioNext{
-    right:-3px;left:auto;text-align:right;
+    right:-3px;
+    left:auto;
+    text-align:right;
     a{border-radius:15px 0 0 15px;}
 }
+em.rightArrow{
+    display:block;
+    border-left: 24px dashed @brand-primary;
+    border-top: 24px solid transparent;
+    border-bottom: 24px solid transparent;
+    position:absolute;
+    top:50%;
+    left:5px;
+    margin-top:-24px;
+}
+em.leftArrow{
+    display:block;
+    border-right: 24px dashed @brand-primary;
+    border-top: 24px solid transparent;
+    border-bottom: 24px solid transparent;
+    position:absolute;
+    top:50%;
+    right:5px;
+    margin-top:-24px;
+}
+
 .portfolioGroup{float:left;margin-right:3%;width:30%;}
 .portfolioGroups{}
 .featureImg{margin:3em auto 1em;display:block;max-width:600px;width:100%;}
@@ -206,7 +252,32 @@ nav{
             background-color:#fff;
             line-height: 38px;
             
+            &[href="#"] em.rightArrow{
+                border-left: 18px dashed lighten(@brand-primary,20%) !important;
+            }
+            &:hover em.rightArrow{
+                border-left: 18px dashed #000;
+            }
+            
+            &[href="#"] em.leftArrow{
+                border-right: 18px dashed lighten(@brand-primary,20%) !important;
+            }
+            &:hover em.leftArrow{
+                border-right: 18px dashed #000;
+            }
         }
+    }
+    em.rightArrow{
+        border-left: 18px dashed @brand-primary;
+        border-top: 18px solid transparent;
+        border-bottom: 18px solid transparent;
+        margin-top:-18px;   
+    }
+    em.leftArrow{
+        border-right: 18px dashed @brand-primary;
+        border-top: 18px solid transparent;
+        border-bottom: 18px solid transparent;
+        margin-top:-18px;   
     }
     #portfolioPrev a{border-radius:0 15px 0 0;}
     #portfolioNext a{border-radius:15px 0 0 0;left:auto;right:0;}
@@ -216,15 +287,11 @@ nav{
             width:50px !important;height:50px !important;
         }
     }
-    //nav{max-width:400px;}
+    nav{
+        margin-top:-25%;
+    }
 }
 @media screen and (max-height:480px) and (orientation:landscape){
-    /*#stage #panel1.recessed1{
-        transform: translateX(-50%) translateY(-125%) translateZ(-800px);
-        -webkit-transform: translateX(-50%) translateY(-125%) translateZ(-800px);
-        -moz-transform: translateX(-50%) translateY(-125%) translateZ(-800px);
-        -o-transform: translateX(-50%) translateY(-125%) translateZ(-800px);
-    }*/
     #confidantLogo{
         margin:0 auto 10px;
         max-width:160px;
@@ -270,7 +337,7 @@ nav{
         width:20%;
         height:100%;
     }
-   a{
+   nav a{
        background-color:rgba(30,30,30,0);
         display:block;
         height:100%; width:100%;
@@ -297,10 +364,11 @@ nav{
     overflow-y:scroll;
     padding:0;
     h1{
-        margin:1em auto 0;
+        margin:2em auto 0;
     }
     ul{margin:0.5em auto 0;}
     p{margin-top:0;}
+    ul+p{margin-top:1.5em;}
     @media screen and (max-width:400px){
         h1{font-size:1em;}
         svg{width:80%;}
@@ -321,6 +389,8 @@ nav{
         img{max-width:600px;width:100%;}
     }
     h2,h3{text-align:center;}
+    
+    h2{font-size:35px;line-height:.8em;}
     .loading{text-align:center;display:none;}
 }
 @zDepthHidden: -2000px;
