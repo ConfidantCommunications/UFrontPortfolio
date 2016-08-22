@@ -1,5 +1,35 @@
 @brand-primary:#caba9c;
 @import url(https://fonts.googleapis.com/css?family=Catamaran:400,700|Nothing+You+Could+Do);
+//mixins:
+.opacity (@opacity: 1) {
+	-webkit-opacity: 	@opacity;
+	-moz-opacity: 		@opacity;
+	opacity: 		@opacity;
+}
+.border-radius (@radius: 20px) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius:    @radius;
+	border-radius:         @radius;
+
+	-moz-background-clip:    padding;
+	-webkit-background-clip: padding-box;
+	background-clip:         padding-box;
+}
+.animation (@name, @duration: 500ms, @delay: 0s) {
+    
+	animation: @name @duration @delay ;
+	-webkit-animation: @name @duration @delay ;
+	-moz-animation:    @name @duration @delay ;
+	-ms-animation:     @name @duration @delay ;
+	-o-animation:     @name @duration @delay ;
+}
+.transform(@string){
+	-webkit-transform: @string;
+	-moz-transform: 	 @string;
+	-ms-transform: 		 @string;
+	-o-transform: 		 @string;
+}
+
 //|Allura
 html{
     margin:0;padding:0;
@@ -103,10 +133,7 @@ dd{
         //line-height:.5em;
 }
 body.revealGobackOnNextLoad #goback{
-    animation: descend 1s 1;
-	-moz-animation: descend 1s 1;
-	-webkit-animation: descend 1s 1;
-	-o-animation: descend 1s 1;
+    .animation(descend 1s 1);
 }
 
 #portfolioPrev,#portfolioNext{
@@ -296,7 +323,7 @@ nav{
         margin:0 auto 10px;
         max-width:160px;
     }
-    //nav{max-width:400px;margin-top:-80px;}
+    nav{max-width:400px;margin-top:-90px;}
 }
 #panel1 { //homepage logo
     position: fixed;
@@ -304,10 +331,7 @@ nav{
     left: 50%;//250px; //container width / 2 minus half of panel width
     width: 100%;
     height: auto;
-    transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth0);
-    -webkit-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth0);
-    -moz-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth0);
-    -o-transform: translateX( -50% ) translateY( -50% ) translateZ(@zDepth0);
+    .transform(translateX( -50% ) translateY( -50% ) translateZ(@zDepth0));
     text-align:center;
     opacity: 1;
     background-color:transparent;
@@ -390,9 +414,10 @@ nav{
     }
     h2,h3{text-align:center;}
     
-    h2{font-size:35px;line-height:.8em;}
+    h2{font-size:35px;line-height:.8em;color:#666;}
     .loading{text-align:center;display:none;}
 }
+
 @zDepthHidden: -2000px;
 @zDepth0: 0px;
 @zOpacity0: 1;
@@ -411,104 +436,135 @@ nav{
 }
 @keyframes zoom3to2 { //recessed3 to recessed2
     from {
-        opacity:@zOpacity3;
+        .opacity(@zOpacity3);
         .mytransform(@zDepth3);
     }
     to {
-        opacity:@zOpacity2;
+        .opacity(@zOpacity2);
         .mytransform(@zDepth2);
     }
 }
 @keyframes zoom2to1 { //recessed2 to recessed1
     from {
-        opacity:@zOpacity2;
+        .opacity(@zOpacity2);
         .mytransform(@zDepth2);
         }
     to {
-        opacity:@zOpacity1;
+        .opacity(@zOpacity1);
         .mytransform(@zDepth1);
         }
 }
 @keyframes zoom1to0 { //recessed1 to normal
     from {
-        opacity:@zOpacity1;
+        .opacity(@zOpacity1);
         .mytransform(@zDepth1);
         }
     to {
-        opacity:@zOpacity0;
+        .opacity(@zOpacity0);
         .mytransform(@zDepth0);
         }
 }
 
 @keyframes zoom0to1 { //normal to recessed1
     from {
-        opacity:@zOpacity0;
+        .opacity(@zOpacity0);
         .mytransform(@zDepth0);
         }
     to {
-        opacity:@zOpacity1;
+        .opacity(@zOpacity1);
         .mytransform(@zDepth1);
         }
 }
 @keyframes zoom1to2 { //recessed1 to recessed 2
     from {
-        opacity:@zOpacity1;
+        .opacity(@zOpacity1);
         .mytransform(@zDepth1);
         }
     to {
-        opacity:@zOpacity2;
+        .opacity(@zOpacity2);
         .mytransform(@zDepth2);
         }
 }
 @keyframes zoom2to3 { //recessed2 to recessed 3
     from {
-        opacity:@zOpacity2;
+        .opacity(@zOpacity2);
         .mytransform(@zDepth2);
         }
     to {
-        opacity:@zOpacity3;
+        .opacity(@zOpacity3);
         .mytransform(@zDepth3);
         }
 }
 @keyframes fadein0to1{
     from {
-        opacity:@zOpacity3;}
+        .opacity(@zOpacity3);
+    }
     to {
-        opacity:@zOpacity0;}
+        .opacity(@zOpacity0);
+        }
 }
 @keyframes fadeout1to0{
     from {
-        opacity:@zOpacity0;}
+        .opacity(@zOpacity0);
+        }
     to {
-        opacity:@zOpacity3;}
+        .opacity(@zOpacity3);
+        }
+}
+
+#loader{
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    width:100px;height:30px;
+    margin-left:-70px;
+    margin-top:-15px;
+    background-color:#fff;
+    border-radius:20px;
+    border:3px solid @brand-primary;
+    padding:1em;
+    text-align:center;
+    font-weight:700;
+    -webkit-box-shadow: 6px 6px 17px 0px rgba(50, 50, 50, 0.95);
+    -moz-box-shadow:    6px 6px 17px 0px rgba(50, 50, 50, 0.95);
+    box-shadow:         6px 6px 17px 0px rgba(50, 50, 50, 0.95);
+    //.opacity(0);
+    //.animation(fadeout1to0,500ms,0s);
+    &.show{
+        display:block;
+        .animation(pulse,4000ms,0s);
+        //.opacity(1);
+    }
+}
+@keyframes pulse {
+	0%,30%, 100% {.opacity(0);}
+	80% {.opacity(1);}
 }
 #stage {
     .recessed0 {
         display:block;  //was none before
         .mytransform(@zDepth0);
-        opacity:1;
+        .opacity(1);
         
     }
     //this rule was added because webkit was badly displaying text when the transforms were applied
     #panel3.recessed0{
-        transform:none;
-        -webkit-transform:none;
-        -moz-transform:none;
-        -o-transform:none;
+        .transform(none);
         
         .loading{display:block;}
     }
     
     .recessed1 {
         .mytransform(@zDepth1);
-        opacity: @zOpacity1;
+        .opacity(@zOpacity1);
     	animation-name: zoom0to1;
     	animation-duration: 0.5s;
     	overflow:hidden;
     	
         &.recessed2{
             .mytransform(@zDepth2);
-            opacity: @zOpacity2;
+            .opacity(@zOpacity2);
         	animation-name: zoom1to2;
         	animation-duration: 0.5s;
             /*&.recessed3{

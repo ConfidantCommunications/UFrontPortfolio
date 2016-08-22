@@ -29,6 +29,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 
   function listen():Void {
 	//change the goback link
+	document.querySelector("#loader").className="";
     var a = PushState.currentPath.split("/");
     a=a.splice(0, a.length-2);
     if(a.length<1) document.querySelector("#stage").className="";//remove reversal
@@ -52,9 +53,15 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 		//trace("this doesn't support SVG");
 		document.querySelector("#nav").className="no-svg";
 	}
+	//add action to all links to show loader
+	var list=document.querySelectorAll("a");
 	
-	
-	
+	for (thisLink in list){
+		thisLink.addEventListener("click",function(){
+		      document.querySelector("#loader").className="show";
+			  //ufTrace("gotcha"); 
+		});
+	}
   }
   function supportsSVG():Bool {
 	#if js

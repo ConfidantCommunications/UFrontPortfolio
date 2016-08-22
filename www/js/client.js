@@ -601,6 +601,7 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	}
 	,listen: function() {
 		var _g = this;
+		window.document.querySelector("#loader").className = "";
 		var a = pushstate_PushState.currentPath.split("/");
 		a = a.splice(0,a.length - 2);
 		if(a.length < 1) window.document.querySelector("#stage").className = "";
@@ -613,6 +614,15 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 		});
 		this.updateClasses();
 		if(!this.supportsSVG()) window.document.querySelector("#nav").className = "no-svg";
+		var list = window.document.querySelectorAll("a");
+		var _g1 = 0;
+		while(_g1 < list.length) {
+			var thisLink = list[_g1];
+			++_g1;
+			thisLink.addEventListener("click",function() {
+				window.document.querySelector("#loader").className = "show";
+			});
+		}
 	}
 	,supportsSVG: function() {
 		try {
