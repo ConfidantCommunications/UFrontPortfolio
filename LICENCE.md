@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2016 Allan Dowdeswell (confidant-communications), 
+Copyright (c) 2016 Allan Dowdeswell (ConfidantCommunications), 
 with generous code contribution from  Kevin Leung (kevinresol), 
 and @postite.
 
