@@ -614,7 +614,7 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 		});
 		this.updateClasses();
 		if(!this.supportsSVG()) window.document.querySelector("#nav").className = "no-svg";
-		var list = window.document.querySelectorAll("a");
+		var list = window.document.querySelectorAll("a.summonLoader");
 		var _g1 = 0;
 		while(_g1 < list.length) {
 			var thisLink = list[_g1];

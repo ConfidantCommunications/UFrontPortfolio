@@ -938,13 +938,13 @@
 		</div>
 		<div data-uf-partial="nextLinkPartial" id="portfolioPrev">
 			::if (portfolioItem.prevLink)::
-				<a href="::portfolioItem.prevLink::" rel="pushstate" aria-label="::portfolioItem.prevLinkLabel::" title="::portfolioItem.prevLinkLabel::"><em class="leftArrow"></em></a>
+				<a class="summonLoader" href="::portfolioItem.prevLink::" rel="pushstate" aria-label="::portfolioItem.prevLinkLabel::" title="::portfolioItem.prevLinkLabel::"><em class="leftArrow"></em></a>
 			::end::
 			
 		</div>
 		<div data-uf-partial="prevLinkPartial" id="portfolioNext">
 			::if (portfolioItem.nextLink)::
-				<a href="::portfolioItem.nextLink::" rel="pushstate" aria-label="::portfolioItem.nextLinkLabel::" title="::portfolioItem.nextLinkLabel::"><em class="rightArrow"></em></a>		
+				<a class="summonLoader" href="::portfolioItem.nextLink::" rel="pushstate" aria-label="::portfolioItem.nextLinkLabel::" title="::portfolioItem.nextLinkLabel::"><em class="rightArrow"></em></a>		
 			::end::
 		</div>
 		<div id="gobackdiv" data-uf-partial="gobackPartial">

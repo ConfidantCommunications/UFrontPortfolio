@@ -54,7 +54,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 		document.querySelector("#nav").className="no-svg";
 	}
 	//add action to all links to show loader
-	var list=document.querySelectorAll("a");
+	var list=document.querySelectorAll("a.summonLoader");
 	
 	for (thisLink in list){
 		thisLink.addEventListener("click",function(){

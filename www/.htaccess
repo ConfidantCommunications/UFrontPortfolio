@@ -1,5 +1,6 @@
 DirectoryIndex index.php
 
+
 RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -31,3 +32,8 @@ ExpiresByType application/javascript "access plus 1 month"
 RewriteBase /
 RewriteCond %{HTTP:Cookie} devicePixelRatio [NC]
 RewriteRule \.(?:jpe?g|gif|png|bmp)$ /retinaimages.php [NC,L]
+
+redirect 301 /index.html http://confidant.ca/
+redirect 301 /award_winning_design_animation.html http://confidant.ca/about/
+redirect 301 /graphic_design.html http://confidant.ca/portfolio/
+redirect 301 /contact.html http://confidant.ca/contact/
