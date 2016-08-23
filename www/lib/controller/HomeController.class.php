@@ -7,7 +7,7 @@ class controller_HomeController extends ufront_web_Controller {
 	}}
 	public $testApi;
 	public function main() {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", "panel1classes" => "recessed0", "panel2classes" => "", "panel3classes" => ""))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Interactive & Graphic Designer and Joomla Website Developer in Saskatoon, Saskatchewan", "panel1classes" => "recessed0", "panel2classes" => "", "panel3classes" => ""))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function getHostName() {
 		return $_SERVER['SERVER_NAME'];
@@ -191,7 +191,7 @@ function controller_HomeController_9(&$d) {
 }
 function controller_HomeController_10(&$_g, &$path, &$result) {
 	{
-		$d = _hx_anonymous(array("title" => "Confidant Communications : Portfolio", "content" => $_g->processJson($result), "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "http://" . _hx_string_or_null($_g->getHostName()) . "/"));
+		$d = _hx_anonymous(array("title" => "Confidant Communications : Portfolio of Graphic Design and Website Development Projects", "content" => $_g->processJson($result), "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "http://" . _hx_string_or_null($_g->getHostName()) . "/"));
 		return ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_14($_g, $d, $path, $result), $d);
 	}
 }

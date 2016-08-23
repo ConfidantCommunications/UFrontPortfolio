@@ -889,7 +889,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan", panel1classes : "recessed0", panel2classes : "", panel3classes : ""})),(function($this) {
+		}(this)),{ title : "Confidant Communications : Interactive & Graphic Designer and Joomla Website Developer in Saskatoon, Saskatchewan", panel1classes : "recessed0", panel2classes : "", panel3classes : ""})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;
@@ -941,7 +941,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.testApi.getJson(path),function(result) {
 			return ufront_web_result_AddClientActionResult.addClientAction(new ufront_web_result_PartialViewResult((function($this) {
 				var $r;
-				var d = { title : "Confidant Communications : Portfolio", content : _g.processJson(result), portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "http://" + _g.getHostName() + "/"};
+				var d = { title : "Confidant Communications : Portfolio of Graphic Design and Website Development Projects", content : _g.processJson(result), portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "http://" + _g.getHostName() + "/"};
 				$r = ufront_view__$TemplateData_TemplateData_$Impl_$.setObject((function($this) {
 					var $r;
 					var obj = { };

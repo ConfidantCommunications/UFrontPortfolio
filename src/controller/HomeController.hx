@@ -25,7 +25,7 @@ class HomeController extends Controller
 	public function main()
 	{
 		return new PartialViewResult({
-				title: "Confidant Communications : Graphic Design, HTML5 Games, Flash Programming and Joomla Developer in Saskatoon, Saskatchewan",
+				title: "Confidant Communications : Interactive & Graphic Designer and Joomla Website Developer in Saskatoon, Saskatchewan",
 				panel1classes:"recessed0",
 				panel2classes:"",
 				panel3classes:""
@@ -87,7 +87,7 @@ class HomeController extends Controller
 		var path="portfolio.json";	
 		return testApi.getJson(path) >>
 			function(result:String) return new PartialViewResult({
-				title: "Confidant Communications : Portfolio",
+				title: "Confidant Communications : Portfolio of Graphic Design and Website Development Projects",
 				content:processJson(result),
 				portfolioItem:null,
 				panel1classes:"recessed0 recessed1",
