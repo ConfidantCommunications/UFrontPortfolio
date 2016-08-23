@@ -1,7 +1,7 @@
 # UFront Portfolio
 
 ## Introduction
-There is some [great example code](https://github.com/kevinresol/ufront-nodejs-guide) made by @kevinresol which is dedicated to the NodeJS target. I built [my own company site](http://confidant.ca] for the PHP target with assistance from him and @postite. By offering this source code with a working real-world application I hope that it will make it easier for other Haxe developers to jump into using [UFront](https://github.com/ufront). This code should work on most PHP-supporting hosting packages.
+There is some [great example code](https://github.com/kevinresol/ufront-nodejs-guide) made by @kevinresol which is dedicated to the NodeJS target. I built [my own company site](http://confidant.ca) for the PHP target with assistance from him and @postite. By offering this source code with a working real-world application I hope that it will make it easier for other Haxe developers to jump into using [UFront](https://github.com/ufront). This code should work on most PHP-supporting hosting packages.
 
 ## Why Use UFront?
 * You will have the same code base on both client and server.
