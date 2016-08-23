@@ -1,4 +1,6 @@
-MIT License
+All images in this repository are copyright (c) 2016 Allan Dowdeswell and may not be used without permission.
+
+Other files are subject to the MIT License:
 
 Copyright (c) 2016 Allan Dowdeswell (ConfidantCommunications), 
 with generous code contribution from  Kevin Leung (kevinresol), 
