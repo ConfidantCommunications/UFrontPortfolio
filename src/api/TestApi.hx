@@ -49,7 +49,7 @@ class TestApi extends UFApi
 		
 		
 		for(i in 0...pj.items.length){
-			trace(i+":"+pj.items[i].slug+":"+slug);
+			//trace(i+":"+pj.items[i].slug+":"+slug);
 			if(pj.items[i].slug==slug){
 				var prevLink:String;
 				var nextLink:String;

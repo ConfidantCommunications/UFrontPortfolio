@@ -28,6 +28,9 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
   }
 
   function listen():Void {
+	//reset scrolling of content divs:
+	document.querySelector("#panel2").scrollTop=0;
+	document.querySelector("#panel3").scrollTop=0;
 	//change the goback link
 	document.querySelector("#loader").className="";
     var a = PushState.currentPath.split("/");

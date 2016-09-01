@@ -601,6 +601,8 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	}
 	,listen: function() {
 		var _g = this;
+		window.document.querySelector("#panel2").scrollTop = 0;
+		window.document.querySelector("#panel3").scrollTop = 0;
 		window.document.querySelector("#loader").className = "";
 		var a = pushstate_PushState.currentPath.split("/");
 		a = a.splice(0,a.length - 2);
