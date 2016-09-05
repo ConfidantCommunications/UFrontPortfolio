@@ -891,7 +891,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var obj = { };
 			$r = obj != null?obj:{ };
 			return $r;
-		}(this)),{ title : "Confidant Communications : Interactive & Graphic Designer and Joomla Website Developer in Saskatoon, Saskatchewan", panel1classes : "recessed0", panel2classes : "", panel3classes : ""})),(function($this) {
+		}(this)),{ title : "Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan", panel1classes : "recessed0", panel2classes : "", panel3classes : ""})),(function($this) {
 			var $r;
 			var className = Type.getClassName(actions_ConfidantInterface);
 			$r = className;

@@ -7,7 +7,7 @@ class controller_HomeController extends ufront_web_Controller {
 	}}
 	public $testApi;
 	public function main() {
-		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Interactive & Graphic Designer and Joomla Website Developer in Saskatoon, Saskatchewan", "panel1classes" => "recessed0", "panel2classes" => "", "panel3classes" => ""))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
+		return ufront_web_result_AddClientActionResult::addClientAction(new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject(controller_HomeController_0($this), _hx_anonymous(array("title" => "Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan", "panel1classes" => "recessed0", "panel2classes" => "", "panel3classes" => ""))), null, null), controller_HomeController_1($this), _hx_anonymous(array("msg" => "simpleAction")));
 	}
 	public function getHostName() {
 		return $_SERVER['SERVER_NAME'];
