@@ -16,4 +16,5 @@ I use FDT for Haxe development, and it will automatically use compile.hxml to co
 
 **What else do I need?**
 
-I am using LESS for my styling. You will need to have a LESS compiler like [Crunch](https://getcrunch.co/) or else replace my styles with your own CSS, Stylus or SASS files.
+* I am using LESS for my styling. You will need to have a LESS compiler like [Crunch](https://getcrunch.co/) or else replace my styles with your own CSS, Stylus or SASS files.
+* Be sure to create a "cache" directory within the "www" directory. Haxe PHP will use it to speed things up.
