@@ -684,8 +684,7 @@ function _hx_substring($s, $startIndex, $endIndex) {
 
 function _hx_trace($v, $i) {
 	$msg = $i !== null ? $i->fileName.':'.$i->lineNumber.': ' : '';
-	echo $msg._hx_string_rec($v, '')."
-";
+	//echo $msg._hx_string_rec($v, '')."";
 }
 
 function _hx_ttype($n) {

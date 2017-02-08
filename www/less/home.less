@@ -131,9 +131,10 @@ dd{
         width:100px;
         height:100px;
         //line-height:.5em;
+    //.animation(descend, 1s, 1s);wasn't displaying properly
 }
 body.revealGobackOnNextLoad #goback{
-    .animation(descend 1s 1);
+    //.animation(descend, 1s, 1s);wasn't displaying properly
 }
 
 #portfolioPrev,#portfolioNext{
@@ -324,6 +325,9 @@ nav{
         max-width:160px;
     }
     nav{max-width:400px;margin-top:-90px;}
+}
+#panel1,#panel2,#panel3{
+    will-change:transform, opacity;
 }
 #panel1 { //homepage logo
     position: fixed;
