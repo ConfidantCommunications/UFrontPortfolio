@@ -1,7 +1,22 @@
 DirectoryIndex index.php
 
+# Use PHP54CGI as default
+# Changed PHP handler from fcgid54-script to fcgidbeta-script on Mon Jan 11 16:00:39 MST 2016.
+AddHandler fcgidbeta-script .php
 
 RewriteEngine On
+
+RewriteCond %{HTTPS} off
+# First rewrite to HTTPS:
+# Don't put www. here. If it is already there it will be included, if not
+# the subsequent rule will catch it.
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Now, rewrite any request to the wrong domain to use www.
+# [NC] is a case-insensitive match
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -37,3 +52,10 @@ redirect 301 /index.html http://confidant.ca/
 redirect 301 /award_winning_design_animation.html http://confidant.ca/about/
 redirect 301 /graphic_design.html http://confidant.ca/portfolio/
 redirect 301 /contact.html http://confidant.ca/contact/
+
+
+
+##### No directory listings -- BEGIN
+#IndexIgnore *
+Options -Indexes
+##### No directory listings -- END
