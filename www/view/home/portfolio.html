@@ -9,11 +9,21 @@
 <div class="portfolioGroups">
 		
 		::foreach content::
-			    ::if (group == 1)::<div class="portfolioGroup"><h2>Interactive Development</h2><ul><li><a class="summonLoader" href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
-			    ::elseif (group == 2)::</ul></div><div class="portfolioGroup"><h2>Graphic Design</h2><ul><li><a class="summonLoader" href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
-			    ::elseif (group == 3)::</ul></div><div class="portfolioGroup"><h2>Websites</h2><ul><li><a class="summonLoader" href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
-			    ::elseif (group == 999)::<li><a class="summonLoader" href="/portfolio/::slug::/" rel="pushstate">::title::</a></li></ul></div>
-			    ::else::<li><a class="summonLoader" href="/portfolio/::slug::/" rel="pushstate">::title::</a></li>
+				::if (group == 1)::
+					<div class="portfolioGroup"><h2>Interactive Development</h2><ul>
+				::elseif (group == 2)::
+					</ul></div><div class="portfolioGroup"><h2>Graphic Design</h2><ul>
+				::elseif (group == 3)::
+					</ul></div><div class="portfolioGroup"><h2>Websites</h2><ul>
+				::end::
+						<li><a title="::title::" class="summonLoader" href="/portfolio/::slug::/" rel="pushstate">
+						<div class="thumb">
+							<div class="caption">::title::</div>
+							<img src="/portfolioStuff/::slug::-thumb.jpg" alt="::title::" />
+						</div>
+						</a></li>
+				::if (group == 999)::
+					</ul></div>
 			    ::end::
 		::end::
 </div>

@@ -65,7 +65,7 @@ h1{
 }
 h2{
     
-    font-size:24px;
+    font-size:30px;
     margin:1.2em auto 0;
     font-family:"Nothing You Could Do";
 }
@@ -207,8 +207,69 @@ em.leftArrow{
     right:5px;
     margin-top:-24px;
 }
-
-.portfolioGroup{float:left;margin-right:3%;width:30%;}
+@keyframes peekCaption { //normal to recessed1
+    from {
+        bottom:-60px;
+        }
+    to {
+        bottom:0px;
+        }
+}
+.portfolioGroup{
+    //float:left;
+    //margin-right:3%;
+    width:100%;//30%;
+    clear:both;
+    margin-top:1em;
+    h2{text-align:center;}
+    ul{
+        margin:0;
+        padding:0;
+        min-height: 200px;
+        text-align:center;
+    }
+    li{
+        list-style-type:none;
+        display:inline-block;
+        width:200px;
+        height:200px;
+        margin:0 5px 10px;
+    }
+    img{}
+    .thumb{
+        position:relative;
+        overflow:hidden;
+        margin:0; 
+        padding:0;
+        border-radius:20px;
+        line-height: 0;
+        .shadowed();
+    }
+    .caption{    
+        display: block;
+        position: absolute;
+        bottom: -60px;
+        text-align:center;
+        line-height:22px;
+        padding:22px 0 0;
+        left: 0;
+        width:100%;
+        height:60px;
+        background-color:rgba(255,255,255,0.8);
+        
+    }
+    a.summonLoader:hover .caption,
+    a.summonLoader:focus .caption
+    {
+        .animation(peekCaption, 0.5s, 0s);   
+        bottom:0px;
+    }
+}
+@media(max-width:640px){
+    .portfolioGroup{
+        li,img{height:100px;width:100px;}   
+    }
+}
 .portfolioGroups{}
 .featureImg{margin:3em auto 1em;display:block;max-width:600px;width:100%;}
 .shadowed{
@@ -418,7 +479,7 @@ nav{
     }
     h2,h3{text-align:center;}
     
-    h2{font-size:35px;line-height:.8em;color:#666;}
+    h2{font-size:36px;line-height:.8em;color:#666;}
     .loading{text-align:center;display:none;}
 }
 
@@ -538,7 +599,6 @@ nav{
     &.show{
         display:block;
         .animation(pulse,4000ms,0s);
-        
         animation-iteration-count: infinite;
     }
 }
