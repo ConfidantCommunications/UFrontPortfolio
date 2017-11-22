@@ -148,6 +148,7 @@ body.revealGobackOnNextLoad #goback{
     //font-weight:bold;
     z-index:98;
     line-height:70px;
+    overflow:hidden;
     a{
         //display:table-cell;
         //vertical-align:middle;
@@ -156,7 +157,7 @@ body.revealGobackOnNextLoad #goback{
         left:0;
         margin-top:-40px;
         //padding:5px;
-        border:2px solid @brand-primary;
+        border:none;//2px solid @brand-primary;
         background-color:#fff;
         height:80px;
         width:40px;
@@ -178,11 +179,11 @@ body.revealGobackOnNextLoad #goback{
     }
 }
 #portfolioPrev{
-    left:-3px;
+    left:10px;
     a{border-radius:0 15px 15px 0;}
 }
 #portfolioNext{
-    right:-3px;
+    right:10px;
     left:auto;
     text-align:right;
     a{border-radius:15px 0 0 15px;}
@@ -338,7 +339,7 @@ nav{
             top:auto;bottom:-2px;
             padding:5px;
             font-size:60px;
-            border:2px solid @brand-primary;
+            //border:2px solid @brand-primary;
             background-color:#fff;
             line-height: 38px;
             

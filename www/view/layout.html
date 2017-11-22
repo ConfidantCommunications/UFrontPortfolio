@@ -13,7 +13,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	
 	<title>::title::</title>  
-	<link rel="stylesheet" href="/css/home.css" media="screen" />
+	<link rel="stylesheet" href="/css/home.css?v=1.03" media="screen" />
 	<!--[if lte IE 9]>
 		<link rel="stylesheet" href="/css/IE9.css">
 	<![endif]-->
@@ -953,11 +953,11 @@
 		</div>
 		<div id="gobackdiv" data-uf-partial="gobackPartial">
 		::if (gobackLink)::
-			<a id="goback" href="::gobackLink::" rel="pushstate" aria-label="Go up one level" title="Go up one level"><img style="width:94px;height:93px;" src="/images/up-button.png" alt="Go up one level" /></a>
+			<a id="goback" href="::gobackLink::" rel="pushstate" aria-label="Go up one level" title="Go up one level"><img style="width:94px;height:93px;border:0;" src="/images/up-button.png" alt="Go up one level" /></a>
 		::end::
 		</div>
 	</div>
-		<div id="loader">Loading...</div>
+	<div id="loader">Loading...</div>
 	<script type="text/javascript" src="/js/client.min.js"></script>
 </body>
 </html>
