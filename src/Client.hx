@@ -17,17 +17,18 @@ class Client
 	{
 		//UFViewEngine.engines.add(new erazor.Template()); // <-- Adding Erazor view engine
 		
-		PushState.init();
+		// PushState.init(); //DO NOT USE THIS; IT WILL CAUSE DOUBLE EXECUTION OF ADDCLIENTACTION
 		var ufrontApp = new ClientJsApplication({ 
 			indexController: HomeController, 
 			//templatingEngines: [TemplatingEngines.erazor], 
-			defaultLayout: "layout.html", 
+			defaultLayout: "layout.html"
 			//some stuff from @postite, never mind
 			//requestMiddleware:[new BrowserFileUploadMiddleware(),new middleware.SignalMiddleWare()], 
 			//responseMiddleware:[new middleware.SignalMiddleWare()], 
-			clientActions:[actions.ConfidantInterface ]
+			// clientActions:[actions.ConfidantInterface ]
 			//authImplementation:YesBossAuthHandler, 
 		});
+		// ufrontApp.registerAction(actions.ConfidantInterface);//results in remapping
 		// Listen to any history changes using PushState, and process each request.
 		ufrontApp.listen();
 		

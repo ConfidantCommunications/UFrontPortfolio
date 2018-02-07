@@ -20,51 +20,61 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
   public var currentPath="";
 
   override public function execute( context:HttpContext, ?data:Dynamic):Void {
+		// var ga=new Analytics();
+		// ga.call('send', 'pageview');
+		#if client
 
-    //ufTrace("Executing Confidant Interface");//+data.msg
-    delay(listen,500); //ensures dom is ready after a partialViewResult
-    
-    
+		untyped __js__('window.ga("set", {page: {0}, title: {1}, location:{2}});',PushState.currentPath,data.msg,document.location);
+		untyped __js__('window.ga("send", "pageview");');
+
+		//lines below for most recent analytics. Generates error.
+		//untyped __js__('gtag("config", "UA-104215086-1", {"page_title" : {1}, "page_location" : {2}, "page_path": {0}});', PushState.currentPath, data.msg, document.location);
+
+
+		// ufTrace("Executing Confidant Interface:"+context);//+data.msg
+		delay(listen,500); //ensures dom is ready after a partialViewResult //don't go lower than this—it's too quick for iOS Safari.
+		#end 
   }
 
   function listen():Void {
-	//reset scrolling of content divs:
-	document.querySelector("#panel2").scrollTop=0;
-	document.querySelector("#panel3").scrollTop=0;
-	//change the goback link
-	document.querySelector("#loader").className="";
-    var a = PushState.currentPath.split("/");
-    a=a.splice(0, a.length-2);
-    if(a.length<1) document.querySelector("#stage").className="";//remove reversal
-	
-	var goback = document.querySelector('#goback');
-    if(goback!=null){
-	    goback.addEventListener("click",function(){
-	      document.querySelector("#stage").className="reversed";
-	      
-	    });
-	}
-    
-    PushState.addEventListener(function(url,state) {
-      //ufTrace( 'Visiting $url and $state' );
-      updateClasses();
-    } );
-    
-    updateClasses();
-	
-	if(!supportsSVG()){
-		//trace("this doesn't support SVG");
-		document.querySelector("#nav").className="no-svg";
-	}
-	//add action to all links to show loader
-	var list=document.querySelectorAll("a.summonLoader");
-	
-	for (thisLink in list){
-		thisLink.addEventListener("click",function(){
-		      document.querySelector("#loader").className="show";
-			  //ufTrace("gotcha"); 
-		});
-	}
+		// ufTrace("trying to ga!");
+		//reset scrolling of content divs:
+		document.querySelector("#panel2").scrollTop=0;
+		document.querySelector("#panel3").scrollTop=0;
+		//change the goback link
+		document.querySelector("#loader").className="";
+			var a = PushState.currentPath.split("/");
+			a=a.splice(0, a.length-2);
+			if(a.length<1) document.querySelector("#stage").className="";//remove reversal
+		
+		var goback = document.querySelector('#goback');
+			if(goback!=null){
+				goback.addEventListener("click",function(){
+					document.querySelector("#stage").className="reversed";
+					
+				});
+		}
+			
+		PushState.addEventListener(function(url,state) {
+			//ufTrace( 'Visiting $url and $state' );
+			updateClasses();
+		} );
+		
+		updateClasses();
+		
+		if(!supportsSVG()){
+			//trace("this doesn't support SVG");
+			document.querySelector("#nav").className="no-svg";
+		}
+		//add action to all links to show loader
+		var list=document.querySelectorAll("a.summonLoader");
+		
+		for (thisLink in list){
+			thisLink.addEventListener("click",function(){
+						document.querySelector("#loader").className="show";
+					//ufTrace("gotcha"); 
+			});
+		}
   }
   function supportsSVG():Bool {
 	#if js
@@ -116,7 +126,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 
   // because Dom is not always ready when execute action occurs
   private function delay(fn:Void->Void,d:Int){
-    var tim = haxe.Timer.delay(fn,d); //don't go lower than this—it's too quick for iOS Safari.
+    var tim = haxe.Timer.delay(fn,d); 
   }
 
 

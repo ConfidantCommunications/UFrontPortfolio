@@ -3,6 +3,7 @@ package controller;
 import api.TestApi;
 import api.PortfolioItem;
 import actions.ConfidantInterface;
+// import actions.AnalyticsAction;
 using ufront.MVC;
 using ufront.web.result.AddClientActionResult;
 
@@ -24,15 +25,17 @@ class HomeController extends Controller
 	@:route(GET, "/")
 	public function main()
 	{
+		var t:String="Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan";
 		return new PartialViewResult({
-				title: "Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan",
+				title: t,
 				panel1classes:"recessed0",
 				panel2classes:"",
 				panel3classes:""
 			})
 			//.addPartial("panel2Partial","home.html")
 			//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
-			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+			.addClientAction(ConfidantInterface,{msg:t});
+			// .addClientAction(AnalyticsAction,{});
 	} 
 	public function getHostName():String {
 		
@@ -52,22 +55,25 @@ class HomeController extends Controller
 
 	public function about()
 	{
+		var t:String="Confidant Communications : About Us";
 		return new PartialViewResult({
-				title: "Confidant Communications : About Us",
+				title: t,
 				portfolioItem:null,
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
 				panel3classes:"",
 				gobackLink:"http://"+getHostName()+"/"
 			})
-			.addClientAction(ConfidantInterface,{msg:"simpleAction"});		
+			.addClientAction(ConfidantInterface,{msg:t});
+			// .addClientAction(AnalyticsAction,{});		
 	}
 	@:route(GET, "/contact")
 
 	public function contact()
 	{
+		var t:String='Confidant Communications : Contact Us';
 		return new PartialViewResult({ 
-			title:'Confidant Communications : Contact Us',
+			title:t,
 			portfolioItem:null,
 				panel1classes:"recessed0 recessed1",
 				panel2classes:"recessed0",
@@ -75,7 +81,8 @@ class HomeController extends Controller
 				gobackLink:"http://"+getHostName()+"/"
 		})
 		
-		.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+		.addClientAction(ConfidantInterface,{msg:t});
+		// .addClientAction(AnalyticsAction,{});
 	}
 	
 	@:route(GET, "/portfolio")
@@ -83,11 +90,11 @@ class HomeController extends Controller
 	{
 		//ufLog('Custom id ${args.id} entered');
 //		var path=context.contentDirectory+"portfolio.json";
-	
+		var t = "Confidant Communications : Portfolio of Graphic Design and Website Development Projects";
 		var path="portfolio.json";	
 		return testApi.getJson(path) >>
 			function(result:String) return new PartialViewResult({
-				title: "Confidant Communications : Portfolio of Graphic Design and Website Development Projects",
+				title: t,
 				content:processJson(result),
 				portfolioItem:null,
 				panel1classes:"recessed0 recessed1",
@@ -95,7 +102,8 @@ class HomeController extends Controller
 				panel3classes:"",
 				gobackLink:"http://"+getHostName()+"/"
 			})
-			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+			.addClientAction(ConfidantInterface,{msg:t});
+			// .addClientAction(AnalyticsAction,{});
 		//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
 		//.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
@@ -104,10 +112,10 @@ class HomeController extends Controller
 	@:route(GET, "/portfolio/$id")
 	public function returnPortfolioItem(id:String)
 	{
-		
+		var t:String = "Confidant Communications : Portfolio : "; 
 		return testApi.getItem(id) >>
 			function(result:PortfolioItem) return new PartialViewResult({
-				title: "Confidant Communications : Portfolio : "+result.title,
+				title: t+result.title,
 				content:new Array<MyItem>(),
 				portfolioItem: result,
 				panel1classes:"recessed0 recessed1 recessed2",
@@ -117,7 +125,8 @@ class HomeController extends Controller
 				//portfolioItem: 'Result: $result'//, // print the result of the API call
 				//random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			},"portfolio.html")
-			.addClientAction(ConfidantInterface,{msg:"simpleAction"});
+			.addClientAction(ConfidantInterface,{msg:t+result.title});
+			// .addClientAction(AnalyticsAction,{});
 	}
 
 	private function processJson(pJson:String):Array<MyItem>{
