@@ -3,6 +3,7 @@ package;
 import api.ApiContext;
 import controller.*;
 import ufront.view.UFViewEngine;
+import overrides.CustomErrorPageHandler;
 //import erazor.*;
 using ufront.MVC;
 
@@ -20,9 +21,9 @@ class Server
 		var ufrontApp = new UfrontApplication({
 			indexController: HomeController,
 			remotingApi: ApiContext, // specify our remoting API context (interface)
-			defaultLayout: "layout.html"
+			defaultLayout: "layout.html",
+			errorHandlers: [ new CustomErrorPageHandler() ]
 		});
-		
 		// listen for incoming connection at this port number
 			#if (php || neko)
 				ufrontApp.executeRequest();

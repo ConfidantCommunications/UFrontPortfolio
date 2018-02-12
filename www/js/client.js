@@ -11,7 +11,7 @@ var Client = function() { };
 $hxClasses["Client"] = Client;
 Client.__name__ = ["Client"];
 Client.main = function() {
-	var ufrontApp = new ufront_app_ClientJsApplication({ indexController : controller_HomeController, defaultLayout : "layout.html"});
+	var ufrontApp = new ufront_app_ClientJsApplication({ indexController : controller_HomeController, defaultLayout : "layout.html", errorHandlers : [new overrides_CustomErrorPageHandler()]});
 	ufrontApp.listen();
 };
 var CompileTime = function() { };
@@ -762,7 +762,6 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	}
 	,supportsSVG: function() {
 		try {
-			window.document;
 			var n = js_Boot.__cast(window.document.createElementNS("http://www.w3.org/2000/svg","svg") , SVGSVGElement);
 			return true;
 		} catch( e ) {
@@ -784,15 +783,6 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 			window.document.querySelector(thisLevel).className = "";
 			window.document.querySelector(thisLevel).className = classes.join(" ");
 			classes.pop();
-		}
-		var c = window.document.querySelector("body").className;
-		if(this.currentLevel > 1 && c == "revealGobackOnNextLoad") {
-			this.delay(function() {
-				window.document.querySelector("body").className = "";
-			},1000);
-		}
-		if(this.currentLevel == 1) {
-			window.document.querySelector("body").className = "revealGobackOnNextLoad";
 		}
 	}
 	,delay: function(fn,d) {
@@ -1091,7 +1081,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		var t = "Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan";
 		var obj = { };
 		var this1 = obj != null ? obj : { };
-		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, panel1classes : "recessed0", panel2classes : "", panel3classes : ""}));
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, panel1classes : "recessed0", panel2classes : "", panel3classes : ""})).addPartialString("subcontent","",ufront_view_TemplatingEngines.get_haxe());
 		var this2 = Type.getClassName(actions_ConfidantInterface);
 		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
 	}
@@ -1103,7 +1093,47 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		var d = { title : t, portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "http://" + this.getHostName() + "/"};
 		var obj = { };
 		var this1 = obj != null ? obj : { };
-		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,d));
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,d)).addPartialString("subcontent","",ufront_view_TemplatingEngines.get_haxe());
+		var this2 = Type.getClassName(actions_ConfidantInterface);
+		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
+	}
+	,graphic: function() {
+		var t = "Confidant Communications : Graphic Design";
+		var obj = { };
+		var this1 = obj != null ? obj : { };
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, portfolioItem : "", panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/about/"})).addPartial("subcontent","/about/graphic.html");
+		var this2 = Type.getClassName(actions_ConfidantInterface);
+		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
+	}
+	,joomla: function() {
+		var t = "Confidant Communications : Joomla! Development and Training in Saskatoon";
+		var obj = { };
+		var this1 = obj != null ? obj : { };
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, portfolioItem : "", panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/about/"})).addPartial("subcontent","/about/joomla.html");
+		var this2 = Type.getClassName(actions_ConfidantInterface);
+		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
+	}
+	,books: function() {
+		var t = "Confidant Communications : Book Design, Book Marketing, and Book Publishing in Saskatoon";
+		var obj = { };
+		var this1 = obj != null ? obj : { };
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, portfolioItem : "", panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/about/"})).addPartial("subcontent","/about/books.html");
+		var this2 = Type.getClassName(actions_ConfidantInterface);
+		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
+	}
+	,web: function() {
+		var t = "Confidant Communications : Web Design in Saskatoon";
+		var obj = { };
+		var this1 = obj != null ? obj : { };
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, portfolioItem : "", panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/about/"})).addPartial("subcontent","/about/web.html");
+		var this2 = Type.getClassName(actions_ConfidantInterface);
+		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
+	}
+	,interactive: function() {
+		var t = "Confidant Communications : Interactive Development in Saskatoon";
+		var obj = { };
+		var this1 = obj != null ? obj : { };
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, portfolioItem : "", panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/about/"})).addPartial("subcontent","/about/interactive.html");
 		var this2 = Type.getClassName(actions_ConfidantInterface);
 		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
 	}
@@ -1112,7 +1142,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		var d = { title : t, portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : "http://" + this.getHostName() + "/"};
 		var obj = { };
 		var this1 = obj != null ? obj : { };
-		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,d));
+		var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,d)).addPartialString("subcontent","",ufront_view_TemplatingEngines.get_haxe());
 		var this2 = Type.getClassName(actions_ConfidantInterface);
 		return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
 	}
@@ -1125,7 +1155,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var d1 = "http://" + _gthis.getHostName() + "/";
 			var obj = { };
 			var this1 = obj != null ? obj : { };
-			var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, content : d, portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : d1}));
+			var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, content : d, portfolioItem : null, panel1classes : "recessed0 recessed1", panel2classes : "recessed0", panel3classes : "", gobackLink : d1})).addPartialString("subcontent","",ufront_view_TemplatingEngines.get_haxe());
 			var this2 = Type.getClassName(actions_ConfidantInterface);
 			return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t});
 		});
@@ -1136,7 +1166,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 			var d = { title : t + result.title, content : [], portfolioItem : result, panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/portfolio/"};
 			var obj = { };
 			var this1 = obj != null ? obj : { };
-			var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,d),"portfolio.html");
+			var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,d),"portfolio.html").addPartialString("subcontent","",ufront_view_TemplatingEngines.get_haxe());
 			var this2 = Type.getClassName(actions_ConfidantInterface);
 			return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t + result.title});
 		});
@@ -1170,34 +1200,79 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				var result1 = this.wrapResult(this.about(),wrappingRequired1);
 				this.setContextActionResultWhenFinished(result1);
 				return result1;
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "graphic-design") {
+				this.context.actionContext.action = "graphic";
+				this.context.actionContext.args = [];
+				this.context.actionContext.get_uriParts().splice(0,2);
+				var this3 = haxe_rtti_Meta.getFields(controller_HomeController).graphic.wrapResult[0];
+				var wrappingRequired2 = this3;
+				var result2 = this.wrapResult(this.graphic(),wrappingRequired2);
+				this.setContextActionResultWhenFinished(result2);
+				return result2;
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "joomla-development") {
+				this.context.actionContext.action = "joomla";
+				this.context.actionContext.args = [];
+				this.context.actionContext.get_uriParts().splice(0,2);
+				var this4 = haxe_rtti_Meta.getFields(controller_HomeController).joomla.wrapResult[0];
+				var wrappingRequired3 = this4;
+				var result3 = this.wrapResult(this.joomla(),wrappingRequired3);
+				this.setContextActionResultWhenFinished(result3);
+				return result3;
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "book-design-saskatoon") {
+				this.context.actionContext.action = "books";
+				this.context.actionContext.args = [];
+				this.context.actionContext.get_uriParts().splice(0,2);
+				var this5 = haxe_rtti_Meta.getFields(controller_HomeController).books.wrapResult[0];
+				var wrappingRequired4 = this5;
+				var result4 = this.wrapResult(this.books(),wrappingRequired4);
+				this.setContextActionResultWhenFinished(result4);
+				return result4;
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "web-design-saskatoon") {
+				this.context.actionContext.action = "web";
+				this.context.actionContext.args = [];
+				this.context.actionContext.get_uriParts().splice(0,2);
+				var this6 = haxe_rtti_Meta.getFields(controller_HomeController).web.wrapResult[0];
+				var wrappingRequired5 = this6;
+				var result5 = this.wrapResult(this.web(),wrappingRequired5);
+				this.setContextActionResultWhenFinished(result5);
+				return result5;
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "interactive") {
+				this.context.actionContext.action = "interactive";
+				this.context.actionContext.args = [];
+				this.context.actionContext.get_uriParts().splice(0,2);
+				var this7 = haxe_rtti_Meta.getFields(controller_HomeController).interactive.wrapResult[0];
+				var wrappingRequired6 = this7;
+				var result6 = this.wrapResult(this.interactive(),wrappingRequired6);
+				this.setContextActionResultWhenFinished(result6);
+				return result6;
 			} else if(method.toLowerCase() == "get" && 1 == uriParts.length && uriParts[0] == "contact") {
 				this.context.actionContext.action = "contact";
 				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,1);
-				var this3 = haxe_rtti_Meta.getFields(controller_HomeController).contact.wrapResult[0];
-				var wrappingRequired2 = this3;
-				var result2 = this.wrapResult(this.contact(),wrappingRequired2);
-				this.setContextActionResultWhenFinished(result2);
-				return result2;
+				var this8 = haxe_rtti_Meta.getFields(controller_HomeController).contact.wrapResult[0];
+				var wrappingRequired7 = this8;
+				var result7 = this.wrapResult(this.contact(),wrappingRequired7);
+				this.setContextActionResultWhenFinished(result7);
+				return result7;
 			} else if(method.toLowerCase() == "get" && 1 == uriParts.length && uriParts[0] == "portfolio") {
 				this.context.actionContext.action = "portfolio";
 				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,1);
-				var this4 = haxe_rtti_Meta.getFields(controller_HomeController).portfolio.wrapResult[0];
-				var wrappingRequired3 = this4;
-				var result3 = this.wrapResult(this.portfolio(),wrappingRequired3);
-				this.setContextActionResultWhenFinished(result3);
-				return result3;
+				var this9 = haxe_rtti_Meta.getFields(controller_HomeController).portfolio.wrapResult[0];
+				var wrappingRequired8 = this9;
+				var result8 = this.wrapResult(this.portfolio(),wrappingRequired8);
+				this.setContextActionResultWhenFinished(result8);
+				return result8;
 			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "portfolio" && uriParts[1].length > 0) {
 				var id = uriParts[1];
 				this.context.actionContext.action = "returnPortfolioItem";
 				this.context.actionContext.args = [id];
 				this.context.actionContext.get_uriParts().splice(0,2);
-				var this5 = haxe_rtti_Meta.getFields(controller_HomeController).returnPortfolioItem.wrapResult[0];
-				var wrappingRequired4 = this5;
-				var result4 = this.wrapResult(this.returnPortfolioItem(id),wrappingRequired4);
-				this.setContextActionResultWhenFinished(result4);
-				return result4;
+				var this10 = haxe_rtti_Meta.getFields(controller_HomeController).returnPortfolioItem.wrapResult[0];
+				var wrappingRequired9 = this10;
+				var result9 = this.wrapResult(this.returnPortfolioItem(id),wrappingRequired9);
+				this.setContextActionResultWhenFinished(result9);
+				return result9;
 			}
 			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 20, className : "controller.HomeController", methodName : "execute"}));
 		} catch( e ) {
@@ -4527,6 +4602,63 @@ minject_provider_ValueProvider.prototype = {
 	}
 	,__class__: minject_provider_ValueProvider
 };
+var ufront_app_UFErrorHandler = function() { };
+$hxClasses["ufront.app.UFErrorHandler"] = ufront_app_UFErrorHandler;
+ufront_app_UFErrorHandler.__name__ = ["ufront","app","UFErrorHandler"];
+ufront_app_UFErrorHandler.prototype = {
+	handleError: null
+	,__class__: ufront_app_UFErrorHandler
+};
+var overrides_CustomErrorPageHandler = function() {
+	this.showStack = false;
+	this.catchErrors = true;
+};
+$hxClasses["overrides.CustomErrorPageHandler"] = overrides_CustomErrorPageHandler;
+overrides_CustomErrorPageHandler.__name__ = ["overrides","CustomErrorPageHandler"];
+overrides_CustomErrorPageHandler.__interfaces__ = [ufront_app_UFErrorHandler];
+overrides_CustomErrorPageHandler.errorStackItems = function(stack) {
+	var arr = haxe_CallStack.toString(stack).split("\n");
+	return arr;
+};
+overrides_CustomErrorPageHandler.prototype = {
+	catchErrors: null
+	,showStack: null
+	,handleError: function(httpError,ctx) {
+		var inner = httpError != null && httpError.data != null ? " (" + Std.string(httpError.data) + ")" : "";
+		var callStack = this.showStack ? " " + haxe_CallStack.toString(haxe_CallStack.exceptionStack()) : "";
+		ctx.messages.push({ msg : "Handling error: " + Std.string(httpError) + inner + callStack, pos : { fileName : "CustomErrorPageHandler.hx", lineNumber : 44, className : "overrides.CustomErrorPageHandler", methodName : "handleError"}, type : ufront_log_MessageType.MError});
+		if((ctx.completion & 1 << ufront_web_context_RequestCompletion.CRequestHandlersComplete[1]) == 0) {
+			ctx.response.clear();
+			ctx.response.status = httpError.code;
+			ctx.response.set_contentType("text/html");
+			ctx.response.write(this.renderError(httpError,this.showStack));
+			ctx.completion |= 1 << ufront_web_context_RequestCompletion.CRequestHandlersComplete[1];
+		}
+		if(!this.catchErrors) {
+			httpError.throwSelf();
+		}
+		return ufront_core_SurpriseTools.success();
+	}
+	,renderErrorContent: function(error,showStack) {
+		if(showStack == null) {
+			showStack = false;
+		}
+		var inner = null != error.data ? "<p class=\"error-data\">" + Std.string(error.data) + "</p>" : "";
+		var pos = showStack ? "<p class=\"error-pos\">&gt; " + error.printPos() + "</p>" : "";
+		var exceptionStackItems = overrides_CustomErrorPageHandler.errorStackItems(haxe_CallStack.exceptionStack());
+		var exceptionStack = showStack && exceptionStackItems.length > 0 ? "<div class=\"error-exception-stack\"><h3>Exception Stack:</h3>\n\t\t\t\t\t<pre><code>" + exceptionStackItems.join("\n") + "</pre></code>\n\t\t\t\t</div>" : "";
+		var content = "\n\t\t\t<summary class=\"error-summary\"><h1 class=\"error-message\">" + error.message + "</h1></summary>\n\t\t\t<details class=\"error-details\"> " + inner + " " + pos + " " + exceptionStack + "</details>\n\t\t";
+		return content;
+	}
+	,renderErrorPage: function(title,content) {
+		return "<!DOCTYPE html>\n<html>\n<head>\n\t<title>" + title + "</title>\n\t<link rel=\"stylesheet\" href=\"/css/home.css\" media=\"screen\">\n</head>\n<body>\n\t<div class=\"container\">\n\t\t<div id=\"stage\" class=\"\">\n\t\t\t<div id=\"panel1\" class=\"recessed0 recessed1\">\n\t\t\t\t<img id=\"confidantLogo\" src=\"/images/confidantLogo.jpg\" alt=\"Confidant Communications\" />\n\t\t\t</div>\n\t\t\t<div id=\"panel2\" style=\"display:block;opacity:1;top:120px;left:0;\">\n\t\t\t\t<div class=\"content\">\n\t\t\t\t\t" + content + "\n\t\t\t\t\t<p style=\"text-align:center;\"><a href=\"/\">Go back to the home page please.</a></p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</body>\n</html>\n";
+	}
+	,renderError: function(error,showStack) {
+		var content = this.renderErrorContent(error,showStack);
+		return this.renderErrorPage(error.message,content);
+	}
+	,__class__: overrides_CustomErrorPageHandler
+};
 var pushstate_PushState = function() { };
 $hxClasses["pushstate.PushState"] = pushstate_PushState;
 pushstate_PushState.__name__ = ["pushstate","PushState"];
@@ -4717,6 +4849,7 @@ pushstate_PushState.getUploadsForState = function(state) {
 	var uploadCacheID = state.__postFilesCacheID;
 	var _this = pushstate_PushState.uploadCache;
 	if((__map_reserved[uploadCacheID] != null ? _this.existsReserved(uploadCacheID) : _this.h.hasOwnProperty(uploadCacheID)) == false) {
+		haxe_Log.trace("Upload files with cache ID " + uploadCacheID + " is not available anymore",{ fileName : "PushState.hx", lineNumber : 214, className : "pushstate.PushState", methodName : "getUploadsForState"});
 		return null;
 	} else {
 		var _this1 = pushstate_PushState.uploadCache;
@@ -6258,6 +6391,8 @@ var ufront_app_ClientJsApplication = function(optionsIn) {
 			}
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
+			if (e instanceof js__$Boot_HaxeError) e = e.val;
+			haxe_Log.trace("Failed to load view engine " + Type.getClassName(this.configuration.viewEngine) + ": " + Std.string(e),{ fileName : "ClientJsApplication.hx", lineNumber : 161, className : "ufront.app.ClientJsApplication", methodName : "new"});
 		}
 	}
 	if(this.configuration.clientActions != null) {
@@ -6331,13 +6466,6 @@ ufront_app_ClientJsApplication.prototype = $extend(ufront_app_HttpApplication.pr
 	,__class__: ufront_app_ClientJsApplication
 	,__properties__: {get_currentContext:"get_currentContext"}
 });
-var ufront_app_UFErrorHandler = function() { };
-$hxClasses["ufront.app.UFErrorHandler"] = ufront_app_UFErrorHandler;
-ufront_app_UFErrorHandler.__name__ = ["ufront","app","UFErrorHandler"];
-ufront_app_UFErrorHandler.prototype = {
-	handleError: null
-	,__class__: ufront_app_UFErrorHandler
-};
 var ufront_app_UFInitRequired = function() { };
 $hxClasses["ufront.app.UFInitRequired"] = ufront_app_UFInitRequired;
 ufront_app_UFInitRequired.__name__ = ["ufront","app","UFInitRequired"];
@@ -8507,35 +8635,49 @@ ufront_remoting_RemotingUtil.defaultErrorHandler = function(error) {
 		var responseData = error[4];
 		var responseCode = error[3];
 		var remotingCallString = error[2];
+		haxe_Log.trace("Error during remoting call " + remotingCallString + ": The HTTP Request returned status [" + responseCode + "].",{ fileName : "RemotingUtil.hx", lineNumber : 125, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		haxe_Log.trace("Returned data: " + responseData,{ fileName : "RemotingUtil.hx", lineNumber : 126, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	case 1:
 		var err = error[3];
 		var remotingCallString1 = error[2];
+		haxe_Log.trace("Error during remoting call " + remotingCallString1 + ": API or Method is not found or not available in the remoting context.",{ fileName : "RemotingUtil.hx", lineNumber : 128, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		haxe_Log.trace("Error message: " + err,{ fileName : "RemotingUtil.hx", lineNumber : 129, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	case 2:
 		var stack = error[4];
 		var e = error[3];
 		var remotingCallString2 = error[2];
+		haxe_Log.trace("Error during remoting call " + remotingCallString2 + ": The server threw an error \"" + Std.string(e) + "\".",{ fileName : "RemotingUtil.hx", lineNumber : 131, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		haxe_Log.trace(stack,{ fileName : "RemotingUtil.hx", lineNumber : 132, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	case 3:
 		var e1 = error[3];
 		var remotingCallString3 = error[2];
+		haxe_Log.trace("Error during remoting call " + remotingCallString3 + ": The client throw an error \"" + Std.string(e1) + "\" during the remoting callback.",{ fileName : "RemotingUtil.hx", lineNumber : 134, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		haxe_Log.trace("Compiling with \"-debug\" will prevent this error being caught, so you can use your browser's debugger to collect more information.",{ fileName : "RemotingUtil.hx", lineNumber : 135, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	case 4:
 		var err1 = error[4];
 		var troubleLine = error[3];
 		var remotingCallString4 = error[2];
+		haxe_Log.trace("Error during remoting call " + remotingCallString4 + ": Failed to unserialize this line in the response: \"" + err1 + "\"",{ fileName : "RemotingUtil.hx", lineNumber : 137, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		haxe_Log.trace("The line that failed: \"" + err1 + "\"",{ fileName : "RemotingUtil.hx", lineNumber : 138, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	case 5:
 		var responseData1 = error[3];
 		var remotingCallString5 = error[2];
+		haxe_Log.trace("Error during remoting call " + remotingCallString5 + ": No remoting result in data.",{ fileName : "RemotingUtil.hx", lineNumber : 140, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
+		haxe_Log.trace("Returned data: " + responseData1,{ fileName : "RemotingUtil.hx", lineNumber : 141, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	case 6:
 		var data = error[3];
 		var remotingCallString6 = error[2];
+		haxe_Log.trace("The remoting call " + remotingCallString6 + " functioned correctly, but the API returned a failure: " + data,{ fileName : "RemotingUtil.hx", lineNumber : 143, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	case 7:
 		var e2 = error[2];
+		haxe_Log.trace("Unknown error encountered during remoting call: " + Std.string(e2),{ fileName : "RemotingUtil.hx", lineNumber : 145, className : "ufront.remoting.RemotingUtil", methodName : "defaultErrorHandler"});
 		break;
 	}
 };
@@ -12184,7 +12326,7 @@ api_TestApi.__meta__ = { obj : { asyncApi : ["api.AsyncTestApi"]}, fields : { ge
 ufront_api_UFAsyncApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.AsyncConnection",""]]}};
 api_AsyncTestApi.__meta__ = { obj : { rtti : [["injectApi","minject.Injector","",""]]}};
 ufront_web_Controller.__meta__ = { obj : { rtti : [["injectContext","ufront.web.context.HttpContext","",""]]}};
-controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [3]}, about : { wrapResult : [3]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [4]}, returnPortfolioItem : { wrapResult : [4]}}};
+controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [3]}, about : { wrapResult : [3]}, graphic : { wrapResult : [3], template : ["/home/about.html"]}, joomla : { wrapResult : [3], template : ["/home/about.html"]}, books : { wrapResult : [3], template : ["/home/about.html"]}, web : { wrapResult : [3], template : ["/home/about.html"]}, interactive : { wrapResult : [3], template : ["/home/about.html"]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [4]}, returnPortfolioItem : { wrapResult : [4]}}};
 haxe_IMap.__meta__ = { obj : { 'interface' : null}};
 haxe_Serializer.USE_CACHE = false;
 haxe_Serializer.USE_ENUM_INDEX = false;
@@ -12214,11 +12356,11 @@ ufront_web_context_HttpResponse.NOT_FOUND = 404;
 ufront_web_context_HttpResponse.INTERNAL_SERVER_ERROR = 500;
 minject_point_InjectionPoint.__meta__ = { obj : { 'interface' : null}};
 minject_provider_DependencyProvider.__meta__ = { obj : { 'interface' : null}};
+ufront_app_UFErrorHandler.__meta__ = { obj : { 'interface' : null}};
 pushstate_PushState.ignoreAnchors = true;
 ufront_api_RequireAsyncCallbackApi.__meta__ = { obj : { 'interface' : null}};
 ufront_api_UFCallbackApi.__meta__ = { obj : { rtti : [["new","haxe.remoting.AsyncConnection","",""]]}};
 ufront_app_ClientJsApplication._currentApps = [];
-ufront_app_UFErrorHandler.__meta__ = { obj : { 'interface' : null}};
 ufront_app_UFInitRequired.__meta__ = { obj : { 'interface' : null}};
 ufront_app_UFLogHandler.__meta__ = { obj : { 'interface' : null}};
 ufront_app_UFResponseMiddleware.__meta__ = { obj : { 'interface' : null}};

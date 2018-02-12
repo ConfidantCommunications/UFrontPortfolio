@@ -5,8 +5,8 @@
 -cp src
 -main Client
 -js www/js/client.js
---no-traces
-# -debug
+#--no-traces
+#-debug
 # don't use dce
 
 -cmd (java -jar /Users/allan/Documents/java/compiler-20131014/compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS --js "www/js/client.js" --js_output_file "www/js/client.min.js")

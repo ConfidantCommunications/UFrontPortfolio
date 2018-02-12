@@ -13,7 +13,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	
 	<title>::title::</title>  
-	<link rel="stylesheet" href="/css/home.css?v=1.03" media="screen" />
+	<link rel="stylesheet" href="/css/home.css?v=1.04" media="screen" />
 	<!--[if lte IE 9]>
 		<link rel="stylesheet" href="/css/IE9.css">
 	<![endif]-->
@@ -935,8 +935,8 @@
 					<div data-uf-partial="portfolioNavPartial" style="">
 						::if (portfolioItem.html)::
 						::portfolioItem.html::
-						::else::
 						::end::
+						$$subcontent()
 					</div>
 				</div>
 			</div>

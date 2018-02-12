@@ -64,29 +64,46 @@ h1{
         margin:80px auto 0;
 }
 h2{
-    
+    text-align:center;
     font-size:30px;
-    margin:1.2em auto 0;
+    margin:0em auto 0.5em;
     font-family:"Nothing You Could Do";
 }
 .content{
     margin:0 10%;
 }
 
+.jaggy{
+    border: 15px solid #fff;
+    background-color:#F0E9DC;
+    border-image: url('/images/jaggy-bg.png') 15 15 15 15 round;
+    padding:1em 1em 0;
+    position:relative;
+    margin:80px 0 ;
+    img{max-width:100%;height:auto;}
+    h2{height:30px;margin-top:0em !important;}
+}
 
+img#pro_design{
+    margin-top:-70px;
+}
+.cgd{
+    text-align:center; margin:0 0 -60px;
+    img{border:10px solid #fff;}
+    }
 //.bbq-item{max-width: 40em;margin:0 auto;width:100%;}
 .limitWidth{max-width:30em;margin:0 auto;}
 dt{
     display:block;
     float:left;
-    width:28%;
+    width:38%;
     text-align:right;
     padding:0 2% 0 0;
 }
 dd{
     display:block;
     float:left;
-    width:70%;
+    width:60%;
     margin:0;
 }
 .applyPerspective(){
@@ -114,10 +131,10 @@ dd{
     position: absolute;
     .applyPerspective();
 }
-@keyframes descend { from {top:-100px;} to {top:0px;}}
-@-moz-keyframes descend { from {top:-100px;} to {top:0px;}}
-@-o-keyframes descend { from {top:-100px;} to {top:0px;}}
-@-webkit-keyframes descend { from {top:-100px;} to {top:0px;}}
+// @keyframes descend { from {top:-100px;} to {top:0px;}}
+// @-moz-keyframes descend { from {top:-100px;} to {top:0px;}}
+// @-o-keyframes descend { from {top:-100px;} to {top:0px;}}
+// @-webkit-keyframes descend { from {top:-100px;} to {top:0px;}}
 #goback{
         display:block;
         position:fixed;
@@ -131,10 +148,9 @@ dd{
         width:100px;
         height:100px;
         //line-height:.5em;
-    //.animation(descend, 1s, 1s);wasn't displaying properly
-}
-body.revealGobackOnNextLoad #goback{
-    //.animation(descend, 1s, 1s);wasn't displaying properly
+        // .animation(descend, 1s, 0s);
+        // animation-fill-mode: backwards;
+        // &.nodescend{animation-duration:0s;}
 }
 
 #portfolioPrev,#portfolioNext{
@@ -317,7 +333,7 @@ nav{
     .portfolioGroup{float:none;width:100%;margin:0;}
     .content{margin: 0 100px;}
     h1{font-size:2em;}
-    h2{font-size:1.2em;margin:1em auto 0;}
+    //h2{font-size:1.2em;margin:1em auto 0;}
     .contentImg{float:none;margin:0 auto;display:block;}
     
 }
@@ -441,6 +457,22 @@ nav{
     }
     
 }
+@keyframes slidein { //for specialties
+    from {
+        margin-left:-5000px;
+    }
+    to {
+        margin-left:0px;
+    }
+}
+@keyframes indent { //for specialties
+    from {
+        padding-left:0px;
+    }
+    to {
+        padding-left:20px;
+    }
+}
 #panel2 { //main navigation
     position: fixed;
     width: 100%;
@@ -457,18 +489,65 @@ nav{
     h1{
         margin:2em auto 0;
     }
-    ul{margin:0.5em auto 0;}
     p{margin-top:0;}
     ul+p{margin-top:1.5em;}
     @media screen and (max-width:400px){
         h1{font-size:1em;}
         svg{width:80%;}
     }
+    ul{
+        margin:0.5em auto 1em;
+    }
+    ul.specialties{
+        padding:0;
+        li{
+	        animation-name: slidein;
+	        animation-duration: 1s;
+            animation-fill-mode: both; //makes it not use the default position prior to animating
+            opacity:1;
+            padding:0 5px;
+            margin:0 0 2px;
+            display:block;
+            width:100%;
+            border-radius:10px;
+            background-color:@brand-primary;
+            list-style-type:none;
+            &.delay1{animation-delay:0s;}
+            &.delay2{animation-delay:.2s;}
+            &.delay3{animation-delay:.4s;}
+            &.delay4{animation-delay:.6s;}
+            &.delay5{animation-delay:.8s;}
+        }  
+        a{
+            color:#fff;
+            font-weight:700;
+            width:100%;
+            display:block;
+            padding:5px 0;
+            animation-direction: reverse;
+            &:hover{
+                animation-name:indent;
+                animation-fill-mode:both;
+                animation-duration:.5s;
+                animation-direction:normal;
+            }
+        }
+    }
 }
+#panel2.recessed1 ul.specialties li{animation-name:none;}
 .scrolldown {   
     text-align:center;
     font-size:2em;
 }
+// .uf-partial-outgoing{background-color:red;}
+// .uf-partial-incoming{
+    // background-color:blue;
+    // .opacity(1);
+    // animation-name: fadein0to1;
+    // animation-duration: 3s;
+// }
+//for error page:
+summary, details{text-align:center;}
 #panel3{
     position:relative;
     top:0;left:0;
@@ -477,11 +556,16 @@ nav{
     .content{
         *{max-width:600px;margin-left:auto;margin-right:auto;}
         padding-bottom:30px;
-        img{max-width:600px;width:100%;}
+        img{max-width:600px;}
     }
     h2,h3{text-align:center;}
     
-    h2{font-size:36px;line-height:.8em;color:#666;}
+    h2{
+        font-size:36px;
+        line-height:.8em;
+        color:#666;
+        margin-top:2em;
+    }
     .loading{text-align:center;display:none;}
 }
 
@@ -618,7 +702,6 @@ nav{
     //this rule was added because webkit was badly displaying text when the transforms were applied
     #panel3.recessed0{
         .transform(none);
-        
         .loading{display:block;}
     }
     

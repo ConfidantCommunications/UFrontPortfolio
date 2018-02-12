@@ -9,12 +9,8 @@ There is some [great example code](https://github.com/kevinresol/ufront-nodejs-g
 * The MVC code structure makes it easy to separate your content from your other code.
 * Multiple templating systems are available. I am using the default Haxe template system.
 
-##FAQ
-**Why do you have all those hxml files?**
-
-I use FDT for Haxe development, and it will automatically use compile.hxml to compile on every save, so I combined client.hxml and server.hxml into this single file. If you are using the UFront command-line tools, the command `ufront b` will build all the hxml files in the current directory. Doing that, you won't need the compile.hxml file. 
-
-**What else do I need?**
+## Notes
 
 * I am using LESS for my styling. You will need to have a LESS compiler like [Crunch](https://getcrunch.co/) or else replace my styles with your own CSS, Stylus or SASS files.
-* Be sure to create a "cache" directory within the "www" directory. Haxe PHP will use it to speed things up.
+* Note: Be sure to create a "cache" directory within the "www" directory. Haxe PHP will use it to speed things up. Also remember that on your web server(s) you should delete files within the cache folder after recompiling, so that the server will refresh the cache to reflect any new code you created. 
+* If you are using XDebug and the server generates a nesting error; be sure to edit php.ini setting "xdebug.max_nesting_level". I have mine at 512. You might be able to get by with 511. ;)

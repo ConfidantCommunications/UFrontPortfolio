@@ -25,21 +25,24 @@ class HomeController extends Controller
 	@:route(GET, "/")
 	public function main()
 	{
+
 		var t:String="Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan";
+
 		return new PartialViewResult({
 				title: t,
 				panel1classes:"recessed0",
 				panel2classes:"",
 				panel3classes:""
 			})
-			//.addPartial("panel2Partial","home.html")
-			//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
+			.addPartialString("subcontent","",TemplatingEngines.haxe)
 			.addClientAction(ConfidantInterface,{msg:t});
 			// .addClientAction(AnalyticsAction,{});
 	} 
 	public function getHostName():String {
 		
-		#if server
+		#if neko
+			return neko.Web.getHostName();
+		#elseif php
 			return php.Web.getHostName();
 		#else
 			return js.Browser.window.location.hostname;
@@ -50,9 +53,8 @@ class HomeController extends Controller
 	
 	//@:route(GET, "/portfolio/*")
 	//public var portfolioController:PortfolioController;
-	//@:route(GET, "/portfolio/*")
-	@:route(GET, "/about")
 
+	@:route(GET, "/about")
 	public function about()
 	{
 		var t:String="Confidant Communications : About Us";
@@ -64,25 +66,123 @@ class HomeController extends Controller
 				panel3classes:"",
 				gobackLink:"http://"+getHostName()+"/"
 			})
+			.addPartialString("subcontent","",TemplatingEngines.haxe)
 			.addClientAction(ConfidantInterface,{msg:t});
-			// .addClientAction(AnalyticsAction,{});		
+			//.addJsScript("/js/rotate-box.js");
+			//.addJsScriptToResult("/blvla.js");
 	}
-	@:route(GET, "/contact")
 
+
+	@:route(GET, "/about/graphic-design")
+	@template("/home/about.html") //returns same template content as above, but with a portfolio item 
+	//also see documentation notes for ViewResult class
+	
+	public function graphic()
+	{
+ 		var t:String="Confidant Communications : Graphic Design";
+
+		return new PartialViewResult({ 
+			title:t,
+			portfolioItem:"",
+			panel1classes:"recessed0 recessed1 recessed2",
+			panel2classes:"recessed0 recessed1",
+			panel3classes:"recessed0",
+			gobackLink:"/about/"
+		})
+		.addPartial("subcontent","/about/graphic.html") //if it generates a nesting error; be sure to edit php.ini
+		//also, call it as a helper from the template
+		.addClientAction(ConfidantInterface,{msg:t});
+	}
+
+	@:route(GET, "/about/joomla-development")
+	@template("/home/about.html")
+	
+	public function joomla()
+	{
+ 		var t:String="Confidant Communications : Joomla! Development and Training in Saskatoon";
+
+		return new PartialViewResult({ 
+			title:t,
+			portfolioItem:"",
+			panel1classes:"recessed0 recessed1 recessed2",
+			panel2classes:"recessed0 recessed1",
+			panel3classes:"recessed0",
+			gobackLink:"/about/"
+		})
+		.addPartial("subcontent","/about/joomla.html")
+		.addClientAction(ConfidantInterface,{msg:t});
+	}
+
+	@:route(GET, "/about/book-design-saskatoon")
+	@template("/home/about.html") 
+	
+	public function books()
+	{
+ 		var t:String="Confidant Communications : Book Design, Book Marketing, and Book Publishing in Saskatoon";
+
+		return new PartialViewResult({ 
+			title:t,
+			portfolioItem:"",
+			panel1classes:"recessed0 recessed1 recessed2",
+			panel2classes:"recessed0 recessed1",
+			panel3classes:"recessed0",
+			gobackLink:"/about/"
+		})
+		.addPartial("subcontent","/about/books.html")
+		.addClientAction(ConfidantInterface,{msg:t});
+	}
+	@:route(GET, "/about/web-design-saskatoon")
+	@template("/home/about.html")
+	
+	public function web()
+	{
+ 		var t:String="Confidant Communications : Web Design in Saskatoon";
+
+		return new PartialViewResult({ 
+			title:t,
+			portfolioItem:"",
+			panel1classes:"recessed0 recessed1 recessed2",
+			panel2classes:"recessed0 recessed1",
+			panel3classes:"recessed0",
+			gobackLink:"/about/"
+		})
+		.addPartial("subcontent","/about/web.html")
+		.addClientAction(ConfidantInterface,{msg:t});
+	}
+
+	@:route(GET, "/about/interactive")
+	@template("/home/about.html")
+	
+	public function interactive()
+	{
+ 		var t:String="Confidant Communications : Interactive Development in Saskatoon";
+
+		return new PartialViewResult({ 
+			title:t,
+			portfolioItem:"",
+			panel1classes:"recessed0 recessed1 recessed2",
+			panel2classes:"recessed0 recessed1",
+			panel3classes:"recessed0",
+			gobackLink:"/about/"
+		})
+		.addPartial("subcontent","/about/interactive.html")
+		.addClientAction(ConfidantInterface,{msg:t});
+	}
+
+	@:route(GET, "/contact")
 	public function contact()
 	{
 		var t:String='Confidant Communications : Contact Us';
 		return new PartialViewResult({ 
 			title:t,
 			portfolioItem:null,
-				panel1classes:"recessed0 recessed1",
-				panel2classes:"recessed0",
-				panel3classes:"",
-				gobackLink:"http://"+getHostName()+"/"
+			panel1classes:"recessed0 recessed1",
+			panel2classes:"recessed0",
+			panel3classes:"",
+			gobackLink:"http://"+getHostName()+"/"
 		})
-		
+		.addPartialString("subcontent","",TemplatingEngines.haxe)
 		.addClientAction(ConfidantInterface,{msg:t});
-		// .addClientAction(AnalyticsAction,{});
 	}
 	
 	@:route(GET, "/portfolio")
@@ -102,8 +202,8 @@ class HomeController extends Controller
 				panel3classes:"",
 				gobackLink:"http://"+getHostName()+"/"
 			})
+			.addPartialString("subcontent","",TemplatingEngines.haxe)
 			.addClientAction(ConfidantInterface,{msg:t});
-			// .addClientAction(AnalyticsAction,{});
 		//.addPartial("portfolioNavPartial","portfolioNavPartial.html")
 		//.addClientAction(ConfidantInterface,{msg:"simpleAction"});
 		//.withLayout("layout.html",TemplatingEngines.haxe); //this line not necessary
@@ -125,6 +225,8 @@ class HomeController extends Controller
 				//portfolioItem: 'Result: $result'//, // print the result of the API call
 				//random: #if server 'Server' #else 'Client' #end, // let us know if this page is rendered by client or server
 			},"portfolio.html")
+
+			.addPartialString("subcontent","",TemplatingEngines.haxe)
 			.addClientAction(ConfidantInterface,{msg:t+result.title});
 			// .addClientAction(AnalyticsAction,{});
 	}

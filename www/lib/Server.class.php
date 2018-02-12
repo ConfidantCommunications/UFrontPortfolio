@@ -5,7 +5,7 @@ class Server {
 	public function __construct(){}
 	static function main() {
 		require 'haxe/_Unserializer/DefaultResolver.class.php'; 
-		$ufrontApp = new ufront_app_UfrontApplication(_hx_anonymous(array("indexController" => _hx_qtype("controller.HomeController"), "remotingApi" => _hx_qtype("api.ApiContext"), "defaultLayout" => "layout.html")));
+		$ufrontApp = new ufront_app_UfrontApplication(_hx_anonymous(array("indexController" => _hx_qtype("controller.HomeController"), "remotingApi" => _hx_qtype("api.ApiContext"), "defaultLayout" => "layout.html", "errorHandlers" => (new _hx_array(array(new overrides_CustomErrorPageHandler()))))));
 		$ufrontApp->executeRequest();
 	}
 	function __toString() { return 'Server'; }

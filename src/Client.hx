@@ -2,6 +2,7 @@ package;
 
 import controller.HomeController;
 import ufront.view.UFViewEngine;
+import overrides.CustomErrorPageHandler;
 #if js
 
 import pushstate.PushState;
@@ -21,12 +22,13 @@ class Client
 		var ufrontApp = new ClientJsApplication({ 
 			indexController: HomeController, 
 			//templatingEngines: [TemplatingEngines.erazor], 
-			defaultLayout: "layout.html"
+			defaultLayout: "layout.html",
 			//some stuff from @postite, never mind
 			//requestMiddleware:[new BrowserFileUploadMiddleware(),new middleware.SignalMiddleWare()], 
 			//responseMiddleware:[new middleware.SignalMiddleWare()], 
 			// clientActions:[actions.ConfidantInterface ]
 			//authImplementation:YesBossAuthHandler, 
+			errorHandlers: [ new CustomErrorPageHandler() ]
 		});
 		// ufrontApp.registerAction(actions.ConfidantInterface);//results in remapping
 		// Listen to any history changes using PushState, and process each request.

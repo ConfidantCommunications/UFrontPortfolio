@@ -20,9 +20,6 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
   public var currentPath="";
 
   override public function execute( context:HttpContext, ?data:Dynamic):Void {
-		// var ga=new Analytics();
-		// ga.call('send', 'pageview');
-		#if client
 
 		untyped __js__('window.ga("set", {page: {0}, title: {1}, location:{2}});',PushState.currentPath,data.msg,document.location);
 		untyped __js__('window.ga("send", "pageview");');
@@ -30,14 +27,10 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 		//lines below for most recent analytics. Generates error.
 		//untyped __js__('gtag("config", "UA-104215086-1", {"page_title" : {1}, "page_location" : {2}, "page_path": {0}});', PushState.currentPath, data.msg, document.location);
 
-
-		// ufTrace("Executing Confidant Interface:"+context);//+data.msg
 		delay(listen,500); //ensures dom is ready after a partialViewResult //don't go lower than this—it's too quick for iOS Safari.
-		#end 
   }
 
   function listen():Void {
-		// ufTrace("trying to ga!");
 		//reset scrolling of content divs:
 		document.querySelector("#panel2").scrollTop=0;
 		document.querySelector("#panel3").scrollTop=0;
@@ -56,7 +49,6 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 		}
 			
 		PushState.addEventListener(function(url,state) {
-			//ufTrace( 'Visiting $url and $state' );
 			updateClasses();
 		} );
 		
@@ -71,24 +63,20 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 		
 		for (thisLink in list){
 			thisLink.addEventListener("click",function(){
-						document.querySelector("#loader").className="show";
-					//ufTrace("gotcha"); 
+				document.querySelector("#loader").className="show";
 			});
 		}
   }
   function supportsSVG():Bool {
-	#if js
 	try{
-		document.createElementNS;
+		// document.createElementNS;
 		var n:SVGElement=cast(document.createElementNS('http://www.w3.org/2000/svg', "svg"),SVGElement);
 		n.createSVGRect;
 		return true;
 	} catch (e:Dynamic){
 		return false;
 	}
-	#end
 	return false;
-	//return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect;
   }
 
 
@@ -107,20 +95,10 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
     classes=classes.slice(0,newlen-1);    //removes unwanted items from end
 		
     for(thisLevel in levels){
-		//var div=document.querySelector(thisLevel);
 		document.querySelector(thisLevel).className="";
 		document.querySelector(thisLevel).className=classes.join(" ");
 		classes.pop();
-		
     }
-	var c=document.querySelector("body").className;
-	if((currentLevel>1)&&(c=="revealGobackOnNextLoad")){
-		//let the animation play, then remove the class
-		delay(function(){document.querySelector("body").className="";},1000);
-	}
-	if(currentLevel==1){
-		document.querySelector("body").className="revealGobackOnNextLoad";
-	}
   }
   
 

@@ -2,8 +2,24 @@
 -lib express
 -lib tink_core
 -D server
-
 -cp src
 -main Server
 --php-front index.php
 -php www/
+# remove cache file to prevent cache errors after adding classes
+-cmd (rm -f ./www/cache/haxe_autoload.php )  
+# -dce no
+# --macro allowPackage('controller')
+# --macro include('controller.AboutController')
+
+
+
+# --next
+# -lib ufront-mvc
+# -lib express
+# -lib tink_core
+# -D server
+# -cp src
+# -main Server
+# -neko www/index.n 
+#nekotools server -p 2000 -h localhost -d /Users/allan/Documents/Freelance/Confidant/Website/3d\ confidant\ site/ufront/www
