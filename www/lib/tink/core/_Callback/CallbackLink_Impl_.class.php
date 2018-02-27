@@ -4,32 +4,38 @@
 class tink_core__Callback_CallbackLink_Impl_ {
 	public function __construct(){}
 	static function _new($link) {
-		$this1 = $link;
+		$this1 = new tink_core__Callback_SimpleLink($link);
 		return $this1;
+	}
+	static function cancel($this1) {
+		if($this1 !== null) {
+			$this1->dissolve();
+		}
 	}
 	static function dissolve($this1) {
 		if($this1 !== null) {
-			call_user_func($this1);
+			$this1->dissolve();
 		}
 	}
 	static function toCallback($this1) {
-		$f = $this1;
-		$this2 = array(new _hx_lambda(array(&$f), "tink_core__Callback_CallbackLink_Impl__0"), 'execute');
-		return $this2;
+		return array(new _hx_lambda(array(&$this1), "tink_core__Callback_CallbackLink_Impl__0"), 'execute');
 	}
 	static function fromFunction($f) {
-		$this1 = $f;
+		$this1 = new tink_core__Callback_SimpleLink($f);
 		return $this1;
 	}
+	static function join($a, $b) {
+		return new tink_core__Callback_LinkPair($a, $b);
+	}
 	static function fromMany($callbacks) {
-		$this1 = array(new _hx_lambda(array(&$callbacks), "tink_core__Callback_CallbackLink_Impl__1"), 'execute');
+		$this1 = new tink_core__Callback_SimpleLink(array(new _hx_lambda(array(&$callbacks), "tink_core__Callback_CallbackLink_Impl__1"), 'execute'));
 		return $this1;
 	}
 	function __toString() { return 'tink.core._Callback.CallbackLink_Impl_'; }
 }
-function tink_core__Callback_CallbackLink_Impl__0(&$f, $r) {
+function tink_core__Callback_CallbackLink_Impl__0(&$this1, $_) {
 	{
-		call_user_func($f);
+		$this1->dissolve();
 	}
 }
 function tink_core__Callback_CallbackLink_Impl__1(&$callbacks) {
@@ -39,7 +45,7 @@ function tink_core__Callback_CallbackLink_Impl__1(&$callbacks) {
 			$cb = $callbacks[$_g];
 			$_g = $_g + 1;
 			if($cb !== null) {
-				call_user_func($cb);
+				$cb->dissolve();
 			}
 			unset($cb);
 		}

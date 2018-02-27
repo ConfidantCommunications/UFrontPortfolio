@@ -139,7 +139,7 @@ class ufront_web_context_HttpContext {
 		if($this->session !== null) {
 			return $this->session->commit();
 		} else {
-			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
 		}
 	}
 	public function ufTrace($msg, $pos = null) {

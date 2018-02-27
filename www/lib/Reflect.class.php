@@ -76,6 +76,21 @@ class Reflect {
 			return true;
 		}
 	}
+	static function compare($a, $b) {
+		if((is_object($_t = $a) && ($_t instanceof Enum) ? $_t == $b : _hx_equal($_t, $b))) {
+			return 0;
+		} else {
+			if(is_string($a)) {
+				return strcmp($a, $b);
+			} else {
+				if($a > $b) {
+					return 1;
+				} else {
+					return -1;
+				}
+			}
+		}
+	}
 	static function isObject($v) {
 		if($v === null) {
 			return false;

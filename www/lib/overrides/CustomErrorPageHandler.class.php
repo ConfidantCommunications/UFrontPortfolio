@@ -54,7 +54,8 @@ class overrides_CustomErrorPageHandler implements ufront_app_UFErrorHandler{
 	public $renderErrorPage = null;
 	public function renderError($error, $showStack = null) {
 		$content = $this->renderErrorContent($error, $showStack);
-		return $this->renderErrorPage($error->message, $content);
+		$shortMessage = _hx_array_get(_hx_explode(":", $error->message), 0);
+		return $this->renderErrorPage($shortMessage, $content);
 	}
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
@@ -104,12 +105,13 @@ function overrides_CustomErrorPageHandler_0(&$__hx__this, $error, $showStack) {
 		} else {
 			$exceptionStack = "";
 		}
-		$content = "\x0A\x09\x09\x09<summary class=\"error-summary\"><h1 class=\"error-message\">" . _hx_string_or_null($error->message) . "</h1></summary>\x0A\x09\x09\x09<details class=\"error-details\"> " . _hx_string_or_null($inner) . " " . _hx_string_or_null($pos) . " " . _hx_string_or_null($exceptionStack) . "</details>\x0A\x09\x09";
+		$shortMessage = _hx_array_get(_hx_explode(":", $error->message), 0);
+		$content = "\x0A\x09\x09\x09<summary class=\"error-summary\"><h1 class=\"error-message\">" . _hx_string_or_null($shortMessage) . "</h1></summary>\x0A\x09\x09\x09<details class=\"error-details\"> " . _hx_string_or_null($inner) . " " . _hx_string_or_null($pos) . " " . _hx_string_or_null($exceptionStack) . "</details>\x0A\x09\x09";
 		return $content;
 	}
 }
 function overrides_CustomErrorPageHandler_1(&$__hx__this, $title, $content) {
 	{
-		return "<!DOCTYPE html>\x0A<html>\x0A<head>\x0A\x09<title>" . _hx_string_or_null($title) . "</title>\x0A\x09<link rel=\"stylesheet\" href=\"/css/home.css\" media=\"screen\">\x0A</head>\x0A<body>\x0A\x09<div class=\"container\">\x0A\x09\x09<div id=\"stage\" class=\"\">\x0A\x09\x09\x09<div id=\"panel1\" class=\"recessed0 recessed1\">\x0A\x09\x09\x09\x09<img id=\"confidantLogo\" src=\"/images/confidantLogo.jpg\" alt=\"Confidant Communications\" />\x0A\x09\x09\x09</div>\x0A\x09\x09\x09<div id=\"panel2\" style=\"display:block;opacity:1;top:120px;left:0;\">\x0A\x09\x09\x09\x09<div class=\"content\">\x0A\x09\x09\x09\x09\x09" . _hx_string_or_null($content) . "\x0A\x09\x09\x09\x09\x09<p style=\"text-align:center;\"><a href=\"/\">Go back to the home page please.</a></p>\x0A\x09\x09\x09\x09</div>\x0A\x09\x09\x09</div>\x0A\x09\x09</div>\x0A\x09</div>\x0A</body>\x0A</html>\x0A";
+		return "<!DOCTYPE html>\x0A<html>\x0A<head>\x0A\x09<title>" . _hx_string_or_null($title) . "</title>\x0A\x09<link rel=\"stylesheet\" href=\"/css/home.css\" media=\"screen\">\x0A</head>\x0A<body>\x0A\x09<div class=\"container\">\x0A\x09\x09<div id=\"stage\" class=\"\">\x0A\x09\x09\x09<div id=\"panel1\" class=\"recessed0 recessed1\">\x0A\x09\x09\x09\x09<img id=\"confidantLogo\" src=\"/images/confidantLogo.jpg\" alt=\"Confidant Communications\" />\x0A\x09\x09\x09</div>\x0A\x09\x09\x09<div id=\"panel2\" style=\"display:block;opacity:1;top:120px;left:0;\">\x0A\x09\x09\x09\x09<div class=\"content\">\x0A\x09\x09\x09\x09\x09" . _hx_string_or_null($content) . "\x0A\x09\x09\x09\x09\x09<p style=\"text-align:center;\"><a href=\"/\">Sorry about that! Go back to the home page maybe?</a></p>\x0A\x09\x09\x09\x09</div>\x0A\x09\x09\x09</div>\x0A\x09\x09</div>\x0A\x09</div>\x0A</body>\x0A</html>\x0A";
 	}
 }

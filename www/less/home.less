@@ -1,5 +1,8 @@
 @brand-primary:#caba9c;
-@import url(https://fonts.googleapis.com/css?family=Catamaran:400,700|Nothing+You+Could+Do);
+@baseline:30px;
+@import url(https://fonts.googleapis.com/css?family=Catamaran:400,700|Nanum+Brush+Script);
+@scriptfont:'Nanum Brush Script', cursive;
+//@import './x3dom.less';
 //mixins:
 .opacity (@opacity: 1) {
 	-webkit-opacity: 	@opacity;
@@ -31,6 +34,10 @@
 }
 
 //|Allura
+* { 
+  margin: 0; 
+  padding: 0;
+}
 html{
     margin:0;padding:0;
     -webkit-font-smoothing: subpixel-antialiased;
@@ -45,65 +52,87 @@ body{
     width:100%;
     color:#333;
     font-family: 'Catamaran', sans-serif;
-    line-height: 1.5em;
-    font-size:18px;
+    line-height: @baseline;
+    font-size:@baseline*2/3;
     font-weight:400;
+    //background-image:url('/images/grid24.png');
 }
+input{width:320px;}
+textarea{width:325px;}
+.formHeader{
+    margin:@baseline 0 @baseline*0.5 30%;
+    border-top:1px solid @brand-primary;
+    text-align:left;
+    padding-top:@baseline;
+    //width:50%;
+    //min-width:280px;
+    display:inline-block;
+    font-size:@baseline*0.8;
+    color:#666;
+    //font-family:@scriptfont;
+}
+.formResult{text-align:center;}
 strong{font-weight:700;}
 a{
     color:darken(@brand-primary,20%);
     text-decoration:none;
     &:hover{color:darken(@brand-primary,50%);}
 }
+p,ul,ol{margin-bottom:@baseline;}
 h1{
         color:@brand-primary;
         font-family: cursive;
-        font-size:26px;
-        line-height:1em;
+        font-size:@baseline*2;
         text-align:center;
-        margin:80px auto 0;
+        margin:@baseline*4 auto 0;
 }
 h2{
+    
+    font-size:@baseline;
+    margin:@baseline*1.5 auto @baseline;
+    font-family:@scriptfont;
     text-align:center;
-    font-size:30px;
-    margin:0em auto 0.5em;
-    font-family:"Nothing You Could Do";
+    border-bottom:1px solid @brand-primary;        
+    //color:#666;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    clear:both;
+}
+h3{
+    font-size:@baseline*2/3;
+    text-align:center;
+    font-weight:700;
 }
 .content{
     margin:0 10%;
 }
-
-.jaggy{
-    border: 15px solid #fff;
-    background-color:#F0E9DC;
-    border-image: url('/images/jaggy-bg.png') 15 15 15 15 round;
-    padding:1em 1em 0;
-    position:relative;
-    margin:80px 0 ;
-    img{max-width:100%;height:auto;}
-    h2{height:30px;margin-top:0em !important;}
+li{
+    margin-left:@baseline;
 }
-
-img#pro_design{
-    margin-top:-70px;
-}
-.cgd{
-    text-align:center; margin:0 0 -60px;
-    img{border:10px solid #fff;}
-    }
 //.bbq-item{max-width: 40em;margin:0 auto;width:100%;}
-.limitWidth{max-width:30em;margin:0 auto;}
+.limitWidth, 
+#panel3 p,
+#panel3 h4,
+#panel3 h3, 
+#panel3 h2 {
+    max-width:30em;
+    margin-left: auto;
+    margin-right: auto;
+}
+#panel3 h2{
+    padding: 0 1em;}
 dt{
     display:block;
     float:left;
-    width:38%;
+    width:28%;
     text-align:right;
     padding:0 2% 0 0;
+    font-weight:700;
 }
 dd{
     display:block;
     float:left;
-    width:60%;
+    width:70%;
     margin:0;
 }
 .applyPerspective(){
@@ -131,10 +160,10 @@ dd{
     position: absolute;
     .applyPerspective();
 }
-// @keyframes descend { from {top:-100px;} to {top:0px;}}
-// @-moz-keyframes descend { from {top:-100px;} to {top:0px;}}
-// @-o-keyframes descend { from {top:-100px;} to {top:0px;}}
-// @-webkit-keyframes descend { from {top:-100px;} to {top:0px;}}
+@keyframes descend { from {top:-100px;} to {top:0px;}}
+@-moz-keyframes descend { from {top:-100px;} to {top:0px;}}
+@-o-keyframes descend { from {top:-100px;} to {top:0px;}}
+@-webkit-keyframes descend { from {top:-100px;} to {top:0px;}}
 #goback{
         display:block;
         position:fixed;
@@ -148,9 +177,10 @@ dd{
         width:100px;
         height:100px;
         //line-height:.5em;
-        // .animation(descend, 1s, 0s);
-        // animation-fill-mode: backwards;
-        // &.nodescend{animation-duration:0s;}
+    //.animation(descend, 1s, 1s);wasn't displaying properly
+}
+body.revealGobackOnNextLoad #goback{
+    //.animation(descend, 1s, 1s);wasn't displaying properly
 }
 
 #portfolioPrev,#portfolioNext{
@@ -164,7 +194,6 @@ dd{
     //font-weight:bold;
     z-index:98;
     line-height:70px;
-    overflow:hidden;
     a{
         //display:table-cell;
         //vertical-align:middle;
@@ -238,7 +267,7 @@ em.leftArrow{
     width:100%;//30%;
     clear:both;
     margin-top:1em;
-    h2{text-align:center;}
+    // h2{text-align:center;}
     ul{
         margin:0;
         padding:0;
@@ -319,8 +348,42 @@ nav{
     z-index:1;
 }
 //allan portrait
-.contentImg{float:right;margin:0 0 0 10px;width:202px;height:202px;}
+.contentImg, #panel3 .content img.contentImg {
+    float:right;
+    margin:0 0 10px 10px;
+    width:202px;
+    height:auto;
+}
+.checky{
+    list-style-type:none;
+    li{
+        margin-left:0;
+        padding-left:30px;
+        background:url('/images/check.png') top left no-repeat;
+        }
+    }
+.specialties {
+    //margin-bottom:@baseline*2;
+    min-height:@baseline*6;
+    li{
+        list-style-type:none;
+        margin:0;
+        height:@baseline*2;
+        display:block;
+        width:40%;
+        float:left;
+        padding-left:60px;
+        img{
+            vertical-align:middle;
+            margin-left:-60px;
+            float:left;
+        }
+    }
+}
+.bulletImg{width: 50px;height:auto;}
+.cgd img{width:auto !important;}
 @media screen and (max-width:780px){
+    .specialties li{width:90%;}
     nav{
         margin-top:-15%;
         svg{
@@ -334,8 +397,14 @@ nav{
     .content{margin: 0 100px;}
     h1{font-size:2em;}
     //h2{font-size:1.2em;margin:1em auto 0;}
-    .contentImg{float:none;margin:0 auto;display:block;}
+    .contentImg, #panel3 .content img.contentImg{float:none;margin:0 auto 10px;display:block;}
+    input,textarea,dt,dd{width:100%;clear:both;text-align:left;}
+    dt{margin-top: 1em;}
     
+    .formHeader{
+        text-align:center;
+        margin:@baseline 0 0 0;
+    }
 }
 
 
@@ -344,6 +413,7 @@ nav{
         margin-top:10%;
         //max-width:160px;
     }
+    h1+h2{margin-top:0;}
     .content{margin: 0 10px;padding-bottom:90px;}
     #portfolioPrev , #portfolioNext {
         height:40px;
@@ -408,6 +478,7 @@ nav{
 #panel1,#panel2,#panel3{
     will-change:transform, opacity;
 }
+
 #panel1 { //homepage logo
     position: fixed;
     top: 50%;
@@ -457,22 +528,6 @@ nav{
     }
     
 }
-@keyframes slidein { //for specialties
-    from {
-        margin-left:-5000px;
-    }
-    to {
-        margin-left:0px;
-    }
-}
-@keyframes indent { //for specialties
-    from {
-        padding-left:0px;
-    }
-    to {
-        padding-left:20px;
-    }
-}
 #panel2 { //main navigation
     position: fixed;
     width: 100%;
@@ -486,86 +541,32 @@ nav{
     background-color:transparent;
     overflow-y:scroll;
     padding:0;
-    h1{
-        margin:2em auto 0;
+    h1{ //svg
+        margin:@baseline auto 0;
     }
-    p{margin-top:0;}
-    ul+p{margin-top:1.5em;}
+    //ul{margin:0 auto 0;}
+    //p{margin-top:0;}
+    //ul+p{margin-top:1.5em;}
     @media screen and (max-width:400px){
         h1{font-size:1em;}
         svg{width:80%;}
     }
-    ul{
-        margin:0.5em auto 1em;
-    }
-    ul.specialties{
-        padding:0;
-        li{
-	        animation-name: slidein;
-	        animation-duration: 1s;
-            animation-fill-mode: both; //makes it not use the default position prior to animating
-            opacity:1;
-            padding:0 5px;
-            margin:0 0 2px;
-            display:block;
-            width:100%;
-            border-radius:10px;
-            background-color:@brand-primary;
-            list-style-type:none;
-            &.delay1{animation-delay:0s;}
-            &.delay2{animation-delay:.2s;}
-            &.delay3{animation-delay:.4s;}
-            &.delay4{animation-delay:.6s;}
-            &.delay5{animation-delay:.8s;}
-        }  
-        a{
-            color:#fff;
-            font-weight:700;
-            width:100%;
-            display:block;
-            padding:5px 0;
-            animation-direction: reverse;
-            &:hover{
-                animation-name:indent;
-                animation-fill-mode:both;
-                animation-duration:.5s;
-                animation-direction:normal;
-            }
-        }
-    }
 }
-#panel2.recessed1 ul.specialties li{animation-name:none;}
 .scrolldown {   
     text-align:center;
     font-size:2em;
 }
-// .uf-partial-outgoing{background-color:red;}
-// .uf-partial-incoming{
-    // background-color:blue;
-    // .opacity(1);
-    // animation-name: fadein0to1;
-    // animation-duration: 3s;
-// }
-//for error page:
-summary, details{text-align:center;}
 #panel3{
     position:relative;
     top:0;left:0;
     background-color:transparent;
     //background-color:#fff;
     .content{
-        *{max-width:600px;margin-left:auto;margin-right:auto;}
+        //*{max-width:600px;margin-left:auto;margin-right:auto;}
         padding-bottom:30px;
-        img{max-width:600px;}
+        img{max-width:600px;width:100%;}
     }
-    h2,h3{text-align:center;}
     
-    h2{
-        font-size:36px;
-        line-height:.8em;
-        color:#666;
-        margin-top:2em;
-    }
     .loading{text-align:center;display:none;}
 }
 
@@ -685,6 +686,7 @@ summary, details{text-align:center;}
     &.show{
         display:block;
         .animation(pulse,4000ms,0s);
+        
         animation-iteration-count: infinite;
     }
 }
@@ -702,6 +704,7 @@ summary, details{text-align:center;}
     //this rule was added because webkit was badly displaying text when the transforms were applied
     #panel3.recessed0{
         .transform(none);
+        
         .loading{display:block;}
     }
     

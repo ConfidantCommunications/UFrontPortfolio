@@ -13,7 +13,9 @@ class ufront_cache_RequestCacheMiddleware implements ufront_app_UFMiddleware{
 		}
 		if(strtolower($ctx->request->get_httpMethod()) === "get") {
 			$uri = $ctx->request->get_uri();
-			return tink_core__Future_Future_Impl_::map($this->cache->get($uri), array(new _hx_lambda(array(&$ctx, &$uri), "ufront_cache_RequestCacheMiddleware_0"), 'execute'), null);
+			$this1 = $this->cache->get($uri);
+			$ret = $this1->map(array(new _hx_lambda(array(&$ctx, &$uri), "ufront_cache_RequestCacheMiddleware_0"), 'execute'));
+			return $ret->gather();
 		} else {
 			return ufront_core_SurpriseTools::success();
 		}
@@ -57,7 +59,8 @@ class ufront_cache_RequestCacheMiddleware implements ufront_app_UFMiddleware{
 				if($tmp4) {
 					$uri = $ctx->request->get_uri();
 					$tmp5 = $this->cache;
-					$this1 = tink_core__Future_Future_Impl_::sync($ctx->response);
+					$f = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($ctx->response));
+					$this1 = $f;
 					return tink_core__Future_Future_Impl_::_map($tmp5->set($uri, $this1), array(new _hx_lambda(array(&$ctx, &$uri), "ufront_cache_RequestCacheMiddleware_1"), 'execute'));
 				}
 			}
@@ -103,13 +106,13 @@ function ufront_cache_RequestCacheMiddleware_0(&$ctx, &$uri, $result) {
 				$ctx2 = $ctx->response;
 				$ctx2->set_redirectLocation($cachedResponse->get_redirectLocation());
 				$ctx->response->charset = $cachedResponse->charset;
-				$tmp = null;
+				$ret1 = null;
 				if($cachedResponse->status !== null) {
-					$tmp = $cachedResponse->status;
+					$ret1 = $cachedResponse->status;
 				} else {
-					$tmp = 200;
+					$ret1 = 200;
 				}
-				$ctx->response->status = $tmp;
+				$ctx->response->status = $ret1;
 				{
 					$c = $cachedResponse->getCookies()->iterator();
 					while($c->hasNext()) {

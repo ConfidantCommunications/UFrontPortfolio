@@ -4,7 +4,7 @@
 class ufront_core_FutureTools {
 	public function __construct(){}
 	static function asFuture($data) {
-		return tink_core__Future_Future_Impl_::sync($data);
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($data));
 	}
 	function __toString() { return 'ufront.core.FutureTools'; }
 }

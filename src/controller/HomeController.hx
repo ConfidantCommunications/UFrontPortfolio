@@ -1,11 +1,12 @@
 package controller;
 
 import api.TestApi;
+import api.MailApi;
 import api.PortfolioItem;
 import actions.ConfidantInterface;
-// import actions.AnalyticsAction;
 using ufront.MVC;
 using ufront.web.result.AddClientActionResult;
+using ufront.web.result.CallJavascriptResult;
 
 typedef MyItem={
 	var group:Int;
@@ -21,6 +22,9 @@ class HomeController extends Controller
 {
 	@inject
 	public var testApi:AsyncTestApi;
+
+	@inject
+	public var mailApi:MailApi;
 	
 	@:route(GET, "/")
 	public function main()
@@ -36,7 +40,6 @@ class HomeController extends Controller
 			})
 			.addPartialString("subcontent","",TemplatingEngines.haxe)
 			.addClientAction(ConfidantInterface,{msg:t});
-			// .addClientAction(AnalyticsAction,{});
 	} 
 	public function getHostName():String {
 		
@@ -68,12 +71,12 @@ class HomeController extends Controller
 			})
 			.addPartialString("subcontent","",TemplatingEngines.haxe)
 			.addClientAction(ConfidantInterface,{msg:t});
-			//.addJsScript("/js/rotate-box.js");
-			//.addJsScriptToResult("/blvla.js");
+			//.addJsScriptToResult("/js/x3dom.js");
+			//.addInlineJsToResult( "document.onload = function() {document.getElementById('specialties').style.display='none';}" );
 	}
 
 
-	@:route(GET, "/about/graphic-design")
+	@:route(GET, "/about/graphic-design-saskatoon")
 	@template("/home/about.html") //returns same template content as above, but with a portfolio item 
 	//also see documentation notes for ViewResult class
 	
@@ -94,7 +97,7 @@ class HomeController extends Controller
 		.addClientAction(ConfidantInterface,{msg:t});
 	}
 
-	@:route(GET, "/about/joomla-development")
+	@:route(GET, "/about/joomla-development-saskatoon")
 	@template("/home/about.html")
 	
 	public function joomla()
@@ -150,7 +153,7 @@ class HomeController extends Controller
 		.addClientAction(ConfidantInterface,{msg:t});
 	}
 
-	@:route(GET, "/about/interactive")
+	@:route(GET, "/about/interactive-developer-saskatoon")
 	@template("/home/about.html")
 	
 	public function interactive()
@@ -228,7 +231,6 @@ class HomeController extends Controller
 
 			.addPartialString("subcontent","",TemplatingEngines.haxe)
 			.addClientAction(ConfidantInterface,{msg:t+result.title});
-			// .addClientAction(AnalyticsAction,{});
 	}
 
 	private function processJson(pJson:String):Array<MyItem>{
@@ -236,4 +238,22 @@ class HomeController extends Controller
 		return parsed.items;
 	}
 	
+	@:route(POST, "/contact/send/")
+	@template("/home/contact.html")
+	public function contactResult(args:{ email:String, name:String, message:String })
+	{
+		var t:String = "Confidant Communications : Contact"; 
+		var returnHome:String = '<p style="text-align:center;"><a href="/" rel="pushstate">Go back home now?</a></p>';
+		return mailApi.doMail(args.email, args.name, args.message) >>
+			function(result:String) return new PartialViewResult({
+				title: t,
+				portfolioItem: null,
+				panel1classes:"recessed0 recessed1 recessed2",
+				panel2classes:"recessed0 recessed1",
+				panel3classes:"recessed0",
+				gobackLink:"/contact/"
+			})
+			.addPartialString("subcontent",result+returnHome,TemplatingEngines.haxe)
+			.addClientAction(ConfidantInterface,{msg:t+result});
+	}
 }

@@ -25,9 +25,9 @@ class ufront_view_FileViewEngine extends ufront_view_UFViewEngine {
 		$fullPath = _hx_string_or_null($this->get_viewDirectory()) . _hx_string_or_null($viewRelativePath);
 		try {
 			if(file_exists($fullPath)) {
-				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(haxe_ds_Option::Some(sys_io_File::getContent($fullPath))));
+				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(haxe_ds_Option::Some(sys_io_File::getContent($fullPath)))));
 			} else {
-				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(haxe_ds_Option::$None));
+				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(haxe_ds_Option::$None)));
 			}
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;

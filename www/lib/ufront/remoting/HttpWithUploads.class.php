@@ -34,7 +34,9 @@ class ufront_remoting_HttpWithUploads {
 					$upload = $_g1[$_g];
 					$_g = $_g + 1;
 					$finished = false;
-					$surprise = tink_core__Future_Future_Impl_::map($upload->getBytes(), array(new _hx_lambda(array(&$_gthis, &$failedUploads, &$finished, &$postName1, &$upload), "ufront_remoting_HttpWithUploads_0"), 'execute'), null);
+					$this1 = $upload->getBytes();
+					$ret = $this1->map(array(new _hx_lambda(array(&$_gthis, &$failedUploads, &$finished, &$postName1, &$upload), "ufront_remoting_HttpWithUploads_0"), 'execute'));
+					$surprise = $ret->gather();
 					$tmp = null;
 					if($this->async === false) {
 						$tmp = !$finished;
@@ -45,12 +47,14 @@ class ufront_remoting_HttpWithUploads {
 						throw new HException("upload.getBytes() resolved asynchronously, and was not ready in time for the synchronous HttpConnection remoting call");
 					}
 					$allUploadsReady->push($surprise);
-					unset($upload,$tmp,$surprise,$finished);
+					unset($upload,$tmp,$this1,$surprise,$ret,$finished);
 				}
 				unset($postName1,$_g1,$_g);
 			}
 		}
-		return tink_core__Future_Future_Impl_::map(tink_core__Future_Future_Impl_::ofMany($allUploadsReady, null), array(new _hx_lambda(array(&$failedUploads), "ufront_remoting_HttpWithUploads_1"), 'execute'), null);
+		$this2 = tink_core__Future_Future_Impl_::ofMany($allUploadsReady, null);
+		$ret1 = $this2->map(array(new _hx_lambda(array(&$failedUploads), "ufront_remoting_HttpWithUploads_1"), 'execute'));
+		return $ret1->gather();
 	}
 	public function send() {
 		$this->h->request(true);
@@ -98,8 +102,8 @@ function ufront_remoting_HttpWithUploads_1(&$failedUploads, $_) {
 		if($failedUploads->length === 0) {
 			return tink_core_Outcome::Success(tink_core_Noise::$Noise);
 		} else {
-			$tmp1 = "Failed to read attachments: " . Std::string($failedUploads);
-			return tink_core_Outcome::Failure(new tink_core_TypedError(null, $tmp1, _hx_anonymous(array("fileName" => "HttpWithUploads.hx", "lineNumber" => 102, "className" => "ufront.remoting.HttpWithUploads", "methodName" => "attachUploads"))));
+			$ret2 = "Failed to read attachments: " . Std::string($failedUploads);
+			return tink_core_Outcome::Failure(new tink_core_TypedError(null, $ret2, _hx_anonymous(array("fileName" => "HttpWithUploads.hx", "lineNumber" => 102, "className" => "ufront.remoting.HttpWithUploads", "methodName" => "attachUploads"))));
 		}
 	}
 }

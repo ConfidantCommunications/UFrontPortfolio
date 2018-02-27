@@ -99,9 +99,9 @@ class CustomErrorPageHandler implements UFErrorHandler {
 					<pre><code>' + exceptionStackItems.join("\n") + '</pre></code>
 				</div>'
 			else "";
-
+		var shortMessage:String = error.message.split(":")[0];
 		var content = '
-			<summary class="error-summary"><h1 class="error-message">${error.message}</h1></summary>
+			<summary class="error-summary"><h1 class="error-message">${shortMessage}</h1></summary>
 			<details class="error-details"> $inner $pos $exceptionStack</details>
 		';
 
@@ -136,7 +136,9 @@ class CustomErrorPageHandler implements UFErrorHandler {
 	**/
 	public function renderError( error:Error, ?showStack:Bool ):String {
 		var content = renderErrorContent( error, showStack );
-		return renderErrorPage( error.message, content );
+		var shortMessage:String = error.message.split(":")[0];
+		// var shortMessage:String = error.message.substr(0,33) + "…";
+		return renderErrorPage( shortMessage, content );
 	}
 
 	/**

@@ -35,6 +35,13 @@ class sys_io_FileInput extends haxe_io_Input {
 			fclose($this->__f);
 		}
 	}
+	public function readLine() {
+		$r = fgets($this->__f);
+		if((false === $r)) {
+			throw new HException(new haxe_io_Eof());
+		}
+		return rtrim($r, "\x0D\x0A");
+	}
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);

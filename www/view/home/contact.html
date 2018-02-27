@@ -3,14 +3,10 @@
 	 width="230px" height="140px" viewBox="0 0 230 140" enable-background="new 0 0 230 140" xml:space="preserve">
 <title>Contact Us<</title>
 <desc>How to contact Confidant Communications / Allan Dowdeswell</desc>
-<use xlink:href="#contactMC" filter="url(#inset-shadow)" width="116" height="54.823" id="contact" x="-12" y="-56" transform="matrix(2.5 0 0 -2.5 0 0)" overflow="visible"/>
+<use xlink:href="#contactMC" filter="url(#inset-shadow)" width="116" height="54.823" id="contactHeader" x="-12" y="-56" transform="matrix(2.5 0 0 -2.5 0 0)" overflow="visible"/>
 </svg>
 </h1>
-<dl><dt>Phone: </dt><dd><a href="tel:13066532400">(306) 653-2400</a></dd>
-<dt>Cell: </dt>
-<dd><a href="tel:13062803541">(306) 280-3541</a></dd>
-<dt>Email: </dt>
-<dd>secrets @ this same domain (confidant.ca)</dd>
+<dl><dt>Phone: </dt><dd><a href="tel:13062803541">(306) 280-3541</a></dd>
 <dt>Twitter: </dt>
 <dd><a href="http://twitter.com/confidant_ca" title="Follow Confidant Communications">@confidant_ca</a></dd>
 <dt>Facebook: </dt>
@@ -24,4 +20,11 @@
 <dt>Mail: </dt>
 <dd><strong>Confidant Communications</strong><br />1501 Avenue C North<br />Saskatoon, SK S7L 1L2<br />Canada<br /></dd>
 <br clear="all" />
+<h3 class="formHeader">Form-sending technology!</h3>
+<form id="contactForm" action="/contact/send/" method="post">
+<dt>Your Name: </dt><dd><input type="text" name="name" id="name" size="80" maxlength="80" /></dd>
+<dt>Email: </dt><dd><input type="text" name="email" id="email" size="80" maxlength="80" /></dd>
+<dt>Message: </dt><dd><textarea id="message" name="message" rows="4" cols="60"></textarea></dd>
+<dt>&nbsp;</dt><dd><input type="submit" name="submit" value="Submit" /></dd>
+</form>
 </dl>				

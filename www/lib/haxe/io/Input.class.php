@@ -93,5 +93,35 @@ class haxe_io_Input {
 		}
 		return $s;
 	}
+	public function readLine() {
+		$buf = new haxe_io_BytesBuffer();
+		$last = null;
+		$s = null;
+		try {
+			while(true) {
+				$last = $this->readByte();
+				if(!($last !== 10)) {
+					break;
+				}
+				$buf1 = $buf;
+				$buf2 = $buf1->b;
+				$buf1->b = _hx_string_or_null($buf2) . _hx_string_or_null(chr($last));
+				unset($buf2,$buf1);
+			}
+			$s = $buf->getBytes()->toString();
+			if(_hx_char_code_at($s, strlen($s) - 1) === 13) {
+				$s = _hx_substr($s, 0, -1);
+			}
+		}catch(Exception $__hx__e) {
+			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
+			if(($e = $_ex_) instanceof haxe_io_Eof){
+				$s = $buf->getBytes()->toString();
+				if(strlen($s) === 0) {
+					throw new HException($e);
+				}
+			} else throw $__hx__e;;
+		}
+		return $s;
+	}
 	function __toString() { return 'haxe.io.Input'; }
 }

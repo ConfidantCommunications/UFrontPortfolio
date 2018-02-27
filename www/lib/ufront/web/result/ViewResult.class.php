@@ -29,7 +29,7 @@ class ufront_web_result_ViewResult extends ufront_web_result_ActionResult {
 		$this->templateSource = $tmp1;
 		$this->layoutSource = ufront_web_result_TemplateSource::$TUnknown;
 		$this->finalOutputTrigger = new tink_core_FutureTrigger();
-		$this->finalOutput = (property_exists($this->finalOutputTrigger, "future") ? $this->finalOutputTrigger->future: array($this->finalOutputTrigger, "future"));
+		$this->finalOutput = $this->finalOutputTrigger;
 	}}
 	public $data;
 	public $helpers;
@@ -402,14 +402,14 @@ class ufront_web_result_ViewResult extends ufront_web_result_ActionResult {
 			$templatingEngine = _hx_deref($source)->params[1];
 			$str = _hx_deref($source)->params[0];
 			try {
-				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($templatingEngine->factory($str)));
+				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($templatingEngine->factory($str))));
 			}catch(Exception $__hx__e) {
 				$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 				$e = $_ex_;
 				{
 					$engine1 = "Templating Engine: \"" . _hx_string_or_null($templatingEngine->type) . "\"";
 					$template = "String template: \"" . _hx_string_or_null($str) . "\"";
-					return tink_core__Future_Future_Impl_::sync(ufront_web_result_ViewResult::error("Failed to parse template.", "" . _hx_string_or_null($engine1) . "\x0A" . _hx_string_or_null($template), _hx_anonymous(array("fileName" => "ViewResult.hx", "lineNumber" => 630, "className" => "ufront.web.result.ViewResult", "methodName" => "loadTemplateFromSource"))));
+					return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(ufront_web_result_ViewResult::error("Failed to parse template.", "" . _hx_string_or_null($engine1) . "\x0A" . _hx_string_or_null($template), _hx_anonymous(array("fileName" => "ViewResult.hx", "lineNumber" => 630, "className" => "ufront.web.result.ViewResult", "methodName" => "loadTemplateFromSource")))));
 				}
 			}
 		}break;
@@ -419,7 +419,7 @@ class ufront_web_result_ViewResult extends ufront_web_result_ActionResult {
 			return $engine->getTemplate($path, $templatingEngine1);
 		}break;
 		case 2:case 3:{
-			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(null));
+			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(null)));
 		}break;
 		}
 	}
@@ -434,12 +434,14 @@ class ufront_web_result_ViewResult extends ufront_web_result_ActionResult {
 				$name1 = $name->next();
 				$source = $allPartialSources->get($name1);
 				$surprise = ufront_web_result_ViewResult::loadTemplateFromSource($source, $engine);
-				call_user_func_array($surprise, array(array(new _hx_lambda(array(&$allPartialTemplates, &$name1, &$partialErrors, &$source), "ufront_web_result_ViewResult_4"), 'execute')));
+				$surprise->handle(array(new _hx_lambda(array(&$allPartialTemplates, &$name1, &$partialErrors, &$source), "ufront_web_result_ViewResult_4"), 'execute'));
 				$allPartialFutures->push($surprise);
 				unset($surprise,$source,$name1);
 			}
 		}
-		return tink_core__Future_Future_Impl_::map(tink_core__Future_Future_Impl_::ofMany($allPartialFutures, null), array(new _hx_lambda(array(&$allPartialTemplates, &$partialErrors), "ufront_web_result_ViewResult_5"), 'execute'), null);
+		$this1 = tink_core__Future_Future_Impl_::ofMany($allPartialFutures, null);
+		$ret = $this1->map(array(new _hx_lambda(array(&$allPartialTemplates, &$partialErrors), "ufront_web_result_ViewResult_5"), 'execute'));
+		return $ret->gather();
 	}
 	static function addHelpersForPartials($partialTemplates, $contextData, $contextHelpers) {
 		$name = $partialTemplates->keys();
@@ -489,27 +491,19 @@ function ufront_web_result_ViewResult_0(&$_gthis, &$actionContext, $finalOut) {
 	{
 		$finalOut = ufront_web_result_ContentResult::replaceVirtualLinks($actionContext, $finalOut);
 		$_gthis->writeResponse($finalOut, $actionContext);
-		{
-			$_this = $_gthis->finalOutputTrigger;
-			if($_this->{"list"} !== null) {
-				$list = $_this->{"list"};
-				$_this->{"list"} = null;
-				$_this->result = $finalOut;
-				tink_core__Callback_CallbackList_Impl_::invoke($list, $finalOut);
-				tink_core__Callback_CallbackList_Impl_::clear($list);
-			}
-		}
+		$_gthis->finalOutputTrigger->trigger($finalOut);
 		return tink_core_Noise::$Noise;
 	}
 }
 function ufront_web_result_ViewResult_1(&$combinedFuture, $cb) {
 	{
-		call_user_func_array($combinedFuture, array(array(new _hx_lambda(array(&$cb), "ufront_web_result_ViewResult_8"), 'execute')));
+		$combinedFuture->handle(array(new _hx_lambda(array(&$cb), "ufront_web_result_ViewResult_8"), 'execute'));
 	}
 }
 function ufront_web_result_ViewResult_2(&$combinedFuture, $cb1) {
 	{
-		return tink_core__Future_Future_Impl_::map($combinedFuture, array(new _hx_lambda(array(&$cb1), "ufront_web_result_ViewResult_9"), 'execute'), null);
+		$ret = $combinedFuture->map(array(new _hx_lambda(array(&$cb1), "ufront_web_result_ViewResult_9"), 'execute'));
+		return $ret->gather();
 	}
 }
 function ufront_web_result_ViewResult_3(&$_gthis, &$defaultData, $viewTemplate, $layoutTemplate, $partialTemplates) {
@@ -595,9 +589,9 @@ function ufront_web_result_ViewResult_5(&$allPartialTemplates, &$partialErrors, 
 				}
 			}
 			$partialNames = $_g1;
-			$tmp = "Partials " . Std::string($partialNames) . " failed to load: ";
-			$tmp1 = _hx_string_or_null($tmp) . _hx_string_or_null($partialErrors->toString());
-			return ufront_web_result_ViewResult::error($tmp1, $partialErrors, _hx_anonymous(array("fileName" => "ViewResult.hx", "lineNumber" => 661, "className" => "ufront.web.result.ViewResult", "methodName" => "loadPartialTemplates")));
+			$ret1 = "Partials " . Std::string($partialNames) . " failed to load: ";
+			$ret2 = _hx_string_or_null($ret1) . _hx_string_or_null($partialErrors->toString());
+			return ufront_web_result_ViewResult::error($ret2, $partialErrors, _hx_anonymous(array("fileName" => "ViewResult.hx", "lineNumber" => 661, "className" => "ufront.web.result.ViewResult", "methodName" => "loadPartialTemplates")));
 		}break;
 		}
 	}

@@ -7,6 +7,7 @@ class controller_HomeController extends ufront_web_Controller {
 		parent::__construct();
 	}}
 	public $testApi;
+	public $mailApi;
 	public function main() {
 		$t = "Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan";
 		$obj = _hx_anonymous(array());
@@ -133,6 +134,11 @@ class controller_HomeController extends ufront_web_Controller {
 		$parsed = haxe_Json::phpJsonDecode($pJson);
 		return $parsed->items;
 	}
+	public function contactResult($args) {
+		$t = "Confidant Communications : Contact";
+		$returnHome = "<p style=\"text-align:center;\"><a href=\"/\" rel=\"pushstate\">Go back home now?</a></p>";
+		return tink_core__Future_Future_Impl_::_tryMap($this->mailApi->doMail($args->email, $args->name, $args->message), array(new _hx_lambda(array(&$returnHome, &$t), "controller_HomeController_2"), 'execute'));
+	}
 	public function execute() {
 		$uriParts = $this->context->actionContext->get_uriParts();
 		$params = $this->context->request->get_params();
@@ -192,7 +198,7 @@ class controller_HomeController extends ufront_web_Controller {
 						$tmp4 = false;
 					}
 					if($tmp4) {
-						$tmp3 = $uriParts[1] === "graphic-design";
+						$tmp3 = $uriParts[1] === "graphic-design-saskatoon";
 					} else {
 						$tmp3 = false;
 					}
@@ -220,7 +226,7 @@ class controller_HomeController extends ufront_web_Controller {
 							$tmp7 = false;
 						}
 						if($tmp7) {
-							$tmp6 = $uriParts[1] === "joomla-development";
+							$tmp6 = $uriParts[1] === "joomla-development-saskatoon";
 						} else {
 							$tmp6 = false;
 						}
@@ -304,7 +310,7 @@ class controller_HomeController extends ufront_web_Controller {
 										$tmp16 = false;
 									}
 									if($tmp16) {
-										$tmp15 = $uriParts[1] === "interactive";
+										$tmp15 = $uriParts[1] === "interactive-developer-saskatoon";
 									} else {
 										$tmp15 = false;
 									}
@@ -390,6 +396,63 @@ class controller_HomeController extends ufront_web_Controller {
 													$result9 = $this->wrapResult($this->returnPortfolioItem($id), $wrappingRequired9);
 													$this->setContextActionResultWhenFinished($result9);
 													return $result9;
+												} else {
+													$tmp25 = null;
+													$tmp26 = null;
+													$tmp27 = null;
+													if(strtolower($method) === "post") {
+														$tmp27 = 2 === $uriParts->length;
+													} else {
+														$tmp27 = false;
+													}
+													if($tmp27) {
+														$tmp26 = $uriParts[0] === "contact";
+													} else {
+														$tmp26 = false;
+													}
+													if($tmp26) {
+														$tmp25 = $uriParts[1] === "send";
+													} else {
+														$tmp25 = false;
+													}
+													if($tmp25) {
+														if(!$params->exists("email")) {
+															$reason = "Missing parameter " . "email";
+															$message = "Bad Request";
+															if($reason !== null) {
+																$message = _hx_string_or_null($message) . _hx_string_or_null((": " . _hx_string_or_null($reason)));
+															}
+															throw new HException(new tink_core_TypedError(400, $message, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 243, "className" => "controller.HomeController", "methodName" => "execute"))));
+														}
+														$_param_tmp_email = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "email");
+														if(!$params->exists("name")) {
+															$reason1 = "Missing parameter " . "name";
+															$message1 = "Bad Request";
+															if($reason1 !== null) {
+																$message1 = _hx_string_or_null($message1) . _hx_string_or_null((": " . _hx_string_or_null($reason1)));
+															}
+															throw new HException(new tink_core_TypedError(400, $message1, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 243, "className" => "controller.HomeController", "methodName" => "execute"))));
+														}
+														$_param_tmp_name = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "name");
+														if(!$params->exists("message")) {
+															$reason2 = "Missing parameter " . "message";
+															$message2 = "Bad Request";
+															if($reason2 !== null) {
+																$message2 = _hx_string_or_null($message2) . _hx_string_or_null((": " . _hx_string_or_null($reason2)));
+															}
+															throw new HException(new tink_core_TypedError(400, $message2, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 243, "className" => "controller.HomeController", "methodName" => "execute"))));
+														}
+														$_param_tmp_message = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "message");
+														$args = _hx_anonymous(array("email" => $_param_tmp_email, "name" => $_param_tmp_name, "message" => $_param_tmp_message));
+														$this->context->actionContext->action = "contactResult";
+														$this->context->actionContext->args = (new _hx_array(array($args)));
+														$this->context->actionContext->get_uriParts()->splice(0, 2);
+														$this11 = _hx_field(haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController")), "contactResult")->wrapResult[0];
+														$wrappingRequired10 = $this11;
+														$result10 = $this->wrapResult($this->contactResult($args), $wrappingRequired10);
+														$this->setContextActionResultWhenFinished($result10);
+														return $result10;
+													}
 												}
 											}
 										}
@@ -400,13 +463,13 @@ class controller_HomeController extends ufront_web_Controller {
 					}
 				}
 			}
-			throw new HException(ufront_web_HttpError::pageNotFound(_hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 20, "className" => "controller.HomeController", "methodName" => "execute"))));
+			throw new HException(ufront_web_HttpError::pageNotFound(_hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 21, "className" => "controller.HomeController", "methodName" => "execute"))));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 			$e = $_ex_;
 			{
-				$tmp25 = "Uncaught error while executing " . Std::string($this->context->actionContext->controller) . ".";
-				return ufront_core_SurpriseTools::asSurpriseError($e, _hx_string_or_null($tmp25) . _hx_string_or_null($this->context->actionContext->action) . "()", _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 20, "className" => "controller.HomeController", "methodName" => "execute")));
+				$tmp28 = "Uncaught error while executing " . Std::string($this->context->actionContext->controller) . ".";
+				return ufront_core_SurpriseTools::asSurpriseError($e, _hx_string_or_null($tmp28) . _hx_string_or_null($this->context->actionContext->action) . "()", _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 21, "className" => "controller.HomeController", "methodName" => "execute")));
 			}
 		}
 	}
@@ -424,7 +487,7 @@ class controller_HomeController extends ufront_web_Controller {
 	static $__meta__;
 	function __toString() { return 'controller.HomeController'; }
 }
-controller_HomeController::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.AsyncTestApi", "")))))))), "fields" => _hx_anonymous(array("main" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "about" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "graphic" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "joomla" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "books" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "web" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "interactive" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "contact" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "portfolio" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "returnPortfolioItem" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4)))))))));
+controller_HomeController::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.AsyncTestApi", ""))), (new _hx_array(array("mailApi", "api.MailApi", "")))))))), "fields" => _hx_anonymous(array("main" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "about" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "graphic" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "joomla" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "books" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "web" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "interactive" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "contact" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "portfolio" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "returnPortfolioItem" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "contactResult" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))), "template" => (new _hx_array(array("/home/contact.html")))))))));
 function controller_HomeController_0(&$_gthis, &$t, $result) {
 	{
 		$d = $_gthis->processJson($result);
@@ -457,5 +520,21 @@ function controller_HomeController_1(&$t, $result) {
 		$tmp1 = $tmp->addPartialString("subcontent", "", ufront_view_TemplatingEngines::get_haxe());
 		$this2 = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp1, $this2, _hx_anonymous(array("msg" => _hx_string_or_null($t) . _hx_string_or_null($result->title))));
+	}
+}
+function controller_HomeController_2(&$returnHome, &$t, $result) {
+	{
+		$obj = _hx_anonymous(array());
+		$this1 = null;
+		if($obj !== null) {
+			$this1 = $obj;
+		} else {
+			$this1 = _hx_anonymous(array());
+		}
+		$tmp = new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject($this1, _hx_anonymous(array("title" => $t, "portfolioItem" => null, "panel1classes" => "recessed0 recessed1 recessed2", "panel2classes" => "recessed0 recessed1", "panel3classes" => "recessed0", "gobackLink" => "/contact/"))), null, null);
+		$tmp1 = _hx_string_or_null($result) . _hx_string_or_null($returnHome);
+		$tmp2 = $tmp->addPartialString("subcontent", $tmp1, ufront_view_TemplatingEngines::get_haxe());
+		$this2 = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
+		return ufront_web_result_AddClientActionResult::addClientAction($tmp2, $this2, _hx_anonymous(array("msg" => _hx_string_or_null($t) . _hx_string_or_null($result))));
 	}
 }

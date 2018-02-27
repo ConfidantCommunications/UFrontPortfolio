@@ -7,6 +7,7 @@ class api_ApiContext extends ufront_api_UFApiContext {
 		parent::__construct();
 	}}
 	public $testApi;
+	public $mailApi;
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
@@ -21,4 +22,4 @@ class api_ApiContext extends ufront_api_UFApiContext {
 	static $__meta__;
 	function __toString() { return 'api.ApiContext'; }
 }
-api_ApiContext::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.TestApi", "")))))), "apiList" => (new _hx_array(array("api.TestApi")))))));
+api_ApiContext::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.TestApi", ""))), (new _hx_array(array("mailApi", "api.MailApi", "")))))), "apiList" => (new _hx_array(array("api.TestApi", "api.MailApi")))))));

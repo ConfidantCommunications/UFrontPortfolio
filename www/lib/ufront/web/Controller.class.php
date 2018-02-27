@@ -15,8 +15,8 @@ class ufront_web_Controller {
 		$this->baseUri = "~" . _hx_string_or_null(haxe_io_Path::addTrailingSlash(_hx_substr($fullUri, 0, strlen($fullUri) - strlen($remainingUri))));
 	}
 	public function execute() {
-		$tmp = "Field execute() in ufront.web.Controller is an abstract method, please override it in " . _hx_string_or_null($this->toString()) . " ";
-		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::internalServerError($tmp, null, _hx_anonymous(array("fileName" => "Controller.hx", "lineNumber" => 219, "className" => "ufront.web.Controller", "methodName" => "execute")))));
+		$v = "Field execute() in ufront.web.Controller is an abstract method, please override it in " . _hx_string_or_null($this->toString()) . " ";
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::internalServerError($v, null, _hx_anonymous(array("fileName" => "Controller.hx", "lineNumber" => 219, "className" => "ufront.web.Controller", "methodName" => "execute"))))));
 	}
 	public function executeSubController($controller) {
 		return $this->context->injector->_instantiate($controller)->execute();
@@ -59,7 +59,7 @@ class ufront_web_Controller {
 	public function wrapResult($result, $wrappingRequired) {
 		if($result === null) {
 			$actionResult = new ufront_web_result_EmptyResult(true);
-			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($actionResult));
+			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($actionResult)));
 		} else {
 			$future = null;
 			if(($wrappingRequired & 1 << ufront_web_result_ResultWrapRequired::$WRFuture->index) !== 0) {
@@ -83,17 +83,19 @@ class ufront_web_Controller {
 		}
 	}
 	public function wrapInFuture($result) {
-		return tink_core__Future_Future_Impl_::sync($result);
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($result));
 	}
 	public function wrapInOutcome($future) {
-		return tink_core__Future_Future_Impl_::map($future, array(new _hx_lambda(array(), "ufront_web_Controller_0"), 'execute'), null);
+		$ret = $future->map(array(new _hx_lambda(array(), "ufront_web_Controller_0"), 'execute'));
+		return $ret->gather();
 	}
 	public function wrapResultOrError($surprise) {
-		return tink_core__Future_Future_Impl_::map($surprise, array(new _hx_lambda(array(), "ufront_web_Controller_1"), 'execute'), null);
+		$ret = $surprise->map(array(new _hx_lambda(array(), "ufront_web_Controller_1"), 'execute'));
+		return $ret->gather();
 	}
 	public function setContextActionResultWhenFinished($result) {
 		$_gthis = $this;
-		call_user_func_array($result, array(array(new _hx_lambda(array(&$_gthis), "ufront_web_Controller_2"), 'execute')));
+		$result->handle(array(new _hx_lambda(array(&$_gthis), "ufront_web_Controller_2"), 'execute'));
 	}
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))

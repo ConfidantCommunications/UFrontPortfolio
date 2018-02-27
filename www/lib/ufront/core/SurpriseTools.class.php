@@ -5,32 +5,32 @@ class ufront_core_SurpriseTools {
 	public function __construct(){}
 	static function success() {
 		if(ufront_core_SurpriseTools::$s === null) {
-			ufront_core_SurpriseTools::$s = tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+			$tmp = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+			ufront_core_SurpriseTools::$s = $tmp;
 		}
-		return (property_exists("ufront_core_SurpriseTools", "s") ? ufront_core_SurpriseTools::$s: array("ufront_core_SurpriseTools", "s"));
+		return ufront_core_SurpriseTools::$s;
 	}
-	static function s() { $args = func_get_args(); return call_user_func_array(self::$s, $args); }
 	static $s;
 	static function asSurprise($outcome) {
-		return tink_core__Future_Future_Impl_::sync($outcome);
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($outcome));
 	}
 	static function asGoodSurprise($data) {
-		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($data));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($data)));
 	}
 	static function asBadSurprise($err) {
-		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure($err));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure($err)));
 	}
 	static function asSurpriseError($err, $msg = null, $p = null) {
 		if($msg === null) {
 			$msg = "Failure: " . Std::string($err);
 		}
-		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($err, $msg, $p)));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($err, $msg, $p))));
 	}
 	static function asSurpriseTypedError($err, $msg = null, $p = null) {
 		if($msg === null) {
 			$msg = "Failure: " . Std::string($err);
 		}
-		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($err, $msg, $p)));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($err, $msg, $p))));
 	}
 	static function tryCatchSurprise($fn, $msg = null, $p = null) {
 		try {
@@ -44,19 +44,23 @@ class ufront_core_SurpriseTools {
 		}
 	}
 	static function changeSuccessTo($s, $newSuccessData) {
-		return tink_core__Future_Future_Impl_::map($s, array(new _hx_lambda(array(&$newSuccessData), "ufront_core_SurpriseTools_0"), 'execute'), null);
+		$ret = $s->map(array(new _hx_lambda(array(&$newSuccessData), "ufront_core_SurpriseTools_0"), 'execute'));
+		return $ret->gather();
 	}
 	static function changeSuccessToNoise($s) {
 		return ufront_core_SurpriseTools::changeSuccessTo($s, tink_core_Noise::$Noise);
 	}
 	static function changeFailureTo($s, $newFailureData) {
-		return tink_core__Future_Future_Impl_::map($s, array(new _hx_lambda(array(&$newFailureData), "ufront_core_SurpriseTools_1"), 'execute'), null);
+		$ret = $s->map(array(new _hx_lambda(array(&$newFailureData), "ufront_core_SurpriseTools_1"), 'execute'));
+		return $ret->gather();
 	}
 	static function changeFailureToError($s, $msg = null, $p = null) {
-		return tink_core__Future_Future_Impl_::map($s, array(new _hx_lambda(array(&$msg, &$p), "ufront_core_SurpriseTools_2"), 'execute'), null);
+		$ret = $s->map(array(new _hx_lambda(array(&$msg, &$p), "ufront_core_SurpriseTools_2"), 'execute'));
+		return $ret->gather();
 	}
 	static function useFallback($s, $fallback) {
-		return tink_core__Future_Future_Impl_::map($s, array(new _hx_lambda(array(&$fallback), "ufront_core_SurpriseTools_3"), 'execute'), null);
+		$ret = $s->map(array(new _hx_lambda(array(&$fallback), "ufront_core_SurpriseTools_3"), 'execute'));
+		return $ret->gather();
 	}
 	function __toString() { return 'ufront.core.SurpriseTools'; }
 }

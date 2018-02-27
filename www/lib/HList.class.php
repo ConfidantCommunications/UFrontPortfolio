@@ -49,8 +49,44 @@ class HList implements IteratorAggregate{
 	public function isEmpty() {
 		return $this->h === null;
 	}
+	public function remove($v) {
+		$prev = null;
+		$l = & $this->h;
+		while($l !== null) {
+			if($l[0] === $v) {
+				if($prev === null) {
+					$this->h =& $l[1];
+				} else {
+					$prev[1] =& $l[1];
+				}
+				if(($this->q === $l)) {
+					$this->q =& $prev;
+				}
+				$this->length--;
+				return true;
+			}
+			$prev =& $l;
+			$l =& $l[1];
+		}
+		return false;
+	}
 	public function iterator() {
 		return new _hx_list_iterator($this);
+	}
+	public function join($sep) {
+		$s = "";
+		$first = true;
+		$l = $this->h;
+		while($l !== null) {
+			if($first) {
+				$first = false;
+			} else {
+				$s = _hx_string_or_null($s) . _hx_string_or_null($sep);
+			}
+			$s = _hx_string_or_null($s) . Std::string($l[0]);
+			$l = $l[1];
+		}
+		return $s;
 	}
 	public function getIterator() {
 		return $this->iterator();

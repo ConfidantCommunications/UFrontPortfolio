@@ -37,25 +37,28 @@ class ufront_cache_MemoryCache implements ufront_cache_UFCacheSync, ufront_cache
 		return tink_core_Outcome::Success(tink_core_Noise::$Noise);
 	}
 	public function get($id) {
-		return tink_core__Future_Future_Impl_::sync($this->getSync($id));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($this->getSync($id)));
 	}
 	public function set($id, $value) {
 		$_gthis = $this;
-		return tink_core__Future_Future_Impl_::map($value, array(new _hx_lambda(array(&$_gthis, &$id), "ufront_cache_MemoryCache_0"), 'execute'), null);
+		$ret = $value->map(array(new _hx_lambda(array(&$_gthis, &$id), "ufront_cache_MemoryCache_0"), 'execute'));
+		return $ret->gather();
 	}
 	public function getOrSet($id, $fn = null) {
 		$_gthis = $this;
 		if($this->map->exists($id)) {
-			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($this->map->get($id)));
+			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($this->map->get($id))));
 		} else {
-			return tink_core__Future_Future_Impl_::map(call_user_func($fn), array(new _hx_lambda(array(&$_gthis, &$id), "ufront_cache_MemoryCache_1"), 'execute'), null);
+			$this1 = call_user_func($fn);
+			$ret = $this1->map(array(new _hx_lambda(array(&$_gthis, &$id), "ufront_cache_MemoryCache_1"), 'execute'));
+			return $ret->gather();
 		}
 	}
 	public function clear() {
-		return tink_core__Future_Future_Impl_::sync($this->clearSync());
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($this->clearSync()));
 	}
 	public function remove($id) {
-		return tink_core__Future_Future_Impl_::sync($this->removeSync($id));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($this->removeSync($id)));
 	}
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))

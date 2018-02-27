@@ -6,17 +6,17 @@ class ufront_core_CallbackTools {
 	static function asVoidSurprise($cb, $pos = null) {
 		$t = new tink_core_FutureTrigger();
 		call_user_func_array($cb, array(array(new _hx_lambda(array(&$pos, &$t), "ufront_core_CallbackTools_0"), 'execute')));
-		return (property_exists($t, "future") ? $t->future: array($t, "future"));
+		return $t;
 	}
 	static function asSurprise($cb, $pos = null) {
 		$t = new tink_core_FutureTrigger();
 		call_user_func_array($cb, array(array(new _hx_lambda(array(&$pos, &$t), "ufront_core_CallbackTools_1"), 'execute')));
-		return (property_exists($t, "future") ? $t->future: array($t, "future"));
+		return $t;
 	}
 	static function asSurprisePair($cb, $pos = null) {
 		$t = new tink_core_FutureTrigger();
 		call_user_func_array($cb, array(array(new _hx_lambda(array(&$pos, &$t), "ufront_core_CallbackTools_2"), 'execute')));
-		return (property_exists($t, "future") ? $t->future: array($t, "future"));
+		return $t;
 	}
 	function __toString() { return 'ufront.core.CallbackTools'; }
 }
@@ -25,25 +25,9 @@ function ufront_core_CallbackTools_0(&$pos, &$t, $error) {
 		if($error !== null) {
 			$e = "" . Std::string($error);
 			$e1 = tink_core_TypedError::withData(500, $e, $pos, _hx_anonymous(array("fileName" => "AsyncTools.hx", "lineNumber" => 216, "className" => "ufront.core.CallbackTools", "methodName" => "asVoidSurprise")));
-			{
-				$result = tink_core_Outcome::Failure($e1);
-				if($t->{"list"} !== null) {
-					$list = $t->{"list"};
-					$t->{"list"} = null;
-					$t->result = $result;
-					tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
-					tink_core__Callback_CallbackList_Impl_::clear($list);
-				}
-			}
+			$t->trigger(tink_core_Outcome::Failure($e1));
 		} else {
-			$result1 = tink_core_Outcome::Success(tink_core_Noise::$Noise);
-			if($t->{"list"} !== null) {
-				$list1 = $t->{"list"};
-				$t->{"list"} = null;
-				$t->result = $result1;
-				tink_core__Callback_CallbackList_Impl_::invoke($list1, $result1);
-				tink_core__Callback_CallbackList_Impl_::clear($list1);
-			}
+			$t->trigger(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 		}
 	}
 }
@@ -52,25 +36,9 @@ function ufront_core_CallbackTools_1(&$pos, &$t, $error, $val) {
 		if($error !== null) {
 			$e = "" . Std::string($error);
 			$e1 = tink_core_TypedError::withData(500, $e, $pos, _hx_anonymous(array("fileName" => "AsyncTools.hx", "lineNumber" => 241, "className" => "ufront.core.CallbackTools", "methodName" => "asSurprise")));
-			{
-				$result = tink_core_Outcome::Failure($e1);
-				if($t->{"list"} !== null) {
-					$list = $t->{"list"};
-					$t->{"list"} = null;
-					$t->result = $result;
-					tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
-					tink_core__Callback_CallbackList_Impl_::clear($list);
-				}
-			}
+			$t->trigger(tink_core_Outcome::Failure($e1));
 		} else {
-			$result1 = tink_core_Outcome::Success($val);
-			if($t->{"list"} !== null) {
-				$list1 = $t->{"list"};
-				$t->{"list"} = null;
-				$t->result = $result1;
-				tink_core__Callback_CallbackList_Impl_::invoke($list1, $result1);
-				tink_core__Callback_CallbackList_Impl_::clear($list1);
-			}
+			$t->trigger(tink_core_Outcome::Success($val));
 		}
 	}
 }
@@ -79,26 +47,10 @@ function ufront_core_CallbackTools_2(&$pos, &$t, $error, $val1, $val2) {
 		if($error !== null) {
 			$e = "" . Std::string($error);
 			$e1 = tink_core_TypedError::withData(500, $e, $pos, _hx_anonymous(array("fileName" => "AsyncTools.hx", "lineNumber" => 266, "className" => "ufront.core.CallbackTools", "methodName" => "asSurprisePair")));
-			{
-				$result = tink_core_Outcome::Failure($e1);
-				if($t->{"list"} !== null) {
-					$list = $t->{"list"};
-					$t->{"list"} = null;
-					$t->result = $result;
-					tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
-					tink_core__Callback_CallbackList_Impl_::clear($list);
-				}
-			}
+			$t->trigger(tink_core_Outcome::Failure($e1));
 		} else {
 			$this1 = new tink_core_MPair($val1, $val2);
-			$result1 = tink_core_Outcome::Success($this1);
-			if($t->{"list"} !== null) {
-				$list1 = $t->{"list"};
-				$t->{"list"} = null;
-				$t->result = $result1;
-				tink_core__Callback_CallbackList_Impl_::invoke($list1, $result1);
-				tink_core__Callback_CallbackList_Impl_::clear($list1);
-			}
+			$t->trigger(tink_core_Outcome::Success($this1));
 		}
 	}
 }

@@ -48,7 +48,7 @@ class ufront_web_result_HttpAuthResult extends ufront_web_result_ActionResult {
 			return call_user_func($successFn);
 		} else {
 			$result = new ufront_web_result_HttpAuthResult($message, $failureMessage);
-			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($result));
+			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($result)));
 		}
 	}
 	function __toString() { return 'ufront.web.result.HttpAuthResult'; }

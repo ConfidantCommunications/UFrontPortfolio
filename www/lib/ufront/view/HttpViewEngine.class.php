@@ -20,12 +20,12 @@ class ufront_view_HttpViewEngine extends ufront_view_UFViewEngine {
 			$req->onData = array(new _hx_lambda(array(&$ft), "ufront_view_HttpViewEngine_1"), 'execute');
 			$req->onError = array(new _hx_lambda(array(&$ft, &$fullPath, &$status), "ufront_view_HttpViewEngine_2"), 'execute');
 			$req->request(null);
-			return (property_exists($ft, "future") ? $ft->future: array($ft, "future"));
+			return $ft;
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 			$e = $_ex_;
 			{
-				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(tink_core_TypedError::withData(null, "Failed to load template " . _hx_string_or_null($fullPath), $e, _hx_anonymous(array("fileName" => "HttpViewEngine.hx", "lineNumber" => 59, "className" => "ufront.view.HttpViewEngine", "methodName" => "getTemplateString")))));
+				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(tink_core_TypedError::withData(null, "Failed to load template " . _hx_string_or_null($fullPath), $e, _hx_anonymous(array("fileName" => "HttpViewEngine.hx", "lineNumber" => 59, "className" => "ufront.view.HttpViewEngine", "methodName" => "getTemplateString"))))));
 			}
 		}
 	}
@@ -51,36 +51,16 @@ function ufront_view_HttpViewEngine_0(&$status, $st) {
 }
 function ufront_view_HttpViewEngine_1(&$ft, $data) {
 	{
-		$result = tink_core_Outcome::Success(haxe_ds_Option::Some($data));
-		if($ft->{"list"} !== null) {
-			$list = $ft->{"list"};
-			$ft->{"list"} = null;
-			$ft->result = $result;
-			tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
-			tink_core__Callback_CallbackList_Impl_::clear($list);
-		}
+		$ft->trigger(tink_core_Outcome::Success(haxe_ds_Option::Some($data)));
 	}
 }
 function ufront_view_HttpViewEngine_2(&$ft, &$fullPath, &$status, $err) {
 	{
 		if($status === 404) {
-			$result1 = tink_core_Outcome::Success(haxe_ds_Option::$None);
-			if($ft->{"list"} !== null) {
-				$list1 = $ft->{"list"};
-				$ft->{"list"} = null;
-				$ft->result = $result1;
-				tink_core__Callback_CallbackList_Impl_::invoke($list1, $result1);
-				tink_core__Callback_CallbackList_Impl_::clear($list1);
-			}
+			$ft->trigger(tink_core_Outcome::Success(haxe_ds_Option::$None));
 		} else {
-			$result2 = tink_core_Outcome::Failure(tink_core_TypedError::withData($status, "Failed to load template " . _hx_string_or_null($fullPath), $err, _hx_anonymous(array("fileName" => "HttpViewEngine.hx", "lineNumber" => 54, "className" => "ufront.view.HttpViewEngine", "methodName" => "getTemplateString"))));
-			if($ft->{"list"} !== null) {
-				$list2 = $ft->{"list"};
-				$ft->{"list"} = null;
-				$ft->result = $result2;
-				tink_core__Callback_CallbackList_Impl_::invoke($list2, $result2);
-				tink_core__Callback_CallbackList_Impl_::clear($list2);
-			}
+			$tmp = tink_core_Outcome::Failure(tink_core_TypedError::withData($status, "Failed to load template " . _hx_string_or_null($fullPath), $err, _hx_anonymous(array("fileName" => "HttpViewEngine.hx", "lineNumber" => 54, "className" => "ufront.view.HttpViewEngine", "methodName" => "getTemplateString"))));
+			$ft->trigger($tmp);
 		}
 	}
 }

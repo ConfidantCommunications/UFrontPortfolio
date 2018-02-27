@@ -23,11 +23,11 @@ class ufront_core__AcceptEither_AcceptEither_Impl_ {
 		return $this1;
 	}
 	static function fromA($v) {
-		$this1 = tink_core_Either::Left($v);
+		$this1 = haxe_ds_Either::Left($v);
 		return $this1;
 	}
 	static function fromB($v) {
-		$this1 = tink_core_Either::Right($v);
+		$this1 = haxe_ds_Either::Right($v);
 		return $this1;
 	}
 	static $__properties__ = array("get_type" => "get_type","get_value" => "get_value");

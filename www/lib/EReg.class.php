@@ -70,6 +70,9 @@ class EReg {
 		}
 		return $p > 0;
 	}
+	public function split($s) {
+		return new _hx_array(preg_split($this->re, $s, $this->{"global"} ? -1 : 2));
+	}
 	public function replace($s, $by) {
 		$by = str_replace("\\\$", "\\\\\$", $by);
 		$by = str_replace("\$\$", "\\\$", $by);

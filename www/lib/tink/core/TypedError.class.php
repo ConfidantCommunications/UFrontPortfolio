@@ -7,21 +7,27 @@ class tink_core_TypedError {
 		if($code === null) {
 			$code = 500;
 		}
+		$this->isTinkError = true;
 		$this->code = $code;
 		$this->message = $message;
 		$this->pos = $pos;
+		$this->exceptionStack = (new _hx_array(array()));
+		$this->callStack = (new _hx_array(array()));
 	}}
 	public $message;
 	public $code;
 	public $data;
 	public $pos;
+	public $callStack;
+	public $exceptionStack;
+	public $isTinkError;
 	public function printPos() {
 		return _hx_string_or_null($this->pos->className) . "." . _hx_string_or_null($this->pos->methodName) . ":" . _hx_string_rec($this->pos->lineNumber, "");
 	}
 	public function toString() {
-		$ret = "Error: " . _hx_string_or_null($this->message);
+		$ret = "Error#" . _hx_string_rec($this->code, "") . ": " . _hx_string_or_null($this->message);
 		if(_hx_field($this, "pos") !== null) {
-			$ret = _hx_string_or_null($ret) . _hx_string_or_null((" " . _hx_string_or_null($this->printPos())));
+			$ret = _hx_string_or_null($ret) . _hx_string_or_null((" @ " . _hx_string_or_null($this->printPos())));
 		}
 		return $ret;
 	}
@@ -47,24 +53,30 @@ class tink_core_TypedError {
 		$ret->data = $data;
 		return $ret;
 	}
-	static function catchExceptions($f, $report = null) {
+	static function asError($v) {
+		return Std::instance($v, _hx_qtype("tink.core.TypedError"));
+	}
+	static function catchExceptions($f, $report = null, $pos = null) {
 		try {
 			return tink_core_Outcome::Success(call_user_func($f));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
-			if(($e = $_ex_) instanceof tink_core_TypedError){
-				return tink_core_Outcome::Failure($e);
-			}
-			else { $e1 = $_ex_;
+			$e = $_ex_;
 			{
+				$_g = tink_core_TypedError::asError($e);
 				$tmp = null;
-				if($report === null) {
-					$tmp = tink_core_TypedError::withData(null, "Unexpected Error", $e1, _hx_anonymous(array("fileName" => "Error.hx", "lineNumber" => 97, "className" => "tink.core.TypedError", "methodName" => "catchExceptions")));
+				if($_g === null) {
+					if($report === null) {
+						$tmp = tink_core_TypedError::withData(null, "Unexpected Error", $e, $pos);
+					} else {
+						$tmp = call_user_func_array($report, array($e));
+					}
 				} else {
-					$tmp = call_user_func_array($report, array($e1));
+					$e1 = $_g;
+					$tmp = $e1;
 				}
 				return tink_core_Outcome::Failure($tmp);
-			}}
+			}
 		}
 	}
 	static function reporter($code = null, $message, $pos = null) {
@@ -73,6 +85,21 @@ class tink_core_TypedError {
 	static function rethrow($any) {
 		php_Lib::rethrow($any);
 		return $any;
+	}
+	static function tryFinally($f, $cleanup) {
+		try {
+			$ret = call_user_func($f);
+			call_user_func($cleanup);
+			return $ret;
+		}catch(Exception $__hx__e) {
+			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
+			$e = $_ex_;
+			{
+				call_user_func($cleanup);
+				php_Lib::rethrow($e);
+				return $e;
+			}
+		}
 	}
 	function __toString() { return $this->toString(); }
 }

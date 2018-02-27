@@ -52,7 +52,9 @@ class ufront_web_upload_TmpFileUploadMiddleware implements ufront_app_UFMiddlewa
 			$onPart = array(new _hx_lambda(array(&$dateStr, &$dir1, &$file, &$origFileName, &$postName, &$size, &$tmpFilePath), "ufront_web_upload_TmpFileUploadMiddleware_0"), 'execute');
 			$onData = array(new _hx_lambda(array(&$file, &$size), "ufront_web_upload_TmpFileUploadMiddleware_1"), 'execute');
 			$onEndPart = array(new _hx_lambda(array(&$ctx, &$file, &$origFileName, &$postName, &$size, &$tmpFilePath), "ufront_web_upload_TmpFileUploadMiddleware_2"), 'execute');
-			return tink_core__Future_Future_Impl_::map($ctx->request->parseMultipart($onPart, $onData, $onEndPart), array(new _hx_lambda(array(), "ufront_web_upload_TmpFileUploadMiddleware_3"), 'execute'), null);
+			$this1 = $ctx->request->parseMultipart($onPart, $onData, $onEndPart);
+			$ret = $this1->map(array(new _hx_lambda(array(), "ufront_web_upload_TmpFileUploadMiddleware_3"), 'execute'));
+			return $ret->gather();
 		} else {
 			return ufront_core_SurpriseTools::success();
 		}

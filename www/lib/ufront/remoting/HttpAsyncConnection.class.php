@@ -29,7 +29,7 @@ class ufront_remoting_HttpAsyncConnection extends haxe_remoting_HttpAsyncConnect
 		$onError = array(new _hx_lambda(array(&$_gthis, &$h, &$onResult, &$remotingCallString1, &$responseCode), "ufront_remoting_HttpAsyncConnection_2"), 'execute');
 		$h->handle($onStatus, $onData, $onError);
 		$uploadsReady = $h->attachUploads($s->uploads);
-		call_user_func_array($uploadsReady, array(array(new _hx_lambda(array(&$h, &$onError, &$onStatus), "ufront_remoting_HttpAsyncConnection_3"), 'execute')));
+		$uploadsReady->handle(array(new _hx_lambda(array(&$h, &$onError, &$onStatus), "ufront_remoting_HttpAsyncConnection_3"), 'execute'));
 	}
 	static function urlConnect($url, $errorHandler = null) {
 		if($errorHandler === null) {

@@ -790,25 +790,6 @@ actions_ConfidantInterface.prototype = $extend(ufront_web_client_UFClientAction.
 	}
 	,__class__: actions_ConfidantInterface
 });
-var api_PortfolioItem = function(html,title,prev,next,pll,nll) {
-	this.html = html;
-	this.title = title;
-	this.prevLink = prev;
-	this.nextLink = next;
-	this.nextLinkLabel = nll;
-	this.prevLinkLabel = pll;
-};
-$hxClasses["api.PortfolioItem"] = api_PortfolioItem;
-api_PortfolioItem.__name__ = ["api","PortfolioItem"];
-api_PortfolioItem.prototype = {
-	html: null
-	,prevLink: null
-	,nextLink: null
-	,prevLinkLabel: null
-	,nextLinkLabel: null
-	,title: null
-	,__class__: api_PortfolioItem
-};
 var ufront_api_UFApi = function() {
 };
 $hxClasses["ufront.api.UFApi"] = ufront_api_UFApi;
@@ -834,7 +815,7 @@ ufront_api_UFApi.prototype = {
 		var flags1;
 		var result = this.cnx.resolve(this.className).resolve(method).call(args);
 		if(isFuture) {
-			return tink_core__$Future_Future_$Impl_$.sync(result);
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(result));
 		} else {
 			return result;
 		}
@@ -843,6 +824,122 @@ ufront_api_UFApi.prototype = {
 		return Type.getClassName(js_Boot.getClass(this));
 	}
 	,__class__: ufront_api_UFApi
+};
+var api_MailApi = function() {
+	ufront_api_UFApi.call(this);
+};
+$hxClasses["api.MailApi"] = api_MailApi;
+api_MailApi.__name__ = ["api","MailApi"];
+api_MailApi.__super__ = ufront_api_UFApi;
+api_MailApi.prototype = $extend(ufront_api_UFApi.prototype,{
+	doMail: function(address,name,message) {
+		if(this.className == null) {
+			this.className = Type.getClassName(js_Boot.getClass(this));
+		}
+		var isFuture = false;
+		try {
+			var fieldsMeta = haxe_rtti_Meta.getFields(js_Boot.getClass(this));
+			var actionMeta = Reflect.field(fieldsMeta,"doMail");
+			var returnType = actionMeta.returnType[0];
+			var this1 = returnType;
+			var flags = this1;
+			isFuture = (flags & 1 << ufront_api_ApiReturnType.ARTFuture[1]) != 0;
+		} catch( e ) {
+			haxe_CallStack.lastException = e;
+		}
+		var flags1;
+		var result = this.cnx.resolve(this.className).resolve("doMail").call([address,name,message]);
+		return isFuture ? new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(result)) : result;
+	}
+	,__class__: api_MailApi
+});
+var ufront_api_UFAsyncApi = function() {
+};
+$hxClasses["ufront.api.UFAsyncApi"] = ufront_api_UFAsyncApi;
+ufront_api_UFAsyncApi.__name__ = ["ufront","api","UFAsyncApi"];
+ufront_api_UFAsyncApi.getAsyncApi = function(syncApi) {
+	var meta = haxe_rtti_Meta.getType(syncApi);
+	if(meta.asyncApi != null) {
+		var asyncApiName = meta.asyncApi[0];
+		if(asyncApiName != null) {
+			return Type.resolveClass(asyncApiName);
+		}
+	}
+	return null;
+};
+ufront_api_UFAsyncApi.prototype = {
+	className: null
+	,cnx: null
+	,_makeApiCall: function(method,args,flags,pos) {
+		var remotingCallString = "" + this.className + "." + method + "(" + args.join(",") + ")";
+		var resultTrigger = new tink_core_FutureTrigger();
+		var cnx = this.cnx.resolve(this.className).resolve(method);
+		cnx.setErrorHandler(ufront_remoting_RemotingUtil.wrapErrorHandler(function(err) {
+			var tmp = tink_core_Outcome.Failure(ufront_web_HttpError.remotingError(err,pos));
+			resultTrigger.trigger(tmp);
+		}));
+		cnx.call(args,function(result) {
+			var wrappedOutcome;
+			if((flags & 1 << ufront_api_ApiReturnType.ARTVoid[1]) != 0) {
+				wrappedOutcome = tink_core_Outcome.Success(tink_core_Noise.Noise);
+			} else if((flags & 1 << ufront_api_ApiReturnType.ARTOutcome[1]) != 0) {
+				var outcome = result;
+				switch(outcome[1]) {
+				case 0:
+					var data = outcome[2];
+					wrappedOutcome = tink_core_Outcome.Success(data);
+					break;
+				case 1:
+					var err1 = outcome[2];
+					wrappedOutcome = tink_core_Outcome.Failure(ufront_web_HttpError.remotingError(ufront_remoting_RemotingError.RApiFailure(remotingCallString,err1),pos));
+					break;
+				}
+			} else {
+				wrappedOutcome = tink_core_Outcome.Success(result);
+			}
+			resultTrigger.trigger(wrappedOutcome);
+		});
+		return resultTrigger;
+	}
+	,__class__: ufront_api_UFAsyncApi
+};
+var api_AsyncMailApi = function() {
+	ufront_api_UFAsyncApi.call(this);
+};
+$hxClasses["api.AsyncMailApi"] = api_AsyncMailApi;
+api_AsyncMailApi.__name__ = ["api","AsyncMailApi"];
+api_AsyncMailApi._getClass = function() {
+	return api_MailApi;
+};
+api_AsyncMailApi.__super__ = ufront_api_UFAsyncApi;
+api_AsyncMailApi.prototype = $extend(ufront_api_UFAsyncApi.prototype,{
+	doMail: function(address,name,message) {
+		var this1 = 3;
+		return this._makeApiCall("doMail",[address,name,message],this1,{ methodName : "doMail", lineNumber : 0, customParams : null, fileName : "src/api/MailApi.hx", className : "AsyncMailApi"});
+	}
+	,injectApi: function(injector) {
+		this.className = "api.MailApi";
+	}
+	,__class__: api_AsyncMailApi
+});
+var api_PortfolioItem = function(html,title,prev,next,pll,nll) {
+	this.html = html;
+	this.title = title;
+	this.prevLink = prev;
+	this.nextLink = next;
+	this.nextLinkLabel = nll;
+	this.prevLinkLabel = pll;
+};
+$hxClasses["api.PortfolioItem"] = api_PortfolioItem;
+api_PortfolioItem.__name__ = ["api","PortfolioItem"];
+api_PortfolioItem.prototype = {
+	html: null
+	,prevLink: null
+	,nextLink: null
+	,prevLinkLabel: null
+	,nextLinkLabel: null
+	,title: null
+	,__class__: api_PortfolioItem
 };
 var api_TestApi = function() {
 	ufront_api_UFApi.call(this);
@@ -868,7 +965,7 @@ api_TestApi.prototype = $extend(ufront_api_UFApi.prototype,{
 		}
 		var flags1;
 		var result = this.cnx.resolve(this.className).resolve("getJson").call([path]);
-		return isFuture ? tink_core__$Future_Future_$Impl_$.sync(result) : result;
+		return isFuture ? new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(result)) : result;
 	}
 	,getItem: function(slug) {
 		if(this.className == null) {
@@ -887,72 +984,10 @@ api_TestApi.prototype = $extend(ufront_api_UFApi.prototype,{
 		}
 		var flags1;
 		var result = this.cnx.resolve(this.className).resolve("getItem").call([slug]);
-		return isFuture ? tink_core__$Future_Future_$Impl_$.sync(result) : result;
+		return isFuture ? new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(result)) : result;
 	}
 	,__class__: api_TestApi
 });
-var ufront_api_UFAsyncApi = function() {
-};
-$hxClasses["ufront.api.UFAsyncApi"] = ufront_api_UFAsyncApi;
-ufront_api_UFAsyncApi.__name__ = ["ufront","api","UFAsyncApi"];
-ufront_api_UFAsyncApi.getAsyncApi = function(syncApi) {
-	var meta = haxe_rtti_Meta.getType(syncApi);
-	if(meta.asyncApi != null) {
-		var asyncApiName = meta.asyncApi[0];
-		if(asyncApiName != null) {
-			return Type.resolveClass(asyncApiName);
-		}
-	}
-	return null;
-};
-ufront_api_UFAsyncApi.prototype = {
-	className: null
-	,cnx: null
-	,_makeApiCall: function(method,args,flags,pos) {
-		var remotingCallString = "" + this.className + "." + method + "(" + args.join(",") + ")";
-		var resultTrigger = new tink_core_FutureTrigger();
-		var cnx = this.cnx.resolve(this.className).resolve(method);
-		cnx.setErrorHandler(ufront_remoting_RemotingUtil.wrapErrorHandler(function(err) {
-			var result = tink_core_Outcome.Failure(ufront_web_HttpError.remotingError(err,pos));
-			if(resultTrigger.list != null) {
-				var list = resultTrigger.list;
-				resultTrigger.list = null;
-				resultTrigger.result = result;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-			}
-		}));
-		cnx.call(args,function(result1) {
-			var wrappedOutcome;
-			if((flags & 1 << ufront_api_ApiReturnType.ARTVoid[1]) != 0) {
-				wrappedOutcome = tink_core_Outcome.Success(tink_core_Noise.Noise);
-			} else if((flags & 1 << ufront_api_ApiReturnType.ARTOutcome[1]) != 0) {
-				var outcome = result1;
-				switch(outcome[1]) {
-				case 0:
-					var data = outcome[2];
-					wrappedOutcome = tink_core_Outcome.Success(data);
-					break;
-				case 1:
-					var err1 = outcome[2];
-					wrappedOutcome = tink_core_Outcome.Failure(ufront_web_HttpError.remotingError(ufront_remoting_RemotingError.RApiFailure(remotingCallString,err1),pos));
-					break;
-				}
-			} else {
-				wrappedOutcome = tink_core_Outcome.Success(result1);
-			}
-			if(resultTrigger.list != null) {
-				var list1 = resultTrigger.list;
-				resultTrigger.list = null;
-				resultTrigger.result = wrappedOutcome;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,wrappedOutcome);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-			}
-		});
-		return resultTrigger.future;
-	}
-	,__class__: ufront_api_UFAsyncApi
-};
 var api_AsyncTestApi = function() {
 	ufront_api_UFAsyncApi.call(this);
 };
@@ -991,7 +1026,7 @@ ufront_web_Controller.prototype = {
 		this.baseUri = "~" + haxe_io_Path.addTrailingSlash(HxOverrides.substr(fullUri,0,fullUri.length - remainingUri.length));
 	}
 	,execute: function() {
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Field execute() in ufront.web.Controller is an abstract method, please override it in " + this.toString() + " ",null,{ fileName : "Controller.hx", lineNumber : 219, className : "ufront.web.Controller", methodName : "execute"})));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Field execute() in ufront.web.Controller is an abstract method, please override it in " + this.toString() + " ",null,{ fileName : "Controller.hx", lineNumber : 219, className : "ufront.web.Controller", methodName : "execute"}))));
 	}
 	,executeSubController: function(controller) {
 		return this.context.injector._instantiate(controller).execute();
@@ -1030,7 +1065,7 @@ ufront_web_Controller.prototype = {
 	,wrapResult: function(result,wrappingRequired) {
 		if(result == null) {
 			var actionResult = new ufront_web_result_EmptyResult(true);
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(actionResult));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(actionResult)));
 		} else {
 			var future = (wrappingRequired & 1 << ufront_web_result_ResultWrapRequired.WRFuture[1]) != 0 ? this.wrapInFuture(result) : result;
 			var surprise = (wrappingRequired & 1 << ufront_web_result_ResultWrapRequired.WROutcome[1]) != 0 ? this.wrapInOutcome(future) : future;
@@ -1039,15 +1074,16 @@ ufront_web_Controller.prototype = {
 		}
 	}
 	,wrapInFuture: function(result) {
-		return tink_core__$Future_Future_$Impl_$.sync(result);
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(result));
 	}
 	,wrapInOutcome: function(future) {
-		return tink_core__$Future_Future_$Impl_$.map(future,function(result) {
+		var ret = future.map(function(result) {
 			return tink_core_Outcome.Success(result);
 		});
+		return ret.gather();
 	}
 	,wrapResultOrError: function(surprise) {
-		return tink_core__$Future_Future_$Impl_$.map(surprise,function(outcome) {
+		var ret = surprise.map(function(outcome) {
 			switch(outcome[1]) {
 			case 0:
 				var result = outcome[2];
@@ -1057,10 +1093,11 @@ ufront_web_Controller.prototype = {
 				return tink_core_Outcome.Failure(ufront_web_HttpError.wrap(error,null,{ fileName : "Controller.hx", lineNumber : 308, className : "ufront.web.Controller", methodName : "wrapResultOrError"}));
 			}
 		});
+		return ret.gather();
 	}
 	,setContextActionResultWhenFinished: function(result) {
 		var _gthis = this;
-		result(function(outcome) {
+		result.handle(function(outcome) {
 			if(outcome[1] == 0) {
 				var ar = outcome[2];
 				_gthis.context.actionContext.actionResult = ar;
@@ -1077,6 +1114,7 @@ controller_HomeController.__name__ = ["controller","HomeController"];
 controller_HomeController.__super__ = ufront_web_Controller;
 controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 	testApi: null
+	,mailApi: null
 	,main: function() {
 		var t = "Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan";
 		var obj = { };
@@ -1175,6 +1213,17 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 		var parsed = JSON.parse(pJson);
 		return parsed.items;
 	}
+	,contactResult: function(args) {
+		var t = "Confidant Communications : Contact";
+		var returnHome = "<p style=\"text-align:center;\"><a href=\"/\" rel=\"pushstate\">Go back home now?</a></p>";
+		return tink_core__$Future_Future_$Impl_$._tryMap(this.mailApi.doMail(args.email,args.name,args.message),function(result) {
+			var obj = { };
+			var this1 = obj != null ? obj : { };
+			var tmp = new ufront_web_result_PartialViewResult(ufront_view__$TemplateData_TemplateData_$Impl_$.setObject(this1,{ title : t, portfolioItem : null, panel1classes : "recessed0 recessed1 recessed2", panel2classes : "recessed0 recessed1", panel3classes : "recessed0", gobackLink : "/contact/"})).addPartialString("subcontent",result + returnHome,ufront_view_TemplatingEngines.get_haxe());
+			var this2 = Type.getClassName(actions_ConfidantInterface);
+			return ufront_web_result_AddClientActionResult.addClientAction(tmp,this2,{ msg : t + result});
+		});
+	}
 	,execute: function() {
 		var uriParts = this.context.actionContext.get_uriParts();
 		var params = this.context.request.get_params();
@@ -1200,7 +1249,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				var result1 = this.wrapResult(this.about(),wrappingRequired1);
 				this.setContextActionResultWhenFinished(result1);
 				return result1;
-			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "graphic-design") {
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "graphic-design-saskatoon") {
 				this.context.actionContext.action = "graphic";
 				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,2);
@@ -1209,7 +1258,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				var result2 = this.wrapResult(this.graphic(),wrappingRequired2);
 				this.setContextActionResultWhenFinished(result2);
 				return result2;
-			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "joomla-development") {
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "joomla-development-saskatoon") {
 				this.context.actionContext.action = "joomla";
 				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,2);
@@ -1236,7 +1285,7 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				var result5 = this.wrapResult(this.web(),wrappingRequired5);
 				this.setContextActionResultWhenFinished(result5);
 				return result5;
-			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "interactive") {
+			} else if(method.toLowerCase() == "get" && 2 == uriParts.length && uriParts[0] == "about" && uriParts[1] == "interactive-developer-saskatoon") {
 				this.context.actionContext.action = "interactive";
 				this.context.actionContext.args = [];
 				this.context.actionContext.get_uriParts().splice(0,2);
@@ -1273,12 +1322,49 @@ controller_HomeController.prototype = $extend(ufront_web_Controller.prototype,{
 				var result9 = this.wrapResult(this.returnPortfolioItem(id),wrappingRequired9);
 				this.setContextActionResultWhenFinished(result9);
 				return result9;
+			} else if(method.toLowerCase() == "post" && 2 == uriParts.length && uriParts[0] == "contact" && uriParts[1] == "send") {
+				if(!(__map_reserved["email"] != null ? params.existsReserved("email") : params.h.hasOwnProperty("email"))) {
+					var reason = "Missing parameter " + "email";
+					var message = "Bad Request";
+					if(reason != null) {
+						message += ": " + reason;
+					}
+					throw new js__$Boot_HaxeError(new tink_core_TypedError(400,message,{ fileName : "HomeController.hx", lineNumber : 243, className : "controller.HomeController", methodName : "execute"}));
+				}
+				var _param_tmp_email = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"email");
+				if(!(__map_reserved["name"] != null ? params.existsReserved("name") : params.h.hasOwnProperty("name"))) {
+					var reason1 = "Missing parameter " + "name";
+					var message1 = "Bad Request";
+					if(reason1 != null) {
+						message1 += ": " + reason1;
+					}
+					throw new js__$Boot_HaxeError(new tink_core_TypedError(400,message1,{ fileName : "HomeController.hx", lineNumber : 243, className : "controller.HomeController", methodName : "execute"}));
+				}
+				var _param_tmp_name = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"name");
+				if(!(__map_reserved["message"] != null ? params.existsReserved("message") : params.h.hasOwnProperty("message"))) {
+					var reason2 = "Missing parameter " + "message";
+					var message2 = "Bad Request";
+					if(reason2 != null) {
+						message2 += ": " + reason2;
+					}
+					throw new js__$Boot_HaxeError(new tink_core_TypedError(400,message2,{ fileName : "HomeController.hx", lineNumber : 243, className : "controller.HomeController", methodName : "execute"}));
+				}
+				var _param_tmp_message = ufront_core__$MultiValueMap_MultiValueMap_$Impl_$.get(params,"message");
+				var args = { email : _param_tmp_email, name : _param_tmp_name, message : _param_tmp_message};
+				this.context.actionContext.action = "contactResult";
+				this.context.actionContext.args = [args];
+				this.context.actionContext.get_uriParts().splice(0,2);
+				var this11 = haxe_rtti_Meta.getFields(controller_HomeController).contactResult.wrapResult[0];
+				var wrappingRequired10 = this11;
+				var result10 = this.wrapResult(this.contactResult(args),wrappingRequired10);
+				this.setContextActionResultWhenFinished(result10);
+				return result10;
 			}
-			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 20, className : "controller.HomeController", methodName : "execute"}));
+			throw new js__$Boot_HaxeError(ufront_web_HttpError.pageNotFound({ fileName : "HomeController.hx", lineNumber : 21, className : "controller.HomeController", methodName : "execute"}));
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
 			if (e instanceof js__$Boot_HaxeError) e = e.val;
-			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 20, className : "controller.HomeController", methodName : "execute"});
+			return ufront_core_SurpriseTools.asSurpriseError(e,"Uncaught error while executing " + Std.string(this.context.actionContext.controller) + "." + this.context.actionContext.action + "()",{ fileName : "HomeController.hx", lineNumber : 21, className : "controller.HomeController", methodName : "execute"});
 		}
 	}
 	,__class__: controller_HomeController
@@ -2741,6 +2827,9 @@ haxe_Unserializer.prototype = {
 	}
 	,__class__: haxe_Unserializer
 };
+var haxe_ds_Either = $hxClasses["haxe.ds.Either"] = { __ename__ : ["haxe","ds","Either"], __constructs__ : ["Left","Right"] };
+haxe_ds_Either.Left = function(v) { var $x = ["Left",0,v]; $x.__enum__ = haxe_ds_Either; $x.toString = $estr; return $x; };
+haxe_ds_Either.Right = function(v) { var $x = ["Right",1,v]; $x.__enum__ = haxe_ds_Either; $x.toString = $estr; return $x; };
 var haxe_ds_IntMap = function() {
 	this.h = { };
 };
@@ -4647,15 +4736,17 @@ overrides_CustomErrorPageHandler.prototype = {
 		var pos = showStack ? "<p class=\"error-pos\">&gt; " + error.printPos() + "</p>" : "";
 		var exceptionStackItems = overrides_CustomErrorPageHandler.errorStackItems(haxe_CallStack.exceptionStack());
 		var exceptionStack = showStack && exceptionStackItems.length > 0 ? "<div class=\"error-exception-stack\"><h3>Exception Stack:</h3>\n\t\t\t\t\t<pre><code>" + exceptionStackItems.join("\n") + "</pre></code>\n\t\t\t\t</div>" : "";
-		var content = "\n\t\t\t<summary class=\"error-summary\"><h1 class=\"error-message\">" + error.message + "</h1></summary>\n\t\t\t<details class=\"error-details\"> " + inner + " " + pos + " " + exceptionStack + "</details>\n\t\t";
+		var shortMessage = error.message.split(":")[0];
+		var content = "\n\t\t\t<summary class=\"error-summary\"><h1 class=\"error-message\">" + shortMessage + "</h1></summary>\n\t\t\t<details class=\"error-details\"> " + inner + " " + pos + " " + exceptionStack + "</details>\n\t\t";
 		return content;
 	}
 	,renderErrorPage: function(title,content) {
-		return "<!DOCTYPE html>\n<html>\n<head>\n\t<title>" + title + "</title>\n\t<link rel=\"stylesheet\" href=\"/css/home.css\" media=\"screen\">\n</head>\n<body>\n\t<div class=\"container\">\n\t\t<div id=\"stage\" class=\"\">\n\t\t\t<div id=\"panel1\" class=\"recessed0 recessed1\">\n\t\t\t\t<img id=\"confidantLogo\" src=\"/images/confidantLogo.jpg\" alt=\"Confidant Communications\" />\n\t\t\t</div>\n\t\t\t<div id=\"panel2\" style=\"display:block;opacity:1;top:120px;left:0;\">\n\t\t\t\t<div class=\"content\">\n\t\t\t\t\t" + content + "\n\t\t\t\t\t<p style=\"text-align:center;\"><a href=\"/\">Go back to the home page please.</a></p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</body>\n</html>\n";
+		return "<!DOCTYPE html>\n<html>\n<head>\n\t<title>" + title + "</title>\n\t<link rel=\"stylesheet\" href=\"/css/home.css\" media=\"screen\">\n</head>\n<body>\n\t<div class=\"container\">\n\t\t<div id=\"stage\" class=\"\">\n\t\t\t<div id=\"panel1\" class=\"recessed0 recessed1\">\n\t\t\t\t<img id=\"confidantLogo\" src=\"/images/confidantLogo.jpg\" alt=\"Confidant Communications\" />\n\t\t\t</div>\n\t\t\t<div id=\"panel2\" style=\"display:block;opacity:1;top:120px;left:0;\">\n\t\t\t\t<div class=\"content\">\n\t\t\t\t\t" + content + "\n\t\t\t\t\t<p style=\"text-align:center;\"><a href=\"/\">Sorry about that! Go back to the home page maybe?</a></p>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</body>\n</html>\n";
 	}
 	,renderError: function(error,showStack) {
 		var content = this.renderErrorContent(error,showStack);
-		return this.renderErrorPage(error.message,content);
+		var shortMessage = error.message.split(":")[0];
+		return this.renderErrorPage(shortMessage,content);
 	}
 	,__class__: overrides_CustomErrorPageHandler
 };
@@ -5014,6 +5105,17 @@ pushstate_PushState.silentReplace = function(url,state,uploads) {
 	pushstate_PushState.currentState = state;
 	pushstate_PushState.currentUploads = uploads;
 };
+var tink_core_Annex = function(target) {
+	this.target = target;
+	this.registry = new haxe_ds_ObjectMap();
+};
+$hxClasses["tink.core.Annex"] = tink_core_Annex;
+tink_core_Annex.__name__ = ["tink","core","Annex"];
+tink_core_Annex.prototype = {
+	target: null
+	,registry: null
+	,__class__: tink_core_Annex
+};
 var tink_core__$Any_Any_$Impl_$ = {};
 $hxClasses["tink.core._Any.Any_Impl_"] = tink_core__$Any_Any_$Impl_$;
 tink_core__$Any_Any_$Impl_$.__name__ = ["tink","core","_Any","Any_Impl_"];
@@ -5027,8 +5129,29 @@ tink_core__$Callback_Callback_$Impl_$._new = function(f) {
 	var this1 = f;
 	return this1;
 };
+tink_core__$Callback_Callback_$Impl_$.toFunction = function(this1) {
+	return this1;
+};
 tink_core__$Callback_Callback_$Impl_$.invoke = function(this1,data) {
-	this1(data);
+	if(tink_core__$Callback_Callback_$Impl_$.depth < 1000) {
+		tink_core__$Callback_Callback_$Impl_$.depth++;
+		this1(data);
+		tink_core__$Callback_Callback_$Impl_$.depth--;
+	} else {
+		var _e = this1;
+		var f = function(data1) {
+			tink_core__$Callback_Callback_$Impl_$.invoke(_e,data1);
+		};
+		var a1 = data;
+		tink_core__$Callback_Callback_$Impl_$.defer(function() {
+			f(a1);
+		});
+	}
+};
+tink_core__$Callback_Callback_$Impl_$.ignore = function(cb) {
+	return tink_core__$Callback_Callback_$Impl_$.fromNiladic(function() {
+		tink_core__$Callback_Callback_$Impl_$.invoke(cb,tink_core_Noise.Noise);
+	});
 };
 tink_core__$Callback_Callback_$Impl_$.fromNiladic = function(f) {
 	var this1 = function(r) {
@@ -5042,45 +5165,135 @@ tink_core__$Callback_Callback_$Impl_$.fromMany = function(callbacks) {
 		while(_g < callbacks.length) {
 			var callback = callbacks[_g];
 			++_g;
-			callback(v);
+			tink_core__$Callback_Callback_$Impl_$.invoke(callback,v);
 		}
 	};
+};
+tink_core__$Callback_Callback_$Impl_$.defer = function(f) {
+	haxe_Timer.delay(f,0);
+};
+var tink_core__$Callback_LinkObject = function() { };
+$hxClasses["tink.core._Callback.LinkObject"] = tink_core__$Callback_LinkObject;
+tink_core__$Callback_LinkObject.__name__ = ["tink","core","_Callback","LinkObject"];
+tink_core__$Callback_LinkObject.prototype = {
+	dissolve: null
+	,__class__: tink_core__$Callback_LinkObject
 };
 var tink_core__$Callback_CallbackLink_$Impl_$ = {};
 $hxClasses["tink.core._Callback.CallbackLink_Impl_"] = tink_core__$Callback_CallbackLink_$Impl_$;
 tink_core__$Callback_CallbackLink_$Impl_$.__name__ = ["tink","core","_Callback","CallbackLink_Impl_"];
 tink_core__$Callback_CallbackLink_$Impl_$._new = function(link) {
-	var this1 = link;
+	var this1 = new tink_core__$Callback_SimpleLink(link);
 	return this1;
+};
+tink_core__$Callback_CallbackLink_$Impl_$.cancel = function(this1) {
+	if(this1 != null) {
+		this1.dissolve();
+	}
 };
 tink_core__$Callback_CallbackLink_$Impl_$.dissolve = function(this1) {
 	if(this1 != null) {
-		this1();
+		this1.dissolve();
 	}
 };
 tink_core__$Callback_CallbackLink_$Impl_$.toCallback = function(this1) {
-	var f = this1;
-	var this2 = function(r) {
-		f();
+	return function(_) {
+		this1.dissolve();
 	};
-	return this2;
 };
 tink_core__$Callback_CallbackLink_$Impl_$.fromFunction = function(f) {
-	var this1 = f;
+	var this1 = new tink_core__$Callback_SimpleLink(f);
 	return this1;
 };
+tink_core__$Callback_CallbackLink_$Impl_$.join = function(a,b) {
+	return new tink_core__$Callback_LinkPair(a,b);
+};
 tink_core__$Callback_CallbackLink_$Impl_$.fromMany = function(callbacks) {
-	var this1 = function() {
+	var this1 = new tink_core__$Callback_SimpleLink(function() {
 		var _g = 0;
 		while(_g < callbacks.length) {
 			var cb = callbacks[_g];
 			++_g;
 			if(cb != null) {
-				cb();
+				cb.dissolve();
 			}
 		}
-	};
+	});
 	return this1;
+};
+var tink_core__$Callback_SimpleLink = function(f) {
+	this.f = f;
+};
+$hxClasses["tink.core._Callback.SimpleLink"] = tink_core__$Callback_SimpleLink;
+tink_core__$Callback_SimpleLink.__name__ = ["tink","core","_Callback","SimpleLink"];
+tink_core__$Callback_SimpleLink.__interfaces__ = [tink_core__$Callback_LinkObject];
+tink_core__$Callback_SimpleLink.prototype = {
+	f: null
+	,dissolve: function() {
+		if(this.f != null) {
+			this.f();
+		}
+	}
+	,__class__: tink_core__$Callback_SimpleLink
+};
+var tink_core__$Callback_LinkPair = function(a,b) {
+	this.dissolved = false;
+	this.a = a;
+	this.b = b;
+};
+$hxClasses["tink.core._Callback.LinkPair"] = tink_core__$Callback_LinkPair;
+tink_core__$Callback_LinkPair.__name__ = ["tink","core","_Callback","LinkPair"];
+tink_core__$Callback_LinkPair.__interfaces__ = [tink_core__$Callback_LinkObject];
+tink_core__$Callback_LinkPair.prototype = {
+	a: null
+	,b: null
+	,dissolved: null
+	,dissolve: function() {
+		if(!this.dissolved) {
+			this.dissolved = true;
+			var this1 = this.a;
+			if(this1 != null) {
+				this1.dissolve();
+			}
+			var this2 = this.b;
+			if(this2 != null) {
+				this2.dissolve();
+			}
+		}
+	}
+	,__class__: tink_core__$Callback_LinkPair
+};
+var tink_core__$Callback_ListCell = function(cb,list) {
+	if(cb == null) {
+		throw new js__$Boot_HaxeError("callback expected but null received");
+	}
+	this.cb = cb;
+	this.list = list;
+};
+$hxClasses["tink.core._Callback.ListCell"] = tink_core__$Callback_ListCell;
+tink_core__$Callback_ListCell.__name__ = ["tink","core","_Callback","ListCell"];
+tink_core__$Callback_ListCell.__interfaces__ = [tink_core__$Callback_LinkObject];
+tink_core__$Callback_ListCell.prototype = {
+	list: null
+	,cb: null
+	,invoke: function(data) {
+		if(this.cb != null) {
+			tink_core__$Callback_Callback_$Impl_$.invoke(this.cb,data);
+		}
+	}
+	,clear: function() {
+		this.list = null;
+		this.cb = null;
+	}
+	,dissolve: function() {
+		var _g = this.list;
+		if(_g != null) {
+			var v = _g;
+			this.clear();
+			HxOverrides.remove(v,this);
+		}
+	}
+	,__class__: tink_core__$Callback_ListCell
 };
 var tink_core__$Callback_CallbackList_$Impl_$ = {};
 $hxClasses["tink.core._Callback.CallbackList_Impl_"] = tink_core__$Callback_CallbackList_$Impl_$;
@@ -5094,20 +5307,9 @@ tink_core__$Callback_CallbackList_$Impl_$.get_length = function(this1) {
 	return this1.length;
 };
 tink_core__$Callback_CallbackList_$Impl_$.add = function(this1,cb) {
-	var this2;
-	var this3 = new Array(1);
-	this2 = this3;
-	var ret = this2;
-	ret[0] = cb;
-	var cell = ret;
-	this1.push(cell);
-	var this4 = function() {
-		if(HxOverrides.remove(this1,cell)) {
-			cell[0] = null;
-		}
-		cell = null;
-	};
-	return this4;
+	var node = new tink_core__$Callback_ListCell(cb,this1);
+	this1.push(node);
+	return node;
 };
 tink_core__$Callback_CallbackList_$Impl_$.invoke = function(this1,data) {
 	var _g = 0;
@@ -5115,8 +5317,8 @@ tink_core__$Callback_CallbackList_$Impl_$.invoke = function(this1,data) {
 	while(_g < _g1.length) {
 		var cell = _g1[_g];
 		++_g;
-		if(cell[0] != null) {
-			cell[0](data);
+		if(cell.cb != null) {
+			tink_core__$Callback_Callback_$Impl_$.invoke(cell.cb,data);
 		}
 	}
 };
@@ -5126,19 +5328,19 @@ tink_core__$Callback_CallbackList_$Impl_$.clear = function(this1) {
 	while(_g < _g1.length) {
 		var cell = _g1[_g];
 		++_g;
-		cell[0] = null;
+		cell.clear();
 	}
 };
-var tink_core_Either = $hxClasses["tink.core.Either"] = { __ename__ : ["tink","core","Either"], __constructs__ : ["Left","Right"] };
-tink_core_Either.Left = function(a) { var $x = ["Left",0,a]; $x.__enum__ = tink_core_Either; $x.toString = $estr; return $x; };
-tink_core_Either.Right = function(b) { var $x = ["Right",1,b]; $x.__enum__ = tink_core_Either; $x.toString = $estr; return $x; };
 var tink_core_TypedError = function(code,message,pos) {
 	if(code == null) {
 		code = 500;
 	}
+	this.isTinkError = true;
 	this.code = code;
 	this.message = message;
 	this.pos = pos;
+	this.exceptionStack = [];
+	this.callStack = [];
 };
 $hxClasses["tink.core.TypedError"] = tink_core_TypedError;
 tink_core_TypedError.__name__ = ["tink","core","TypedError"];
@@ -5150,19 +5352,35 @@ tink_core_TypedError.typed = function(code,message,data,pos) {
 	ret.data = data;
 	return ret;
 };
-tink_core_TypedError.catchExceptions = function(f,report) {
+tink_core_TypedError.ofJsError = function(e,pos) {
+	return tink_core_TypedError.withData(500,e.message,e,pos);
+};
+tink_core_TypedError.asError = function(v) {
+	if(v != null && v.isTinkError) {
+		return v;
+	} else {
+		return null;
+	}
+};
+tink_core_TypedError.catchExceptions = function(f,report,pos) {
 	try {
 		return tink_core_Outcome.Success(f());
-	} catch( $e0 ) {
-		haxe_CallStack.lastException = $e0;
-		if ($e0 instanceof js__$Boot_HaxeError) $e0 = $e0.val;
-		if( js_Boot.__instanceof($e0,tink_core_TypedError) ) {
-			var e = $e0;
-			return tink_core_Outcome.Failure(e);
+	} catch( e ) {
+		haxe_CallStack.lastException = e;
+		if (e instanceof js__$Boot_HaxeError) e = e.val;
+		var _g = tink_core_TypedError.asError(e);
+		var tmp;
+		if(_g == null) {
+			if(report == null) {
+				tmp = tink_core_TypedError.withData(null,"Unexpected Error",e,pos);
+			} else {
+				tmp = report(e);
+			}
 		} else {
-		var e1 = $e0;
-		return tink_core_Outcome.Failure(report == null ? tink_core_TypedError.withData(null,"Unexpected Error",e1,{ fileName : "Error.hx", lineNumber : 97, className : "tink.core.TypedError", methodName : "catchExceptions"}) : report(e1));
+			var e1 = _g;
+			tmp = e1;
 		}
+		return tink_core_Outcome.Failure(tmp);
 	}
 };
 tink_core_TypedError.reporter = function(code,message,pos) {
@@ -5173,18 +5391,25 @@ tink_core_TypedError.reporter = function(code,message,pos) {
 tink_core_TypedError.rethrow = function(any) {
 	throw js__$Boot_HaxeError.wrap(any);
 };
+tink_core_TypedError.tryFinally = function(f,cleanup) {
+	try { return f(); } finally { cleanup(); }
+	return null;
+};
 tink_core_TypedError.prototype = {
 	message: null
 	,code: null
 	,data: null
 	,pos: null
+	,callStack: null
+	,exceptionStack: null
+	,isTinkError: null
 	,printPos: function() {
 		return this.pos.className + "." + this.pos.methodName + ":" + this.pos.lineNumber;
 	}
 	,toString: function() {
-		var ret = "Error: " + this.message;
+		var ret = "Error#" + this.code + ": " + this.message;
 		if(this.pos != null) {
-			ret += " " + this.printPos();
+			ret += " @ " + this.printPos();
 		}
 		return ret;
 	}
@@ -5193,45 +5418,140 @@ tink_core_TypedError.prototype = {
 	}
 	,__class__: tink_core_TypedError
 };
+var tink_core__$Error_Stack_$Impl_$ = {};
+$hxClasses["tink.core._Error.Stack_Impl_"] = tink_core__$Error_Stack_$Impl_$;
+tink_core__$Error_Stack_$Impl_$.__name__ = ["tink","core","_Error","Stack_Impl_"];
+tink_core__$Error_Stack_$Impl_$.toString = function(this1) {
+	return "Error stack not available. Compile with -D error_stack.";
+};
+var tink_core__$Future_FutureObject = function() { };
+$hxClasses["tink.core._Future.FutureObject"] = tink_core__$Future_FutureObject;
+tink_core__$Future_FutureObject.__name__ = ["tink","core","_Future","FutureObject"];
+tink_core__$Future_FutureObject.prototype = {
+	map: null
+	,flatMap: null
+	,handle: null
+	,gather: null
+	,eager: null
+	,__class__: tink_core__$Future_FutureObject
+};
+var tink_core__$Future_NeverFuture = function() {
+};
+$hxClasses["tink.core._Future.NeverFuture"] = tink_core__$Future_NeverFuture;
+tink_core__$Future_NeverFuture.__name__ = ["tink","core","_Future","NeverFuture"];
+tink_core__$Future_NeverFuture.__interfaces__ = [tink_core__$Future_FutureObject];
+tink_core__$Future_NeverFuture.prototype = {
+	map: function(f) {
+		return tink_core__$Future_NeverFuture.inst;
+	}
+	,flatMap: function(f) {
+		return tink_core__$Future_NeverFuture.inst;
+	}
+	,handle: function(callback) {
+		return null;
+	}
+	,gather: function() {
+		return tink_core__$Future_NeverFuture.inst;
+	}
+	,eager: function() {
+		return tink_core__$Future_NeverFuture.inst;
+	}
+	,__class__: tink_core__$Future_NeverFuture
+};
+var tink_core_Noise = $hxClasses["tink.core.Noise"] = { __ename__ : ["tink","core","Noise"], __constructs__ : ["Noise"] };
+tink_core_Noise.Noise = ["Noise",0];
+tink_core_Noise.Noise.toString = $estr;
+tink_core_Noise.Noise.__enum__ = tink_core_Noise;
+var tink_core__$Lazy_LazyObject = function() { };
+$hxClasses["tink.core._Lazy.LazyObject"] = tink_core__$Lazy_LazyObject;
+tink_core__$Lazy_LazyObject.__name__ = ["tink","core","_Lazy","LazyObject"];
+tink_core__$Lazy_LazyObject.prototype = {
+	get: null
+	,map: null
+	,flatMap: null
+	,__class__: tink_core__$Lazy_LazyObject
+};
+var tink_core__$Lazy_LazyConst = function(value) {
+	this.value = value;
+};
+$hxClasses["tink.core._Lazy.LazyConst"] = tink_core__$Lazy_LazyConst;
+tink_core__$Lazy_LazyConst.__name__ = ["tink","core","_Lazy","LazyConst"];
+tink_core__$Lazy_LazyConst.__interfaces__ = [tink_core__$Lazy_LazyObject];
+tink_core__$Lazy_LazyConst.prototype = {
+	value: null
+	,get: function() {
+		return this.value;
+	}
+	,map: function(f) {
+		return new tink_core__$Lazy_LazyConst(f(this.value));
+	}
+	,flatMap: function(f) {
+		return f(this.value);
+	}
+	,__class__: tink_core__$Lazy_LazyConst
+};
+var tink_core__$Future_SyncFuture = function(value) {
+	this.value = value;
+};
+$hxClasses["tink.core._Future.SyncFuture"] = tink_core__$Future_SyncFuture;
+tink_core__$Future_SyncFuture.__name__ = ["tink","core","_Future","SyncFuture"];
+tink_core__$Future_SyncFuture.__interfaces__ = [tink_core__$Future_FutureObject];
+tink_core__$Future_SyncFuture.prototype = {
+	value: null
+	,map: function(f) {
+		return new tink_core__$Future_SyncFuture(this.value.map(f));
+	}
+	,flatMap: function(f) {
+		var l = this.value.map(f);
+		return new tink_core__$Future_SimpleFuture(function(cb) {
+			return l.get().handle(cb);
+		});
+	}
+	,handle: function(cb) {
+		tink_core__$Callback_Callback_$Impl_$.invoke(cb,this.value.get());
+		return null;
+	}
+	,eager: function() {
+		return this;
+	}
+	,gather: function() {
+		return this;
+	}
+	,__class__: tink_core__$Future_SyncFuture
+};
 var tink_core__$Future_Future_$Impl_$ = {};
 $hxClasses["tink.core._Future.Future_Impl_"] = tink_core__$Future_Future_$Impl_$;
 tink_core__$Future_Future_$Impl_$.__name__ = ["tink","core","_Future","Future_Impl_"];
 tink_core__$Future_Future_$Impl_$._new = function(f) {
-	var this1 = f;
+	var this1 = new tink_core__$Future_SimpleFuture(f);
 	return this1;
 };
-tink_core__$Future_Future_$Impl_$.handle = function(this1,callback) {
-	return this1(callback);
-};
-tink_core__$Future_Future_$Impl_$.gather = function(this1) {
-	var op = new tink_core_FutureTrigger();
-	var self = this1;
-	return tink_core__$Future_Future_$Impl_$._new(function(cb) {
-		if(self != null) {
-			this1($bind(op,op.trigger));
-			self = null;
-		}
-		return op.future(cb);
-	});
-};
 tink_core__$Future_Future_$Impl_$.first = function(this1,other) {
-	return tink_core__$Future_Future_$Impl_$.async(function(cb) {
-		this1(cb);
-		other(cb);
-	});
+	var ret = new tink_core_FutureTrigger();
+	var l1 = this1.handle($bind(ret,ret.trigger));
+	var l2 = other.handle($bind(ret,ret.trigger));
+	var ret1 = ret;
+	if(l1 != null) {
+		var this2 = l1;
+		ret1.handle(function(_) {
+			this2.dissolve();
+		});
+	}
+	if(l2 != null) {
+		var this3 = l2;
+		ret1.handle(function(_1) {
+			this3.dissolve();
+		});
+	}
+	return ret1;
 };
 tink_core__$Future_Future_$Impl_$.map = function(this1,f,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var ret = tink_core__$Future_Future_$Impl_$._new(function(callback) {
-		return this1(function(result) {
-			var data = f(result);
-			callback(data);
-		});
-	});
+	var ret = this1.map(f);
 	if(gather) {
-		return tink_core__$Future_Future_$Impl_$.gather(ret);
+		return ret.gather();
 	} else {
 		return ret;
 	}
@@ -5240,58 +5560,74 @@ tink_core__$Future_Future_$Impl_$.flatMap = function(this1,next,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var ret = tink_core__$Future_Future_$Impl_$.flatten(tink_core__$Future_Future_$Impl_$.map(this1,next,gather));
+	var ret = this1.flatMap(next);
 	if(gather) {
-		return tink_core__$Future_Future_$Impl_$.gather(ret);
+		return ret.gather();
 	} else {
 		return ret;
 	}
+};
+tink_core__$Future_Future_$Impl_$.next = function(this1,n) {
+	return this1.flatMap(function(v) {
+		return n(v);
+	});
 };
 tink_core__$Future_Future_$Impl_$.merge = function(this1,other,merger,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	return tink_core__$Future_Future_$Impl_$.flatMap(this1,function(t) {
-		return tink_core__$Future_Future_$Impl_$.map(other,function(a) {
+	var ret = this1.flatMap(function(t) {
+		var ret1 = other.map(function(a) {
 			return merger(t,a);
-		},false);
-	},gather);
+		});
+		return ret1;
+	});
+	if(gather) {
+		return ret.gather();
+	} else {
+		return ret;
+	}
 };
 tink_core__$Future_Future_$Impl_$.flatten = function(f) {
-	return tink_core__$Future_Future_$Impl_$._new(function(callback) {
-		var ret = null;
-		ret = f(function(next) {
-			ret = next(function(result) {
-				callback(result);
-			});
+	return new tink_core__$Future_NestedFuture(f);
+};
+tink_core__$Future_Future_$Impl_$.ofJsPromise = function(promise) {
+	return tink_core__$Future_Future_$Impl_$.async(function(cb) {
+		promise.then(function(a) {
+			cb(tink_core_Outcome.Success(a));
+		})["catch"](function(e) {
+			var tmp = tink_core_Outcome.Failure(tink_core_TypedError.withData(null,e.message,e,{ fileName : "Future.hx", lineNumber : 78, className : "tink.core._Future.Future_Impl_", methodName : "ofJsPromise"}));
+			cb(tmp);
 		});
-		return ret;
 	});
 };
-tink_core__$Future_Future_$Impl_$.fromTrigger = function(trigger) {
-	return trigger.future;
+tink_core__$Future_Future_$Impl_$.asPromise = function(s) {
+	return s;
 };
 tink_core__$Future_Future_$Impl_$.ofMany = function(futures,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var ret = tink_core__$Future_Future_$Impl_$.sync([]);
+	var ret = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst([]));
 	var _g = 0;
 	while(_g < futures.length) {
 		var f = [futures[_g]];
 		++_g;
-		ret = tink_core__$Future_Future_$Impl_$.flatMap(ret,(function(f1) {
+		var ret1 = ret.flatMap((function(f1) {
 			return function(results) {
-				return tink_core__$Future_Future_$Impl_$.map(f1[0],(function() {
+				var ret2 = (function() {
 					return function(result) {
 						return results.concat([result]);
 					};
-				})(),false);
+				})();
+				var ret3 = f1[0].map(ret2);
+				return ret3;
 			};
-		})(f),false);
+		})(f));
+		ret = ret1;
 	}
 	if(gather) {
-		return tink_core__$Future_Future_$Impl_$.gather(ret);
+		return ret.gather();
 	} else {
 		return ret;
 	}
@@ -5300,37 +5636,31 @@ tink_core__$Future_Future_$Impl_$.fromMany = function(futures) {
 	return tink_core__$Future_Future_$Impl_$.ofMany(futures);
 };
 tink_core__$Future_Future_$Impl_$.lazy = function(l) {
-	return tink_core__$Future_Future_$Impl_$._new(function(cb) {
-		cb(l());
-		return null;
-	});
+	return new tink_core__$Future_SyncFuture(l);
 };
 tink_core__$Future_Future_$Impl_$.sync = function(v) {
-	return tink_core__$Future_Future_$Impl_$._new(function(callback) {
-		callback(v);
-		return null;
-	});
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(v));
 };
 tink_core__$Future_Future_$Impl_$.async = function(f,lazy) {
 	if(lazy == null) {
 		lazy = false;
 	}
 	if(lazy) {
-		var f1 = f;
-		return tink_core__$Future_Future_$Impl_$.flatten(tink_core__$Future_Future_$Impl_$.lazy(tink_core__$Lazy_Lazy_$Impl_$.ofFunc(function() {
-			return tink_core__$Future_Future_$Impl_$.async(f1,false);
-		})));
+		return new tink_core__$Future_LazyTrigger(f);
 	} else {
 		var op = new tink_core_FutureTrigger();
-		f($bind(op,op.trigger));
-		return op.future;
+		var wrapped = f;
+		tink_core__$Callback_Callback_$Impl_$.invoke(wrapped,$bind(op,op.trigger));
+		return op;
 	}
 };
 tink_core__$Future_Future_$Impl_$.or = function(a,b) {
 	return tink_core__$Future_Future_$Impl_$.first(a,b);
 };
 tink_core__$Future_Future_$Impl_$.either = function(a,b) {
-	return tink_core__$Future_Future_$Impl_$.first(tink_core__$Future_Future_$Impl_$.map(a,tink_core_Either.Left,false),tink_core__$Future_Future_$Impl_$.map(b,tink_core_Either.Right,false));
+	var ret = a.map(haxe_ds_Either.Left);
+	var ret1 = b.map(haxe_ds_Either.Right);
+	return tink_core__$Future_Future_$Impl_$.first(ret,ret1);
 };
 tink_core__$Future_Future_$Impl_$.and = function(a,b) {
 	return tink_core__$Future_Future_$Impl_$.merge(a,b,function(a1,b1) {
@@ -5339,76 +5669,212 @@ tink_core__$Future_Future_$Impl_$.and = function(a,b) {
 	});
 };
 tink_core__$Future_Future_$Impl_$._tryFailingFlatMap = function(f,map) {
-	return tink_core__$Future_Future_$Impl_$.flatMap(f,function(o) {
+	var ret = f.flatMap(function(o) {
 		switch(o[1]) {
 		case 0:
 			var d = o[2];
 			return map(d);
 		case 1:
 			var f1 = o[2];
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(f1));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(f1)));
 		}
 	});
+	return ret.gather();
 };
 tink_core__$Future_Future_$Impl_$._tryFlatMap = function(f,map) {
-	return tink_core__$Future_Future_$Impl_$.flatMap(f,function(o) {
+	var ret = f.flatMap(function(o) {
 		switch(o[1]) {
 		case 0:
 			var d = o[2];
-			return tink_core__$Future_Future_$Impl_$.map(map(d),tink_core_Outcome.Success);
+			var ret1 = map(d).map(tink_core_Outcome.Success);
+			return ret1.gather();
 		case 1:
 			var f1 = o[2];
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(f1));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(f1)));
 		}
 	});
+	return ret.gather();
 };
 tink_core__$Future_Future_$Impl_$._tryFailingMap = function(f,map) {
-	return tink_core__$Future_Future_$Impl_$.map(f,function(o) {
+	var ret = f.map(function(o) {
 		return tink_core_OutcomeTools.flatMap(o,tink_core__$Outcome_OutcomeMapper_$Impl_$.withSameError(map));
 	});
+	return ret.gather();
 };
 tink_core__$Future_Future_$Impl_$._tryMap = function(f,map) {
-	return tink_core__$Future_Future_$Impl_$.map(f,function(o) {
-		switch(o[1]) {
-		case 0:
-			var a = o[2];
-			return tink_core_Outcome.Success(map(a));
-		case 1:
-			var f1 = o[2];
-			return tink_core_Outcome.Failure(f1);
-		}
+	var ret = f.map(function(o) {
+		return tink_core_OutcomeTools.map(o,map);
 	});
+	return ret.gather();
 };
 tink_core__$Future_Future_$Impl_$._flatMap = function(f,map) {
-	return tink_core__$Future_Future_$Impl_$.flatMap(f,map);
+	var ret = f.flatMap(map);
+	return ret.gather();
 };
 tink_core__$Future_Future_$Impl_$._map = function(f,map) {
-	return tink_core__$Future_Future_$Impl_$.map(f,map);
+	var ret = f.map(map);
+	return ret.gather();
 };
 tink_core__$Future_Future_$Impl_$.trigger = function() {
 	return new tink_core_FutureTrigger();
 };
+var tink_core__$Future_Futuristic_$Impl_$ = {};
+$hxClasses["tink.core._Future.Futuristic_Impl_"] = tink_core__$Future_Futuristic_$Impl_$;
+tink_core__$Future_Futuristic_$Impl_$.__name__ = ["tink","core","_Future","Futuristic_Impl_"];
+tink_core__$Future_Futuristic_$Impl_$.ofAny = function(v) {
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(v));
+};
+var tink_core__$Future_SimpleFuture = function(f) {
+	this.f = f;
+};
+$hxClasses["tink.core._Future.SimpleFuture"] = tink_core__$Future_SimpleFuture;
+tink_core__$Future_SimpleFuture.__name__ = ["tink","core","_Future","SimpleFuture"];
+tink_core__$Future_SimpleFuture.__interfaces__ = [tink_core__$Future_FutureObject];
+tink_core__$Future_SimpleFuture.prototype = {
+	f: null
+	,gathered: null
+	,handle: function(callback) {
+		return this.f(callback);
+	}
+	,map: function(f) {
+		var _gthis = this;
+		return new tink_core__$Future_SimpleFuture(function(cb) {
+			return _gthis.f(function(v) {
+				var tmp = f(v);
+				tink_core__$Callback_Callback_$Impl_$.invoke(cb,tmp);
+			});
+		});
+	}
+	,flatMap: function(f) {
+		var f1 = f;
+		var _gthis = this;
+		return tink_core__$Future_Future_$Impl_$.flatten(new tink_core__$Future_SimpleFuture(function(cb) {
+			return _gthis.f(function(v) {
+				var tmp = f1(v);
+				tink_core__$Callback_Callback_$Impl_$.invoke(cb,tmp);
+			});
+		}));
+	}
+	,gather: function() {
+		return tink_core_FutureTrigger.gatherFuture(this);
+	}
+	,eager: function() {
+		var ret = tink_core_FutureTrigger.gatherFuture(this);
+		ret.handle(tink_core__$Callback_Callback_$Impl_$.fromNiladic(function() {
+		}));
+		return ret;
+	}
+	,__class__: tink_core__$Future_SimpleFuture
+};
+var tink_core__$Future_NestedFuture = function(outer) {
+	this.outer = outer;
+};
+$hxClasses["tink.core._Future.NestedFuture"] = tink_core__$Future_NestedFuture;
+tink_core__$Future_NestedFuture.__name__ = ["tink","core","_Future","NestedFuture"];
+tink_core__$Future_NestedFuture.__interfaces__ = [tink_core__$Future_FutureObject];
+tink_core__$Future_NestedFuture.prototype = {
+	outer: null
+	,map: function(f) {
+		var ret = this.outer.flatMap(function(inner) {
+			var ret1 = inner.map(f);
+			return ret1.gather();
+		});
+		return ret.gather();
+	}
+	,flatMap: function(f) {
+		var ret = this.outer.flatMap(function(inner) {
+			var ret1 = inner.flatMap(f);
+			return ret1.gather();
+		});
+		return ret.gather();
+	}
+	,gather: function() {
+		return tink_core_FutureTrigger.gatherFuture(this);
+	}
+	,eager: function() {
+		var ret = tink_core_FutureTrigger.gatherFuture(this);
+		ret.handle(tink_core__$Callback_Callback_$Impl_$.fromNiladic(function() {
+		}));
+		return ret;
+	}
+	,handle: function(cb) {
+		var ret = null;
+		ret = this.outer.handle(function(inner) {
+			ret = inner.handle(function(result) {
+				tink_core__$Callback_Callback_$Impl_$.invoke(cb,result);
+			});
+		});
+		return ret;
+	}
+	,__class__: tink_core__$Future_NestedFuture
+};
 var tink_core_FutureTrigger = function() {
-	var _gthis = this;
 	var this1 = [];
 	this.list = this1;
-	this.future = tink_core__$Future_Future_$Impl_$._new(function(callback) {
-		if(_gthis.list == null) {
-			callback(_gthis.result);
-			return null;
-		} else {
-			return tink_core__$Callback_CallbackList_$Impl_$.add(_gthis.list,callback);
-		}
-	});
 };
 $hxClasses["tink.core.FutureTrigger"] = tink_core_FutureTrigger;
 tink_core_FutureTrigger.__name__ = ["tink","core","FutureTrigger"];
+tink_core_FutureTrigger.__interfaces__ = [tink_core__$Future_FutureObject];
+tink_core_FutureTrigger.gatherFuture = function(f) {
+	var op = null;
+	var this1 = new tink_core__$Future_SimpleFuture(function(cb) {
+		if(op == null) {
+			op = new tink_core_FutureTrigger();
+			f.handle($bind(op,op.trigger));
+			f = null;
+		}
+		return op.handle(cb);
+	});
+	return this1;
+};
 tink_core_FutureTrigger.prototype = {
 	result: null
 	,list: null
-	,future: null
+	,handle: function(callback) {
+		var _g = this.list;
+		if(_g == null) {
+			tink_core__$Callback_Callback_$Impl_$.invoke(callback,this.result);
+			return null;
+		} else {
+			var v = _g;
+			return tink_core__$Callback_CallbackList_$Impl_$.add(v,callback);
+		}
+	}
+	,map: function(f) {
+		var _g = this.list;
+		if(_g == null) {
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(f(this.result)));
+		} else {
+			var v = _g;
+			var ret = new tink_core_FutureTrigger();
+			tink_core__$Callback_CallbackList_$Impl_$.add(this.list,function(v1) {
+				var tmp = f(v1);
+				ret.trigger(tmp);
+			});
+			return ret;
+		}
+	}
+	,flatMap: function(f) {
+		var _g = this.list;
+		if(_g == null) {
+			return f(this.result);
+		} else {
+			var v = _g;
+			var ret = new tink_core_FutureTrigger();
+			tink_core__$Callback_CallbackList_$Impl_$.add(this.list,function(v1) {
+				f(v1).handle($bind(ret,ret.trigger));
+			});
+			return ret;
+		}
+	}
+	,gather: function() {
+		return this;
+	}
+	,eager: function() {
+		return this;
+	}
 	,asFuture: function() {
-		return this.future;
+		return this;
 	}
 	,trigger: function(result) {
 		if(this.list == null) {
@@ -5424,47 +5890,229 @@ tink_core_FutureTrigger.prototype = {
 	}
 	,__class__: tink_core_FutureTrigger
 };
+var tink_core__$Future_LazyTrigger = function(op) {
+	this.op = op;
+	tink_core_FutureTrigger.call(this);
+};
+$hxClasses["tink.core._Future.LazyTrigger"] = tink_core__$Future_LazyTrigger;
+tink_core__$Future_LazyTrigger.__name__ = ["tink","core","_Future","LazyTrigger"];
+tink_core__$Future_LazyTrigger.__super__ = tink_core_FutureTrigger;
+tink_core__$Future_LazyTrigger.prototype = $extend(tink_core_FutureTrigger.prototype,{
+	op: null
+	,eager: function() {
+		if(this.op != null) {
+			var op = this.op;
+			this.op = null;
+			tink_core__$Callback_Callback_$Impl_$.invoke(op,$bind(this,this.trigger));
+		}
+		return this;
+	}
+	,map: function(f) {
+		var _gthis = this;
+		if(this.op == null) {
+			return tink_core_FutureTrigger.prototype.map.call(this,f);
+		} else {
+			return tink_core__$Future_Future_$Impl_$.async(function(cb) {
+				_gthis.handle(function(v) {
+					var tmp = f(v);
+					cb(tmp);
+				});
+			},true);
+		}
+	}
+	,flatMap: function(f) {
+		var _gthis = this;
+		if(this.op == null) {
+			return tink_core_FutureTrigger.prototype.flatMap.call(this,f);
+		} else {
+			return tink_core__$Future_Future_$Impl_$.async(function(cb) {
+				_gthis.handle(function(v) {
+					f(v).handle(cb);
+				});
+			},true);
+		}
+	}
+	,handle: function(cb) {
+		this.eager();
+		return tink_core_FutureTrigger.prototype.handle.call(this,cb);
+	}
+	,__class__: tink_core__$Future_LazyTrigger
+});
+var tink_core_JsPromiseTools = function() { };
+$hxClasses["tink.core.JsPromiseTools"] = tink_core_JsPromiseTools;
+tink_core_JsPromiseTools.__name__ = ["tink","core","JsPromiseTools"];
+tink_core_JsPromiseTools.toSurprise = function(promise) {
+	return tink_core__$Future_Future_$Impl_$.ofJsPromise(promise);
+};
+tink_core_JsPromiseTools.toPromise = function(promise) {
+	return tink_core__$Future_Future_$Impl_$.ofJsPromise(promise);
+};
 var tink_core__$Lazy_Lazy_$Impl_$ = {};
 $hxClasses["tink.core._Lazy.Lazy_Impl_"] = tink_core__$Lazy_Lazy_$Impl_$;
 tink_core__$Lazy_Lazy_$Impl_$.__name__ = ["tink","core","_Lazy","Lazy_Impl_"];
-tink_core__$Lazy_Lazy_$Impl_$._new = function(r) {
-	var this1 = r;
-	return this1;
-};
 tink_core__$Lazy_Lazy_$Impl_$.get = function(this1) {
-	return this1();
+	return this1.get();
 };
 tink_core__$Lazy_Lazy_$Impl_$.ofFunc = function(f) {
-	var result = null;
-	var this1 = function() {
-		if(f != null) {
-			result = f();
-			f = null;
-		}
-		return result;
-	};
-	return this1;
+	return new tink_core__$Lazy_LazyFunc(f);
 };
 tink_core__$Lazy_Lazy_$Impl_$.map = function(this1,f) {
-	return tink_core__$Lazy_Lazy_$Impl_$.ofFunc(function() {
-		return f(this1());
-	});
+	return this1.map(f);
 };
 tink_core__$Lazy_Lazy_$Impl_$.flatMap = function(this1,f) {
-	return tink_core__$Lazy_Lazy_$Impl_$.ofFunc(function() {
-		return f(this1())();
-	});
+	return this1.flatMap(f);
 };
 tink_core__$Lazy_Lazy_$Impl_$.ofConst = function(c) {
-	var this1 = function() {
-		return c;
-	};
-	return this1;
+	return new tink_core__$Lazy_LazyConst(c);
 };
-var tink_core_Noise = $hxClasses["tink.core.Noise"] = { __ename__ : ["tink","core","Noise"], __constructs__ : ["Noise"] };
-tink_core_Noise.Noise = ["Noise",0];
-tink_core_Noise.Noise.toString = $estr;
-tink_core_Noise.Noise.__enum__ = tink_core_Noise;
+var tink_core__$Lazy_LazyFunc = function(f) {
+	this.f = f;
+};
+$hxClasses["tink.core._Lazy.LazyFunc"] = tink_core__$Lazy_LazyFunc;
+tink_core__$Lazy_LazyFunc.__name__ = ["tink","core","_Lazy","LazyFunc"];
+tink_core__$Lazy_LazyFunc.__interfaces__ = [tink_core__$Lazy_LazyObject];
+tink_core__$Lazy_LazyFunc.prototype = {
+	f: null
+	,result: null
+	,get: function() {
+		if(this.f != null) {
+			this.result = this.f();
+			this.f = null;
+		}
+		return this.result;
+	}
+	,map: function(f) {
+		var _gthis = this;
+		return new tink_core__$Lazy_LazyFunc(function() {
+			var tmp = _gthis.get();
+			return f(tmp);
+		});
+	}
+	,flatMap: function(f) {
+		var _gthis = this;
+		return new tink_core__$Lazy_LazyFunc(function() {
+			var this1 = _gthis.get();
+			return f(this1).get();
+		});
+	}
+	,__class__: tink_core__$Lazy_LazyFunc
+};
+var tink_core_NamedWith = function(name,value) {
+	this.name = name;
+	this.value = value;
+};
+$hxClasses["tink.core.NamedWith"] = tink_core_NamedWith;
+tink_core_NamedWith.__name__ = ["tink","core","NamedWith"];
+tink_core_NamedWith.prototype = {
+	name: null
+	,value: null
+	,__class__: tink_core_NamedWith
+};
+var tink_core_OptionTools = function() { };
+$hxClasses["tink.core.OptionTools"] = tink_core_OptionTools;
+tink_core_OptionTools.__name__ = ["tink","core","OptionTools"];
+tink_core_OptionTools.force = function(o,pos) {
+	if(o[1] == 0) {
+		var v = o[2];
+		return v;
+	} else {
+		throw new js__$Boot_HaxeError(new tink_core_TypedError(404,"Some value expected but none found",pos));
+	}
+};
+tink_core_OptionTools.or = function(o,l) {
+	if(o[1] == 0) {
+		var v = o[2];
+		return v;
+	} else {
+		return l.get();
+	}
+};
+tink_core_OptionTools.orNull = function(o) {
+	if(o[1] == 0) {
+		var v = o[2];
+		return v;
+	} else {
+		return null;
+	}
+};
+tink_core_OptionTools.filter = function(o,f) {
+	if(o[1] == 0) {
+		var _hx_tmp = f(o[2]);
+		if(_hx_tmp == false) {
+			return haxe_ds_Option.None;
+		} else {
+			return o;
+		}
+	} else {
+		return o;
+	}
+};
+tink_core_OptionTools.satisfies = function(o,f) {
+	if(o[1] == 0) {
+		var v = o[2];
+		return f(v);
+	} else {
+		return false;
+	}
+};
+tink_core_OptionTools.equals = function(o,v) {
+	if(o[1] == 0) {
+		var v1 = o[2];
+		return v1 == v;
+	} else {
+		return false;
+	}
+};
+tink_core_OptionTools.map = function(o,f) {
+	if(o[1] == 0) {
+		var v = o[2];
+		return haxe_ds_Option.Some(f(v));
+	} else {
+		return haxe_ds_Option.None;
+	}
+};
+tink_core_OptionTools.flatMap = function(o,f) {
+	if(o[1] == 0) {
+		var v = o[2];
+		return f(v);
+	} else {
+		return haxe_ds_Option.None;
+	}
+};
+tink_core_OptionTools.iterator = function(o) {
+	return new tink_core_OptionIter(o);
+};
+tink_core_OptionTools.toArray = function(o) {
+	if(o[1] == 0) {
+		var v = o[2];
+		return [v];
+	} else {
+		return [];
+	}
+};
+var tink_core_OptionIter = function(o) {
+	this.alive = true;
+	if(o[1] == 0) {
+		var v = o[2];
+		this.value = v;
+	} else {
+		this.alive = false;
+	}
+};
+$hxClasses["tink.core.OptionIter"] = tink_core_OptionIter;
+tink_core_OptionIter.__name__ = ["tink","core","OptionIter"];
+tink_core_OptionIter.prototype = {
+	value: null
+	,alive: null
+	,hasNext: function() {
+		return this.alive;
+	}
+	,next: function() {
+		this.alive = false;
+		return this.value;
+	}
+	,__class__: tink_core_OptionIter
+};
 var tink_core_Outcome = $hxClasses["tink.core.Outcome"] = { __ename__ : ["tink","core","Outcome"], __constructs__ : ["Success","Failure"] };
 tink_core_Outcome.Success = function(data) { var $x = ["Success",0,data]; $x.__enum__ = tink_core_Outcome; $x.toString = $estr; return $x; };
 tink_core_Outcome.Failure = function(failure) { var $x = ["Failure",1,failure]; $x.__enum__ = tink_core_Outcome; $x.toString = $estr; return $x; };
@@ -5478,10 +6126,12 @@ tink_core_OutcomeTools.sure = function(outcome) {
 		return data;
 	case 1:
 		var failure = outcome[2];
-		if(js_Boot.__instanceof(failure,tink_core_TypedError)) {
-			return failure.throwSelf();
-		} else {
+		var _g = tink_core_TypedError.asError(failure);
+		if(_g == null) {
 			throw new js__$Boot_HaxeError(failure);
+		} else {
+			var e = _g;
+			return e.throwSelf();
 		}
 		break;
 	}
@@ -5501,7 +6151,7 @@ tink_core_OutcomeTools.toOutcome = function(option,pos) {
 		var value = option[2];
 		return tink_core_Outcome.Success(value);
 	case 1:
-		return tink_core_Outcome.Failure(new tink_core_TypedError(404,"Some value expected but none found in " + pos.fileName + "@line " + pos.lineNumber,{ fileName : "Outcome.hx", lineNumber : 37, className : "tink.core.OutcomeTools", methodName : "toOutcome"}));
+		return tink_core_Outcome.Failure(new tink_core_TypedError(404,"Some value expected but none found in " + pos.fileName + "@line " + pos.lineNumber,{ fileName : "Outcome.hx", lineNumber : 47, className : "tink.core.OutcomeTools", methodName : "toOutcome"}));
 	}
 };
 tink_core_OutcomeTools.orNull = function(outcome) {
@@ -5519,7 +6169,7 @@ tink_core_OutcomeTools.orUse = function(outcome,fallback) {
 		var data = outcome[2];
 		return data;
 	case 1:
-		return fallback();
+		return fallback.get();
 	}
 };
 tink_core_OutcomeTools.orTry = function(outcome,fallback) {
@@ -5527,7 +6177,7 @@ tink_core_OutcomeTools.orTry = function(outcome,fallback) {
 	case 0:
 		return outcome;
 	case 1:
-		return fallback();
+		return fallback.get();
 	}
 };
 tink_core_OutcomeTools.equals = function(outcome,to) {
@@ -5559,6 +6209,16 @@ tink_core_OutcomeTools.isSuccess = function(outcome) {
 tink_core_OutcomeTools.flatMap = function(o,mapper) {
 	return tink_core__$Outcome_OutcomeMapper_$Impl_$.apply(mapper,o);
 };
+tink_core_OutcomeTools.swap = function(outcome,v) {
+	switch(outcome[1]) {
+	case 0:
+		var a = outcome[2];
+		return tink_core_Outcome.Success(v);
+	case 1:
+		var f = outcome[2];
+		return tink_core_Outcome.Failure(f);
+	}
+};
 tink_core_OutcomeTools.attempt = function(f,report) {
 	try {
 		return tink_core_Outcome.Success(f());
@@ -5566,6 +6226,23 @@ tink_core_OutcomeTools.attempt = function(f,report) {
 		haxe_CallStack.lastException = e;
 		if (e instanceof js__$Boot_HaxeError) e = e.val;
 		return tink_core_Outcome.Failure(report(e));
+	}
+};
+tink_core_OutcomeTools.flatten = function(o) {
+	switch(o[1]) {
+	case 0:
+		switch(o[2][1]) {
+		case 0:
+			var d = o[2][2];
+			return tink_core_Outcome.Success(d);
+		case 1:
+			var f = o[2][2];
+			return tink_core_Outcome.Failure(f);
+		}
+		break;
+	case 1:
+		var f1 = o[2];
+		return tink_core_Outcome.Failure(f1);
 	}
 };
 var tink_core__$Outcome_OutcomeMapper_$Impl_$ = {};
@@ -5602,12 +6279,12 @@ tink_core__$Outcome_OutcomeMapper_$Impl_$.withEitherError = function(f) {
 				return tink_core_Outcome.Success(d1);
 			case 1:
 				var f1 = _g[2];
-				return tink_core_Outcome.Failure(tink_core_Either.Right(f1));
+				return tink_core_Outcome.Failure(haxe_ds_Either.Right(f1));
 			}
 			break;
 		case 1:
 			var f2 = o[2];
-			return tink_core_Outcome.Failure(tink_core_Either.Left(f2));
+			return tink_core_Outcome.Failure(haxe_ds_Either.Left(f2));
 		}
 	});
 };
@@ -5645,6 +6322,272 @@ tink_core_MPair.prototype = {
 	,b: null
 	,__class__: tink_core_MPair
 };
+var tink_core__$Promise_Promise_$Impl_$ = {};
+$hxClasses["tink.core._Promise.Promise_Impl_"] = tink_core__$Promise_Promise_$Impl_$;
+tink_core__$Promise_Promise_$Impl_$.__name__ = ["tink","core","_Promise","Promise_Impl_"];
+tink_core__$Promise_Promise_$Impl_$.eager = function(this1) {
+	return this1.eager();
+};
+tink_core__$Promise_Promise_$Impl_$.map = function(this1,f) {
+	var ret = this1.map(f);
+	return ret.gather();
+};
+tink_core__$Promise_Promise_$Impl_$.flatMap = function(this1,f) {
+	var ret = this1.flatMap(f);
+	return ret.gather();
+};
+tink_core__$Promise_Promise_$Impl_$.tryRecover = function(this1,f) {
+	var ret = this1.flatMap(function(o) {
+		switch(o[1]) {
+		case 0:
+			var d = o[2];
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(o));
+		case 1:
+			var e = o[2];
+			return f(e);
+		}
+	});
+	return ret.gather();
+};
+tink_core__$Promise_Promise_$Impl_$.recover = function(this1,f) {
+	var ret = this1.flatMap(function(o) {
+		switch(o[1]) {
+		case 0:
+			var d = o[2];
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(d));
+		case 1:
+			var e = o[2];
+			return f(e);
+		}
+	});
+	return ret.gather();
+};
+tink_core__$Promise_Promise_$Impl_$.mapError = function(this1,f) {
+	var ret = this1.map(function(o) {
+		switch(o[1]) {
+		case 0:
+			return o;
+		case 1:
+			var e = o[2];
+			return tink_core_Outcome.Failure(f(e));
+		}
+	});
+	return ret.gather();
+};
+tink_core__$Promise_Promise_$Impl_$.handle = function(this1,cb) {
+	return this1.handle(cb);
+};
+tink_core__$Promise_Promise_$Impl_$.noise = function(this1) {
+	return tink_core__$Promise_Promise_$Impl_$.next(this1,function(v) {
+		return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Success(tink_core_Noise.Noise));
+	});
+};
+tink_core__$Promise_Promise_$Impl_$.isSuccess = function(this1) {
+	var ret = this1.map(function(o) {
+		return tink_core_OutcomeTools.isSuccess(o);
+	});
+	return ret.gather();
+};
+tink_core__$Promise_Promise_$Impl_$.next = function(this1,f,gather) {
+	if(gather == null) {
+		gather = true;
+	}
+	var ret = this1.flatMap(function(o) {
+		switch(o[1]) {
+		case 0:
+			var d = o[2];
+			return f(d);
+		case 1:
+			var f1 = o[2];
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(f1)));
+		}
+	});
+	if(gather) {
+		return ret.gather();
+	} else {
+		return ret;
+	}
+};
+tink_core__$Promise_Promise_$Impl_$.swap = function(this1,v) {
+	return tink_core__$Future_Future_$Impl_$._tryMap(this1,function(_) {
+		return v;
+	});
+};
+tink_core__$Promise_Promise_$Impl_$.swapError = function(this1,e) {
+	return tink_core__$Promise_Promise_$Impl_$.mapError(this1,function(_) {
+		return e;
+	});
+};
+tink_core__$Promise_Promise_$Impl_$.merge = function(this1,other,merger,gather) {
+	if(gather == null) {
+		gather = true;
+	}
+	return tink_core__$Promise_Promise_$Impl_$.next(this1,function(t) {
+		return tink_core__$Promise_Promise_$Impl_$.next(other,function(a) {
+			return merger(t,a);
+		},false);
+	},gather);
+};
+tink_core__$Promise_Promise_$Impl_$.and = function(a,b) {
+	return tink_core__$Promise_Promise_$Impl_$.merge(a,b,function(a1,b1) {
+		var this1 = new tink_core_MPair(a1,b1);
+		return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Success(this1));
+	});
+};
+tink_core__$Promise_Promise_$Impl_$.ofJsPromise = function(promise) {
+	return tink_core__$Future_Future_$Impl_$.ofJsPromise(promise);
+};
+tink_core__$Promise_Promise_$Impl_$.ofSpecific = function(s) {
+	return s;
+};
+tink_core__$Promise_Promise_$Impl_$.ofFuture = function(f) {
+	var ret = f.map(tink_core_Outcome.Success);
+	return ret.gather();
+};
+tink_core__$Promise_Promise_$Impl_$.ofOutcome = function(o) {
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(o));
+};
+tink_core__$Promise_Promise_$Impl_$.ofError = function(e) {
+	return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Failure(e));
+};
+tink_core__$Promise_Promise_$Impl_$.ofData = function(d) {
+	return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Success(d));
+};
+tink_core__$Promise_Promise_$Impl_$.lazy = function(p) {
+	return tink_core__$Future_Future_$Impl_$.async(function(cb) {
+		p.get().handle(cb);
+	},true);
+};
+tink_core__$Promise_Promise_$Impl_$.inParallel = function(a,lazy) {
+	if(a.length == 0) {
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success([])));
+	} else {
+		return tink_core__$Future_Future_$Impl_$.async(function(cb) {
+			var result = [];
+			var pending = a.length;
+			var links = null;
+			var sync = false;
+			var done = function(o) {
+				if(links == null) {
+					sync = true;
+				} else if(links != null) {
+					links.dissolve();
+				}
+				cb(o);
+			};
+			var fail = function(e) {
+				done(tink_core_Outcome.Failure(e));
+			};
+			var set = function(index,value) {
+				result[index] = value;
+				if((pending -= 1) == 0) {
+					done(tink_core_Outcome.Success(result));
+				}
+			};
+			var linkArray = [];
+			var _g1 = 0;
+			var _g = a.length;
+			while(_g1 < _g) {
+				var i = [_g1++];
+				if(sync) {
+					break;
+				}
+				var i1 = i[0];
+				var tmp = (function(i2) {
+					return function(o1) {
+						switch(o1[1]) {
+						case 0:
+							var v = o1[2];
+							set(i2[0],v);
+							break;
+						case 1:
+							var e1 = o1[2];
+							fail(e1);
+							break;
+						}
+					};
+				})(i);
+				linkArray.push(a[i1].handle(tmp));
+			}
+			links = tink_core__$Callback_CallbackLink_$Impl_$.fromMany(linkArray);
+			if(sync) {
+				if(links != null) {
+					links.dissolve();
+				}
+			}
+		},lazy);
+	}
+};
+tink_core__$Promise_Promise_$Impl_$.inSequence = function(a) {
+	var loop = null;
+	loop = function(index) {
+		if(index == a.length) {
+			return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Success([]));
+		} else {
+			return tink_core__$Promise_Promise_$Impl_$.next(a[index],function(head) {
+				return tink_core__$Promise_Promise_$Impl_$.next(loop(index + 1),function(tail) {
+					return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Success([head].concat(tail)));
+				});
+			});
+		}
+	};
+	var loop1 = loop;
+	return loop1(0);
+};
+tink_core__$Promise_Promise_$Impl_$.lift = function(p) {
+	return p;
+};
+var tink_core__$Promise_Next_$Impl_$ = {};
+$hxClasses["tink.core._Promise.Next_Impl_"] = tink_core__$Promise_Next_$Impl_$;
+tink_core__$Promise_Next_$Impl_$.__name__ = ["tink","core","_Promise","Next_Impl_"];
+tink_core__$Promise_Next_$Impl_$.ofSafe = function(f) {
+	return function(x) {
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(f(x)));
+	};
+};
+tink_core__$Promise_Next_$Impl_$.ofSync = function(f) {
+	return function(x) {
+		var ret = f(x).map(tink_core_Outcome.Success);
+		return ret.gather();
+	};
+};
+tink_core__$Promise_Next_$Impl_$.ofSafeSync = function(f) {
+	return function(x) {
+		return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Success(f(x)));
+	};
+};
+tink_core__$Promise_Next_$Impl_$._chain = function(a,b) {
+	return function(v) {
+		return tink_core__$Promise_Promise_$Impl_$.next(a(v),b);
+	};
+};
+var tink_core__$Promise_Recover_$Impl_$ = {};
+$hxClasses["tink.core._Promise.Recover_Impl_"] = tink_core__$Promise_Recover_$Impl_$;
+tink_core__$Promise_Recover_$Impl_$.__name__ = ["tink","core","_Promise","Recover_Impl_"];
+tink_core__$Promise_Recover_$Impl_$.ofSync = function(f) {
+	return function(e) {
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(f(e)));
+	};
+};
+var tink_core__$Promise_Combiner_$Impl_$ = {};
+$hxClasses["tink.core._Promise.Combiner_Impl_"] = tink_core__$Promise_Combiner_$Impl_$;
+tink_core__$Promise_Combiner_$Impl_$.__name__ = ["tink","core","_Promise","Combiner_Impl_"];
+tink_core__$Promise_Combiner_$Impl_$.ofSafe = function(f) {
+	return function(x1,x2) {
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(f(x1,x2)));
+	};
+};
+tink_core__$Promise_Combiner_$Impl_$.ofSync = function(f) {
+	return function(x1,x2) {
+		var ret = f(x1,x2).map(tink_core_Outcome.Success);
+		return ret.gather();
+	};
+};
+tink_core__$Promise_Combiner_$Impl_$.ofSafeSync = function(f) {
+	return function(x1,x2) {
+		return tink_core__$Promise_Promise_$Impl_$.ofOutcome(tink_core_Outcome.Success(f(x1,x2)));
+	};
+};
 var tink_core__$Ref_Ref_$Impl_$ = {};
 $hxClasses["tink.core._Ref.Ref_Impl_"] = tink_core__$Ref_Ref_$Impl_$;
 tink_core__$Ref_Ref_$Impl_$.__name__ = ["tink","core","_Ref","Ref_Impl_"];
@@ -5676,22 +6619,19 @@ var tink_core__$Signal_Signal_$Impl_$ = {};
 $hxClasses["tink.core._Signal.Signal_Impl_"] = tink_core__$Signal_Signal_$Impl_$;
 tink_core__$Signal_Signal_$Impl_$.__name__ = ["tink","core","_Signal","Signal_Impl_"];
 tink_core__$Signal_Signal_$Impl_$._new = function(f) {
-	var this1 = f;
+	var this1 = new tink_core__$Signal_SimpleSignal(f);
 	return this1;
-};
-tink_core__$Signal_Signal_$Impl_$.handle = function(this1,handler) {
-	return this1(handler);
 };
 tink_core__$Signal_Signal_$Impl_$.map = function(this1,f,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var this2 = function(cb) {
-		return this1(function(result) {
-			var data = f(result);
-			cb(data);
+	var this2 = new tink_core__$Signal_SimpleSignal(function(cb) {
+		return this1.handle(function(result) {
+			var this3 = f(result);
+			tink_core__$Callback_Callback_$Impl_$.invoke(cb,this3);
 		});
-	};
+	});
 	var ret = this2;
 	if(gather) {
 		return tink_core__$Signal_Signal_$Impl_$.gather(ret);
@@ -5703,11 +6643,11 @@ tink_core__$Signal_Signal_$Impl_$.flatMap = function(this1,f,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var this2 = function(cb) {
-		return this1(function(result) {
-			f(result)(cb);
+	var this2 = new tink_core__$Signal_SimpleSignal(function(cb) {
+		return this1.handle(function(result) {
+			f(result).handle(cb);
 		});
-	};
+	});
 	var ret = this2;
 	if(gather) {
 		return tink_core__$Signal_Signal_$Impl_$.gather(ret);
@@ -5719,13 +6659,37 @@ tink_core__$Signal_Signal_$Impl_$.filter = function(this1,f,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var this2 = function(cb) {
-		return this1(function(result) {
+	var this2 = new tink_core__$Signal_SimpleSignal(function(cb) {
+		return this1.handle(function(result) {
 			if(f(result)) {
-				cb(result);
+				tink_core__$Callback_Callback_$Impl_$.invoke(cb,result);
 			}
 		});
-	};
+	});
+	var ret = this2;
+	if(gather) {
+		return tink_core__$Signal_Signal_$Impl_$.gather(ret);
+	} else {
+		return ret;
+	}
+};
+tink_core__$Signal_Signal_$Impl_$.select = function(this1,selector,gather) {
+	if(gather == null) {
+		gather = true;
+	}
+	var this2 = new tink_core__$Signal_SimpleSignal(function(cb) {
+		return this1.handle(function(result) {
+			var _g = selector(result);
+			switch(_g[1]) {
+			case 0:
+				var v = _g[2];
+				tink_core__$Callback_Callback_$Impl_$.invoke(cb,v);
+				break;
+			case 1:
+				break;
+			}
+		});
+	});
 	var ret = this2;
 	if(gather) {
 		return tink_core__$Signal_Signal_$Impl_$.gather(ret);
@@ -5737,9 +6701,9 @@ tink_core__$Signal_Signal_$Impl_$.join = function(this1,other,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var this2 = function(cb) {
-		return tink_core__$Callback_CallbackLink_$Impl_$.fromMany([this1(cb),other(cb)]);
-	};
+	var this2 = new tink_core__$Signal_SimpleSignal(function(cb) {
+		return new tink_core__$Callback_LinkPair(this1.handle(cb),other.handle(cb));
+	});
 	var ret = this2;
 	if(gather) {
 		return tink_core__$Signal_Signal_$Impl_$.gather(ret);
@@ -5747,10 +6711,29 @@ tink_core__$Signal_Signal_$Impl_$.join = function(this1,other,gather) {
 		return ret;
 	}
 };
-tink_core__$Signal_Signal_$Impl_$.next = function(this1) {
+tink_core__$Signal_Signal_$Impl_$.nextTime = function(this1,condition) {
 	var ret = new tink_core_FutureTrigger();
-	this1(tink_core__$Callback_CallbackLink_$Impl_$.toCallback(this1($bind(ret,ret.trigger))));
-	return ret.future;
+	var link = null;
+	var immediate = false;
+	link = this1.handle(function(v) {
+		if(condition == null || condition(v)) {
+			ret.trigger(v);
+			if(link == null) {
+				immediate = true;
+			} else if(link != null) {
+				link.dissolve();
+			}
+		}
+	});
+	if(immediate) {
+		if(link != null) {
+			link.dissolve();
+		}
+	}
+	return ret;
+};
+tink_core__$Signal_Signal_$Impl_$.next = function(this1,condition) {
+	return tink_core__$Signal_Signal_$Impl_$.nextTime(this1,condition);
 };
 tink_core__$Signal_Signal_$Impl_$.noise = function(this1) {
 	return tink_core__$Signal_Signal_$Impl_$.map(this1,function(_) {
@@ -5759,34 +6742,36 @@ tink_core__$Signal_Signal_$Impl_$.noise = function(this1) {
 };
 tink_core__$Signal_Signal_$Impl_$.gather = function(this1) {
 	var ret = tink_core__$Signal_Signal_$Impl_$.trigger();
-	this1(function(x) {
-		tink_core__$Callback_CallbackList_$Impl_$.invoke(ret,x);
+	this1.handle(function(x) {
+		tink_core__$Callback_CallbackList_$Impl_$.invoke(ret.handlers,x);
 	});
-	return tink_core__$Signal_SignalTrigger_$Impl_$.asSignal(ret);
+	return ret;
+};
+tink_core__$Signal_Signal_$Impl_$.generate = function(generator) {
+	var ret = tink_core__$Signal_Signal_$Impl_$.trigger();
+	generator($bind(ret,ret.trigger));
+	return ret;
 };
 tink_core__$Signal_Signal_$Impl_$.trigger = function() {
-	var this1;
-	var this2 = [];
-	this1 = this2;
-	return this1;
+	return new tink_core_SignalTrigger();
 };
 tink_core__$Signal_Signal_$Impl_$.ofClassical = function(add,remove,gather) {
 	if(gather == null) {
 		gather = true;
 	}
-	var this1 = function(cb) {
+	var this1 = new tink_core__$Signal_SimpleSignal(function(cb) {
 		var f = function(a) {
-			cb(a);
+			tink_core__$Callback_Callback_$Impl_$.invoke(cb,a);
 		};
 		add(f);
 		var this2;
 		var f1 = remove;
 		var a1 = f;
-		this2 = function() {
+		this2 = new tink_core__$Callback_SimpleLink(function() {
 			f1(a1);
-		};
+		});
 		return this2;
-	};
+	});
 	var ret = this1;
 	if(gather) {
 		return tink_core__$Signal_Signal_$Impl_$.gather(ret);
@@ -5794,31 +6779,51 @@ tink_core__$Signal_Signal_$Impl_$.ofClassical = function(add,remove,gather) {
 		return ret;
 	}
 };
-var tink_core__$Signal_SignalTrigger_$Impl_$ = {};
-$hxClasses["tink.core._Signal.SignalTrigger_Impl_"] = tink_core__$Signal_SignalTrigger_$Impl_$;
-tink_core__$Signal_SignalTrigger_$Impl_$.__name__ = ["tink","core","_Signal","SignalTrigger_Impl_"];
-tink_core__$Signal_SignalTrigger_$Impl_$._new = function() {
-	var this1;
-	var this2 = [];
-	this1 = this2;
-	return this1;
+var tink_core_SignalObject = function() { };
+$hxClasses["tink.core.SignalObject"] = tink_core_SignalObject;
+tink_core_SignalObject.__name__ = ["tink","core","SignalObject"];
+tink_core_SignalObject.prototype = {
+	handle: null
+	,__class__: tink_core_SignalObject
 };
-tink_core__$Signal_SignalTrigger_$Impl_$.trigger = function(this1,event) {
-	tink_core__$Callback_CallbackList_$Impl_$.invoke(this1,event);
+var tink_core__$Signal_SimpleSignal = function(f) {
+	this.f = f;
 };
-tink_core__$Signal_SignalTrigger_$Impl_$.getLength = function(this1) {
-	return this1.length;
+$hxClasses["tink.core._Signal.SimpleSignal"] = tink_core__$Signal_SimpleSignal;
+tink_core__$Signal_SimpleSignal.__name__ = ["tink","core","_Signal","SimpleSignal"];
+tink_core__$Signal_SimpleSignal.__interfaces__ = [tink_core_SignalObject];
+tink_core__$Signal_SimpleSignal.prototype = {
+	f: null
+	,handle: function(cb) {
+		return this.f(cb);
+	}
+	,__class__: tink_core__$Signal_SimpleSignal
 };
-tink_core__$Signal_SignalTrigger_$Impl_$.clear = function(this1) {
-	tink_core__$Callback_CallbackList_$Impl_$.clear(this1);
+var tink_core_SignalTrigger = function() {
+	var this1 = [];
+	this.handlers = this1;
 };
-tink_core__$Signal_SignalTrigger_$Impl_$.asSignal = function(this1) {
-	var this2;
-	var _e = this1;
-	this2 = function(cb) {
-		return tink_core__$Callback_CallbackList_$Impl_$.add(_e,cb);
-	};
-	return this2;
+$hxClasses["tink.core.SignalTrigger"] = tink_core_SignalTrigger;
+tink_core_SignalTrigger.__name__ = ["tink","core","SignalTrigger"];
+tink_core_SignalTrigger.__interfaces__ = [tink_core_SignalObject];
+tink_core_SignalTrigger.prototype = {
+	handlers: null
+	,trigger: function(event) {
+		tink_core__$Callback_CallbackList_$Impl_$.invoke(this.handlers,event);
+	}
+	,getLength: function() {
+		return this.handlers.length;
+	}
+	,handle: function(cb) {
+		return tink_core__$Callback_CallbackList_$Impl_$.add(this.handlers,cb);
+	}
+	,clear: function() {
+		tink_core__$Callback_CallbackList_$Impl_$.clear(this.handlers);
+	}
+	,asSignal: function() {
+		return this;
+	}
+	,__class__: tink_core_SignalTrigger
 };
 var ufront_MVC = function() { };
 $hxClasses["ufront.MVC"] = ufront_MVC;
@@ -5896,27 +6901,27 @@ ufront_api_UFCallbackApi.prototype = {
 		var cnx = this.cnx.resolve(this.className).resolve(method);
 		if(onError != null) {
 			var errHandler = function(e) {
-				onError(e);
+				tink_core__$Callback_Callback_$Impl_$.invoke(onError,e);
 			};
 			cnx.setErrorHandler(errHandler);
 		}
 		cnx.call(args,function(result) {
 			if((flags & 1 << ufront_api_ApiReturnType.ARTVoid[1]) != 0) {
-				onResult(null);
+				tink_core__$Callback_Callback_$Impl_$.invoke(onResult,null);
 			} else if((flags & 1 << ufront_api_ApiReturnType.ARTOutcome[1]) != 0) {
 				var outcome = result;
 				switch(outcome[1]) {
 				case 0:
 					var data = outcome[2];
-					onResult(data);
+					tink_core__$Callback_Callback_$Impl_$.invoke(onResult,data);
 					break;
 				case 1:
 					var err = outcome[2];
-					onError(ufront_remoting_RemotingError.RApiFailure(remotingCallString,err));
+					tink_core__$Callback_Callback_$Impl_$.invoke(onError,ufront_remoting_RemotingError.RApiFailure(remotingCallString,err));
 					break;
 				}
 			} else {
-				onResult(result);
+				tink_core__$Callback_Callback_$Impl_$.invoke(onResult,result);
 			}
 		});
 	}
@@ -5964,7 +6969,7 @@ ufront_app_HttpApplication.prototype = {
 				++_g;
 				futures.push(module.init(this));
 			}
-			this.modulesReady = tink_core__$Future_Future_$Impl_$.map(tink_core__$Future_Future_$Impl_$.ofMany(futures),function(outcomes) {
+			var ret = tink_core__$Future_Future_$Impl_$.ofMany(futures).map(function(outcomes) {
 				var _g2 = 0;
 				while(_g2 < outcomes.length) {
 					var o = outcomes[_g2];
@@ -5979,6 +6984,7 @@ ufront_app_HttpApplication.prototype = {
 				}
 				return tink_core_Outcome.Success(tink_core_Noise.Noise);
 			});
+			this.modulesReady = ret.gather();
 		}
 		return this.modulesReady;
 	}
@@ -5992,7 +6998,7 @@ ufront_app_HttpApplication.prototype = {
 			++_g;
 			futures.push(module.dispose(this));
 		}
-		return tink_core__$Future_Future_$Impl_$.map(tink_core__$Future_Future_$Impl_$.ofMany(futures),function(outcomes) {
+		var ret = tink_core__$Future_Future_$Impl_$.ofMany(futures).map(function(outcomes) {
 			_gthis.modulesReady = null;
 			var _g2 = 0;
 			while(_g2 < outcomes.length) {
@@ -6008,6 +7014,7 @@ ufront_app_HttpApplication.prototype = {
 			haxe_Log.trace = _gthis.originalTrace;
 			return tink_core_Outcome.Success(tink_core_Noise.Noise);
 		});
+		return ret.gather();
 	}
 	,getModulesThatRequireInit: function() {
 		var moduleSets = [this.requestMiddleware,this.requestHandlers,this.responseMiddleware,this.logHandlers,this.errorHandlers];
@@ -6141,13 +7148,9 @@ ufront_app_HttpApplication.prototype = {
 				});
 			});
 		});
-		var f4 = function() {
+		allDone.handle(tink_core__$Callback_Callback_$Impl_$.fromNiladic(function() {
 			var msg1 = "End executing request " + httpContext.getRequestUri();
-		};
-		var this5 = function(r) {
-			f4();
-		};
-		allDone(this5);
+		}));
 		return allDone;
 	}
 	,logModule: function(ctx,msg) {
@@ -6161,27 +7164,13 @@ ufront_app_HttpApplication.prototype = {
 			var m = modules.shift();
 			if(flag != null && (ctx.completion & 1 << flag[1]) != 0) {
 				var msg1 = "  Finished execcuting modules for " + Std.string(flag) + " (completion flag was set)";
-				var result = tink_core_Outcome.Success(tink_core_Noise.Noise);
-				if(done.list != null) {
-					var list = done.list;
-					done.list = null;
-					done.result = result;
-					tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-					tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-				}
+				done.trigger(tink_core_Outcome.Success(tink_core_Noise.Noise));
 			} else if(m == null) {
 				var msg2 = "  Finished execcuting modules for " + Std.string(flag) + " (all modules completed)";
 				if(flag != null) {
 					ctx.completion |= 1 << flag[1];
 				}
-				var result1 = tink_core_Outcome.Success(tink_core_Noise.Noise);
-				if(done.list != null) {
-					var list1 = done.list;
-					done.list = null;
-					done.result = result1;
-					tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-					tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-				}
+				done.trigger(tink_core_Outcome.Success(tink_core_Noise.Noise));
 			} else {
 				var moduleCb = m.a;
 				_gthis.currentModule = m.b;
@@ -6193,15 +7182,15 @@ ufront_app_HttpApplication.prototype = {
 					haxe_CallStack.lastException = e;
 					if (e instanceof js__$Boot_HaxeError) e = e.val;
 					ctx.messages.push({ msg : "Caught error " + Std.string(e) + " while executing module " + _gthis.currentModule.className + "." + _gthis.currentModule.methodName + " in HttpApplication.executeModules()", pos : { fileName : "HttpApplication.hx", lineNumber : 422, className : "ufront.app.HttpApplication", methodName : "executeModules"}, type : ufront_log_MessageType.MLog});
-					moduleResult = tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e,null,_gthis.currentModule)));
+					moduleResult = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e,null,_gthis.currentModule))));
 				}
-				moduleResult(function(result2) {
-					switch(result2[1]) {
+				moduleResult.handle(function(result) {
+					switch(result[1]) {
 					case 0:
 						runNext();
 						break;
 					case 1:
-						var e1 = result2[2];
+						var e1 = result[2];
 						_gthis.handleError(e1,ctx,done);
 						break;
 					}
@@ -6210,7 +7199,7 @@ ufront_app_HttpApplication.prototype = {
 		};
 		var runNext1 = runNext;
 		runNext1();
-		return done.future;
+		return done;
 	}
 	,handleError: function(err,ctx,doneTrigger) {
 		var _gthis = this;
@@ -6258,21 +7247,10 @@ ufront_app_HttpApplication.prototype = {
 					});
 				});
 			});
-			var f3 = function() {
+			allDone.handle(tink_core__$Callback_Callback_$Impl_$.fromNiladic(function() {
 				var msg1 = "  End handling error " + Std.string(err);
-				var result = tink_core_Outcome.Failure(err);
-				if(doneTrigger.list != null) {
-					var list = doneTrigger.list;
-					doneTrigger.list = null;
-					doneTrigger.result = result;
-					tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-					tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-				}
-			};
-			var this4 = function(r) {
-				f3();
-			};
-			allDone(this4);
+				doneTrigger.trigger(tink_core_Outcome.Failure(err));
+			}));
 		} else {
 			var msg2 = "You had an error after your error handler had already run.  Last active module: " + this.currentModule.className + "." + this.currentModule.methodName;
 			throw new js__$Boot_HaxeError("" + msg2 + " \nError: " + Std.string(err) + " \nError Data: " + Std.string(err.data));
@@ -6979,11 +7957,11 @@ ufront_cache_MemoryCache.prototype = {
 		return tink_core_Outcome.Success(tink_core_Noise.Noise);
 	}
 	,get: function(id) {
-		return tink_core__$Future_Future_$Impl_$.sync(this.getSync(id));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(this.getSync(id)));
 	}
 	,set: function(id,value) {
 		var _gthis = this;
-		return tink_core__$Future_Future_$Impl_$.map(value,function(v) {
+		var ret = value.map(function(v) {
 			var _this = _gthis.map;
 			if(__map_reserved[id] != null) {
 				_this.setReserved(id,v);
@@ -6992,15 +7970,16 @@ ufront_cache_MemoryCache.prototype = {
 			}
 			return tink_core_Outcome.Success(v);
 		});
+		return ret.gather();
 	}
 	,getOrSet: function(id,fn) {
 		var _gthis = this;
 		var _this = this.map;
 		if(__map_reserved[id] != null ? _this.existsReserved(id) : _this.h.hasOwnProperty(id)) {
 			var _this1 = this.map;
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(__map_reserved[id] != null ? _this1.getReserved(id) : _this1.h[id]));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(__map_reserved[id] != null ? _this1.getReserved(id) : _this1.h[id])));
 		} else {
-			return tink_core__$Future_Future_$Impl_$.map(fn(),function(v) {
+			var ret = fn().map(function(v) {
 				var _this2 = _gthis.map;
 				if(__map_reserved[id] != null) {
 					_this2.setReserved(id,v);
@@ -7009,13 +7988,14 @@ ufront_cache_MemoryCache.prototype = {
 				}
 				return tink_core_Outcome.Success(v);
 			});
+			return ret.gather();
 		}
 	}
 	,clear: function() {
-		return tink_core__$Future_Future_$Impl_$.sync(this.clearSync());
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(this.clearSync()));
 	}
 	,remove: function(id) {
-		return tink_core__$Future_Future_$Impl_$.sync(this.removeSync(id));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(this.removeSync(id)));
 	}
 	,__class__: ufront_cache_MemoryCache
 };
@@ -7036,7 +8016,7 @@ ufront_cache_RequestCacheMiddleware.prototype = {
 		}
 		if(ctx.request.get_httpMethod().toLowerCase() == "get") {
 			var uri = ctx.request.get_uri();
-			return tink_core__$Future_Future_$Impl_$.map(this.cache.get(uri),function(result) {
+			var ret = this.cache.get(uri).map(function(result) {
 				if(result[1] == 0) {
 					var res = result[2];
 					var cachedResponse = res;
@@ -7063,6 +8043,7 @@ ufront_cache_RequestCacheMiddleware.prototype = {
 				}
 				return tink_core_Outcome.Success(tink_core_Noise.Noise);
 			});
+			return ret.gather();
 		} else {
 			return ufront_core_SurpriseTools.success();
 		}
@@ -7080,7 +8061,7 @@ ufront_cache_RequestCacheMiddleware.prototype = {
 				if(ufront_cache_RequestCacheMiddleware.hasCacheMeta(controllerMeta) || ufront_cache_RequestCacheMiddleware.hasCacheMeta(fieldMeta)) {
 					var uri = ctx.request.get_uri();
 					var tmp = this.cache;
-					var this1 = tink_core__$Future_Future_$Impl_$.sync(ctx.response);
+					var this1 = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(ctx.response));
 					return tink_core__$Future_Future_$Impl_$._map(tmp.set(uri,this1),function(result) {
 						if(result[1] == 1) {
 							var e = result[2];
@@ -7127,48 +8108,48 @@ ufront_core__$AcceptEither_AcceptEither_$Impl_$.get_type = function(this1) {
 	return this1;
 };
 ufront_core__$AcceptEither_AcceptEither_$Impl_$.fromA = function(v) {
-	var this1 = tink_core_Either.Left(v);
+	var this1 = haxe_ds_Either.Left(v);
 	return this1;
 };
 ufront_core__$AcceptEither_AcceptEither_$Impl_$.fromB = function(v) {
-	var this1 = tink_core_Either.Right(v);
+	var this1 = haxe_ds_Either.Right(v);
 	return this1;
 };
 var ufront_core_FutureTools = function() { };
 $hxClasses["ufront.core.FutureTools"] = ufront_core_FutureTools;
 ufront_core_FutureTools.__name__ = ["ufront","core","FutureTools"];
 ufront_core_FutureTools.asFuture = function(data) {
-	return tink_core__$Future_Future_$Impl_$.sync(data);
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(data));
 };
 var ufront_core_SurpriseTools = function() { };
 $hxClasses["ufront.core.SurpriseTools"] = ufront_core_SurpriseTools;
 ufront_core_SurpriseTools.__name__ = ["ufront","core","SurpriseTools"];
 ufront_core_SurpriseTools.success = function() {
 	if(ufront_core_SurpriseTools.s == null) {
-		ufront_core_SurpriseTools.s = tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+		ufront_core_SurpriseTools.s = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 	}
 	return ufront_core_SurpriseTools.s;
 };
 ufront_core_SurpriseTools.asSurprise = function(outcome) {
-	return tink_core__$Future_Future_$Impl_$.sync(outcome);
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(outcome));
 };
 ufront_core_SurpriseTools.asGoodSurprise = function(data) {
-	return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(data));
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(data)));
 };
 ufront_core_SurpriseTools.asBadSurprise = function(err) {
-	return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(err));
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(err)));
 };
 ufront_core_SurpriseTools.asSurpriseError = function(err,msg,p) {
 	if(msg == null) {
 		msg = "Failure: " + Std.string(err);
 	}
-	return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(err,msg,p)));
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(err,msg,p))));
 };
 ufront_core_SurpriseTools.asSurpriseTypedError = function(err,msg,p) {
 	if(msg == null) {
 		msg = "Failure: " + Std.string(err);
 	}
-	return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(err,msg,p)));
+	return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(err,msg,p))));
 };
 ufront_core_SurpriseTools.tryCatchSurprise = function(fn,msg,p) {
 	try {
@@ -7180,7 +8161,7 @@ ufront_core_SurpriseTools.tryCatchSurprise = function(fn,msg,p) {
 	}
 };
 ufront_core_SurpriseTools.changeSuccessTo = function(s,newSuccessData) {
-	return tink_core__$Future_Future_$Impl_$.map(s,function(outcome) {
+	var ret = s.map(function(outcome) {
 		switch(outcome[1]) {
 		case 0:
 			return tink_core_Outcome.Success(newSuccessData);
@@ -7189,12 +8170,13 @@ ufront_core_SurpriseTools.changeSuccessTo = function(s,newSuccessData) {
 			return tink_core_Outcome.Failure(e);
 		}
 	});
+	return ret.gather();
 };
 ufront_core_SurpriseTools.changeSuccessToNoise = function(s) {
 	return ufront_core_SurpriseTools.changeSuccessTo(s,tink_core_Noise.Noise);
 };
 ufront_core_SurpriseTools.changeFailureTo = function(s,newFailureData) {
-	return tink_core__$Future_Future_$Impl_$.map(s,function(outcome) {
+	var ret = s.map(function(outcome) {
 		switch(outcome[1]) {
 		case 0:
 			var d = outcome[2];
@@ -7203,9 +8185,10 @@ ufront_core_SurpriseTools.changeFailureTo = function(s,newFailureData) {
 			return tink_core_Outcome.Failure(newFailureData);
 		}
 	});
+	return ret.gather();
 };
 ufront_core_SurpriseTools.changeFailureToError = function(s,msg,p) {
-	return tink_core__$Future_Future_$Impl_$.map(s,function(outcome) {
+	var ret = s.map(function(outcome) {
 		switch(outcome[1]) {
 		case 0:
 			var d = outcome[2];
@@ -7218,9 +8201,10 @@ ufront_core_SurpriseTools.changeFailureToError = function(s,msg,p) {
 			return tink_core_Outcome.Failure(ufront_web_HttpError.wrap(inner,msg,p));
 		}
 	});
+	return ret.gather();
 };
 ufront_core_SurpriseTools.useFallback = function(s,fallback) {
-	return tink_core__$Future_Future_$Impl_$.map(s,function(outcome) {
+	var ret = s.map(function(outcome) {
 		switch(outcome[1]) {
 		case 0:
 			var data = outcome[2];
@@ -7229,6 +8213,7 @@ ufront_core_SurpriseTools.useFallback = function(s,fallback) {
 			return fallback;
 		}
 	});
+	return ret.gather();
 };
 var ufront_core_CallbackTools = function() { };
 $hxClasses["ufront.core.CallbackTools"] = ufront_core_CallbackTools;
@@ -7238,79 +8223,37 @@ ufront_core_CallbackTools.asVoidSurprise = function(cb,pos) {
 	cb(function(error) {
 		if(error != null) {
 			var e = tink_core_TypedError.withData(500,"" + Std.string(error),pos,{ fileName : "AsyncTools.hx", lineNumber : 216, className : "ufront.core.CallbackTools", methodName : "asVoidSurprise"});
-			var result = tink_core_Outcome.Failure(e);
-			if(t.list != null) {
-				var list = t.list;
-				t.list = null;
-				t.result = result;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-			}
+			t.trigger(tink_core_Outcome.Failure(e));
 		} else {
-			var result1 = tink_core_Outcome.Success(tink_core_Noise.Noise);
-			if(t.list != null) {
-				var list1 = t.list;
-				t.list = null;
-				t.result = result1;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-			}
+			t.trigger(tink_core_Outcome.Success(tink_core_Noise.Noise));
 		}
 	});
-	return t.future;
+	return t;
 };
 ufront_core_CallbackTools.asSurprise = function(cb,pos) {
 	var t = new tink_core_FutureTrigger();
 	cb(function(error,val) {
 		if(error != null) {
 			var e = tink_core_TypedError.withData(500,"" + Std.string(error),pos,{ fileName : "AsyncTools.hx", lineNumber : 241, className : "ufront.core.CallbackTools", methodName : "asSurprise"});
-			var result = tink_core_Outcome.Failure(e);
-			if(t.list != null) {
-				var list = t.list;
-				t.list = null;
-				t.result = result;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-			}
+			t.trigger(tink_core_Outcome.Failure(e));
 		} else {
-			var result1 = tink_core_Outcome.Success(val);
-			if(t.list != null) {
-				var list1 = t.list;
-				t.list = null;
-				t.result = result1;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-			}
+			t.trigger(tink_core_Outcome.Success(val));
 		}
 	});
-	return t.future;
+	return t;
 };
 ufront_core_CallbackTools.asSurprisePair = function(cb,pos) {
 	var t = new tink_core_FutureTrigger();
 	cb(function(error,val1,val2) {
 		if(error != null) {
 			var e = tink_core_TypedError.withData(500,"" + Std.string(error),pos,{ fileName : "AsyncTools.hx", lineNumber : 266, className : "ufront.core.CallbackTools", methodName : "asSurprisePair"});
-			var result = tink_core_Outcome.Failure(e);
-			if(t.list != null) {
-				var list = t.list;
-				t.list = null;
-				t.result = result;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-			}
+			t.trigger(tink_core_Outcome.Failure(e));
 		} else {
 			var this1 = new tink_core_MPair(val1,val2);
-			var result1 = tink_core_Outcome.Success(this1);
-			if(t.list != null) {
-				var list1 = t.list;
-				t.list = null;
-				t.result = result1;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-			}
+			t.trigger(tink_core_Outcome.Success(this1));
 		}
 	});
-	return t.future;
+	return t;
 };
 var ufront_core__$CaseInsensitiveMultiValueMap_CaseInsensitiveMultiValueMap_$Impl_$ = {};
 $hxClasses["ufront.core._CaseInsensitiveMultiValueMap.CaseInsensitiveMultiValueMap_Impl_"] = ufront_core__$CaseInsensitiveMultiValueMap_CaseInsensitiveMultiValueMap_$Impl_$;
@@ -7376,7 +8319,7 @@ ufront_core__$Futuristic_Futuristic_$Impl_$._new = function(f) {
 	return this1;
 };
 ufront_core__$Futuristic_Futuristic_$Impl_$.fromSync = function(v) {
-	var this1 = tink_core__$Future_Future_$Impl_$.sync(v);
+	var this1 = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(v));
 	return this1;
 };
 ufront_core__$Futuristic_Futuristic_$Impl_$.asFuture = function(this1) {
@@ -8109,7 +9052,7 @@ ufront_remoting_HttpAsyncConnection.prototype = $extend(haxe_remoting_HttpAsyncC
 		};
 		h.handle(onStatus,onData,onError);
 		var uploadsReady = h.attachUploads(s.uploads);
-		uploadsReady(function(outcome) {
+		uploadsReady.handle(function(outcome) {
 			switch(outcome[1]) {
 			case 0:
 				h.send();
@@ -8340,11 +9283,12 @@ ufront_remoting_RemotingHandler.prototype = {
 					throw new js__$Boot_HaxeError("Unable to deserialize remoting call: " + Std.string(e) + ". Remoting call string: " + remotingCall);
 				}
 				var apiCallFinished = this.executeApiCall(path,args,this.context,httpContext.actionContext);
-				remotingResponse = tink_core__$Future_Future_$Impl_$.map(apiCallFinished,function(data) {
+				var ret = apiCallFinished.map(function(data) {
 					var s = new ufront_remoting_RemotingSerializer(ufront_remoting_RemotingDirection.RDServerToClient);
 					s.serialize(data);
 					return "hxr" + s.toString();
 				});
+				remotingResponse = ret.gather();
 			} catch( e1 ) {
 				haxe_CallStack.lastException = e1;
 				if (e1 instanceof js__$Boot_HaxeError) e1 = e1.val;
@@ -8353,38 +9297,24 @@ ufront_remoting_RemotingHandler.prototype = {
 				if(path != null && args != null && typeof(e1) == "string" && Lambda.exists(apiNotFoundMessages,function(msg) {
 					return StringTools.startsWith(error,msg);
 				})) {
-					remotingResponse = tink_core__$Future_Future_$Impl_$.sync("Unable to access " + path.join(".") + " - API Not Found (" + error + "). See " + Std.string(this.context.objects));
+					remotingResponse = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst("Unable to access " + path.join(".") + " - API Not Found (" + error + "). See " + Std.string(this.context.objects)));
 					r.setNotFound();
 				} else {
 					r.setInternalError();
-					remotingResponse = tink_core__$Future_Future_$Impl_$.sync(this.remotingError(e1,httpContext));
+					remotingResponse = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(this.remotingError(e1,httpContext)));
 				}
 			}
-			remotingResponse(function(response) {
+			remotingResponse.handle(function(response) {
 				r.set_contentType("application/x-haxe-remoting");
 				r.clearContent();
 				r.write(response);
 				httpContext.completion |= 1 << ufront_web_context_RequestCompletion.CRequestHandlersComplete[1];
-				var result = tink_core_Outcome.Success(tink_core_Noise.Noise);
-				if(doneTrigger.list != null) {
-					var list = doneTrigger.list;
-					doneTrigger.list = null;
-					doneTrigger.result = result;
-					tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-					tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-				}
+				doneTrigger.trigger(tink_core_Outcome.Success(tink_core_Noise.Noise));
 			});
 		} else {
-			var result1 = tink_core_Outcome.Success(tink_core_Noise.Noise);
-			if(doneTrigger.list != null) {
-				var list1 = doneTrigger.list;
-				doneTrigger.list = null;
-				doneTrigger.result = result1;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-			}
+			doneTrigger.trigger(tink_core_Outcome.Success(tink_core_Noise.Noise));
 		}
-		return doneTrigger.future;
+		return doneTrigger;
 	}
 	,initializeContext: function(injector) {
 		this.context = new haxe_remoting_Context();
@@ -8443,9 +9373,9 @@ ufront_remoting_RemotingHandler.prototype = {
 		if((flags & 1 << ufront_api_ApiReturnType.ARTFuture[1]) != 0) {
 			return result;
 		} else if((flags & 1 << ufront_api_ApiReturnType.ARTVoid[1]) != 0) {
-			return tink_core__$Future_Future_$Impl_$.sync(null);
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(null));
 		} else {
-			return tink_core__$Future_Future_$Impl_$.sync(result);
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(result));
 		}
 	}
 	,remotingError: function(e,httpContext) {
@@ -8860,7 +9790,7 @@ ufront_view_UFViewEngine.prototype = {
 			var _this1 = this.cache;
 			var cached = __map_reserved[path] != null ? _this1.getReserved(path) : _this1.h[path];
 			if(templatingEngine == null || templatingEngine.type == cached.a) {
-				return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(cached.b));
+				return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(cached.b)));
 			}
 		}
 		var tplStrReady = new tink_core_FutureTrigger();
@@ -8868,43 +9798,23 @@ ufront_view_UFViewEngine.prototype = {
 		var finalPath = null;
 		if(templatingEngine != null && ext != "") {
 			finalPath = path;
-			this.getTemplateString(finalPath)(function(result) {
+			this.getTemplateString(finalPath).handle(function(result) {
 				switch(result[1]) {
 				case 0:
 					switch(result[2][1]) {
 					case 0:
 						var tpl = result[2][2];
-						var result1 = tink_core_Outcome.Success(tpl);
-						if(tplStrReady.list != null) {
-							var list = tplStrReady.list;
-							tplStrReady.list = null;
-							tplStrReady.result = result1;
-							tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result1);
-							tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-						}
+						tplStrReady.trigger(tink_core_Outcome.Success(tpl));
 						break;
 					case 1:
-						var result2 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"Template " + path + " not found",{ fileName : "UFViewEngine.hx", lineNumber : 115, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
-						if(tplStrReady.list != null) {
-							var list1 = tplStrReady.list;
-							tplStrReady.list = null;
-							tplStrReady.result = result2;
-							tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result2);
-							tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-						}
+						var tmp1 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"Template " + path + " not found",{ fileName : "UFViewEngine.hx", lineNumber : 115, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
+						tplStrReady.trigger(tmp1);
 						break;
 					}
 					break;
 				case 1:
 					var err = result[2];
-					var result3 = tink_core_Outcome.Failure(err);
-					if(tplStrReady.list != null) {
-						var list2 = tplStrReady.list;
-						tplStrReady.list = null;
-						tplStrReady.result = result3;
-						tink_core__$Callback_CallbackList_$Impl_$.invoke(list2,result3);
-						tink_core__$Callback_CallbackList_$Impl_$.clear(list2);
-					}
+					tplStrReady.trigger(tink_core_Outcome.Failure(err));
 					break;
 				}
 			});
@@ -8915,20 +9825,13 @@ ufront_view_UFViewEngine.prototype = {
 				if(exts.length > 0) {
 					var ext1 = exts.shift();
 					finalPath = haxe_io_Path.withExtension(path,ext1);
-					_gthis.getTemplateString(finalPath)(function(result4) {
-						switch(result4[1]) {
+					_gthis.getTemplateString(finalPath).handle(function(result1) {
+						switch(result1[1]) {
 						case 0:
-							switch(result4[2][1]) {
+							switch(result1[2][1]) {
 							case 0:
-								var tpl1 = result4[2][2];
-								var result5 = tink_core_Outcome.Success(tpl1);
-								if(tplStrReady.list != null) {
-									var list3 = tplStrReady.list;
-									tplStrReady.list = null;
-									tplStrReady.result = result5;
-									tink_core__$Callback_CallbackList_$Impl_$.invoke(list3,result5);
-									tink_core__$Callback_CallbackList_$Impl_$.clear(list3);
-								}
+								var tpl1 = result1[2][2];
+								tplStrReady.trigger(tink_core_Outcome.Success(tpl1));
 								break;
 							case 1:
 								testNextExtension();
@@ -8936,31 +9839,18 @@ ufront_view_UFViewEngine.prototype = {
 							}
 							break;
 						case 1:
-							var err1 = result4[2];
-							var result6 = tink_core_Outcome.Failure(err1);
-							if(tplStrReady.list != null) {
-								var list4 = tplStrReady.list;
-								tplStrReady.list = null;
-								tplStrReady.result = result6;
-								tink_core__$Callback_CallbackList_$Impl_$.invoke(list4,result6);
-								tink_core__$Callback_CallbackList_$Impl_$.clear(list4);
-							}
+							var err1 = result1[2];
+							tplStrReady.trigger(tink_core_Outcome.Failure(err1));
 							break;
 						}
 					});
 				} else {
-					var result7 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"No template found for " + path + " with extensions " + Std.string(templatingEngine.extensions),{ fileName : "UFViewEngine.hx", lineNumber : 131, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
-					if(tplStrReady.list != null) {
-						var list5 = tplStrReady.list;
-						tplStrReady.list = null;
-						tplStrReady.result = result7;
-						tink_core__$Callback_CallbackList_$Impl_$.invoke(list5,result7);
-						tink_core__$Callback_CallbackList_$Impl_$.clear(list5);
-					}
+					var testNextExtension1 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"No template found for " + path + " with extensions " + Std.string(templatingEngine.extensions),{ fileName : "UFViewEngine.hx", lineNumber : 131, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
+					tplStrReady.trigger(testNextExtension1);
 				}
 			};
-			var testNextExtension1 = testNextExtension;
-			testNextExtension1();
+			var testNextExtension2 = testNextExtension;
+			testNextExtension2();
 		} else if(templatingEngine == null && ext != "") {
 			var tplEngines = this.engines.slice();
 			var testNextEngine = null;
@@ -8969,44 +9859,24 @@ ufront_view_UFViewEngine.prototype = {
 					var engine = tplEngines.shift();
 					if(Lambda.has(engine.extensions,ext)) {
 						finalPath = haxe_io_Path.normalize(path);
-						_gthis.getTemplateString(finalPath)(function(result8) {
-							switch(result8[1]) {
+						_gthis.getTemplateString(finalPath).handle(function(result2) {
+							switch(result2[1]) {
 							case 0:
-								switch(result8[2][1]) {
+								switch(result2[2][1]) {
 								case 0:
-									var tpl2 = result8[2][2];
+									var tpl2 = result2[2][2];
 									templatingEngine = engine;
-									var result9 = tink_core_Outcome.Success(tpl2);
-									if(tplStrReady.list != null) {
-										var list6 = tplStrReady.list;
-										tplStrReady.list = null;
-										tplStrReady.result = result9;
-										tink_core__$Callback_CallbackList_$Impl_$.invoke(list6,result9);
-										tink_core__$Callback_CallbackList_$Impl_$.clear(list6);
-									}
+									tplStrReady.trigger(tink_core_Outcome.Success(tpl2));
 									break;
 								case 1:
-									var result10 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"Template " + path + " not found",{ fileName : "UFViewEngine.hx", lineNumber : 147, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
-									if(tplStrReady.list != null) {
-										var list7 = tplStrReady.list;
-										tplStrReady.list = null;
-										tplStrReady.result = result10;
-										tink_core__$Callback_CallbackList_$Impl_$.invoke(list7,result10);
-										tink_core__$Callback_CallbackList_$Impl_$.clear(list7);
-									}
+									var testNextEngine1 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"Template " + path + " not found",{ fileName : "UFViewEngine.hx", lineNumber : 147, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
+									tplStrReady.trigger(testNextEngine1);
 									break;
 								}
 								break;
 							case 1:
-								var err2 = result8[2];
-								var result11 = tink_core_Outcome.Failure(err2);
-								if(tplStrReady.list != null) {
-									var list8 = tplStrReady.list;
-									tplStrReady.list = null;
-									tplStrReady.result = result11;
-									tink_core__$Callback_CallbackList_$Impl_$.invoke(list8,result11);
-									tink_core__$Callback_CallbackList_$Impl_$.clear(list8);
-								}
+								var err2 = result2[2];
+								tplStrReady.trigger(tink_core_Outcome.Failure(err2));
 								break;
 							}
 						});
@@ -9014,18 +9884,12 @@ ufront_view_UFViewEngine.prototype = {
 						testNextEngine();
 					}
 				} else {
-					var result12 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"No templating engine found for " + path + " (None support extension " + ext + ")",{ fileName : "UFViewEngine.hx", lineNumber : 151, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
-					if(tplStrReady.list != null) {
-						var list9 = tplStrReady.list;
-						tplStrReady.list = null;
-						tplStrReady.result = result12;
-						tink_core__$Callback_CallbackList_$Impl_$.invoke(list9,result12);
-						tink_core__$Callback_CallbackList_$Impl_$.clear(list9);
-					}
+					var testNextEngine2 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"No templating engine found for " + path + " (None support extension " + ext + ")",{ fileName : "UFViewEngine.hx", lineNumber : 151, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
+					tplStrReady.trigger(testNextEngine2);
 				}
 			};
-			var testNextEngine1 = testNextEngine;
-			testNextEngine1();
+			var testNextEngine3 = testNextEngine;
+			testNextEngine3();
 		} else if(templatingEngine == null && ext == "") {
 			var tplEngines1 = this.engines.slice();
 			var engine1 = null;
@@ -9035,14 +9899,8 @@ ufront_view_UFViewEngine.prototype = {
 			var testNextEngineOrExtension = null;
 			testNextEngineOrExtension = function() {
 				if(extensions.length == 0 && tplEngines1.length == 0) {
-					var result13 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"No template found for " + path + " with extensions " + Std.string(extensionsUsed),{ fileName : "UFViewEngine.hx", lineNumber : 165, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
-					if(tplStrReady.list != null) {
-						var list10 = tplStrReady.list;
-						tplStrReady.list = null;
-						tplStrReady.result = result13;
-						tink_core__$Callback_CallbackList_$Impl_$.invoke(list10,result13);
-						tink_core__$Callback_CallbackList_$Impl_$.clear(list10);
-					}
+					var testNextEngineOrExtension1 = tink_core_Outcome.Failure(new tink_core_TypedError(null,"No template found for " + path + " with extensions " + Std.string(extensionsUsed),{ fileName : "UFViewEngine.hx", lineNumber : 165, className : "ufront.view.UFViewEngine", methodName : "getTemplate"}));
+					tplStrReady.trigger(testNextEngineOrExtension1);
 					return;
 				} else if(extensions.length == 0) {
 					engine1 = tplEngines1.shift();
@@ -9053,21 +9911,14 @@ ufront_view_UFViewEngine.prototype = {
 				}
 				extensionsUsed.push(ext2);
 				finalPath = haxe_io_Path.withExtension(path,ext2);
-				_gthis.getTemplateString(finalPath)(function(result14) {
-					switch(result14[1]) {
+				_gthis.getTemplateString(finalPath).handle(function(result3) {
+					switch(result3[1]) {
 					case 0:
-						switch(result14[2][1]) {
+						switch(result3[2][1]) {
 						case 0:
-							var tpl3 = result14[2][2];
+							var tpl3 = result3[2][2];
 							templatingEngine = engine1;
-							var result15 = tink_core_Outcome.Success(tpl3);
-							if(tplStrReady.list != null) {
-								var list11 = tplStrReady.list;
-								tplStrReady.list = null;
-								tplStrReady.result = result15;
-								tink_core__$Callback_CallbackList_$Impl_$.invoke(list11,result15);
-								tink_core__$Callback_CallbackList_$Impl_$.clear(list11);
-							}
+							tplStrReady.trigger(tink_core_Outcome.Success(tpl3));
 							break;
 						case 1:
 							testNextEngineOrExtension();
@@ -9075,24 +9926,17 @@ ufront_view_UFViewEngine.prototype = {
 						}
 						break;
 					case 1:
-						var err3 = result14[2];
-						var result16 = tink_core_Outcome.Failure(err3);
-						if(tplStrReady.list != null) {
-							var list12 = tplStrReady.list;
-							tplStrReady.list = null;
-							tplStrReady.result = result16;
-							tink_core__$Callback_CallbackList_$Impl_$.invoke(list12,result16);
-							tink_core__$Callback_CallbackList_$Impl_$.clear(list12);
-						}
+						var err3 = result3[2];
+						tplStrReady.trigger(tink_core_Outcome.Failure(err3));
 						break;
 					}
 				});
 				return;
 			};
-			var testNextEngineOrExtension1 = testNextEngineOrExtension;
-			testNextEngineOrExtension1();
+			var testNextEngineOrExtension2 = testNextEngineOrExtension;
+			testNextEngineOrExtension2();
 		}
-		return tink_core__$Future_Future_$Impl_$._tryFailingMap(tplStrReady.future,function(tplStr) {
+		return tink_core__$Future_Future_$Impl_$._tryFailingMap(tplStrReady,function(tplStr) {
 			try {
 				var tpl4 = templatingEngine.factory(tplStr);
 				if(_gthis.cache != null) {
@@ -9115,7 +9959,7 @@ ufront_view_UFViewEngine.prototype = {
 		});
 	}
 	,getTemplateString: function(path) {
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(new tink_core_TypedError(null,"Attempting to fetch template " + path + " with UFViewEngine.  This is an abstract class, you must use one of the ViewEngine implementations.",{ fileName : "UFViewEngine.hx", lineNumber : 226, className : "ufront.view.UFViewEngine", methodName : "getTemplateString"})));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(new tink_core_TypedError(null,"Attempting to fetch template " + path + " with UFViewEngine.  This is an abstract class, you must use one of the ViewEngine implementations.",{ fileName : "UFViewEngine.hx", lineNumber : 226, className : "ufront.view.UFViewEngine", methodName : "getTemplateString"}))));
 	}
 	,addTemplatingEngine: function(engine) {
 		this.engines.push(engine);
@@ -9172,42 +10016,22 @@ ufront_view_HttpViewEngine.prototype = $extend(ufront_view_UFViewEngine.prototyp
 				status = st;
 			};
 			req.onData = function(data) {
-				var result = tink_core_Outcome.Success(haxe_ds_Option.Some(data));
-				if(ft.list != null) {
-					var list = ft.list;
-					ft.list = null;
-					ft.result = result;
-					tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-					tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-				}
+				ft.trigger(tink_core_Outcome.Success(haxe_ds_Option.Some(data)));
 			};
 			req.onError = function(err) {
 				if(status == 404) {
-					var result1 = tink_core_Outcome.Success(haxe_ds_Option.None);
-					if(ft.list != null) {
-						var list1 = ft.list;
-						ft.list = null;
-						ft.result = result1;
-						tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-						tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-					}
+					ft.trigger(tink_core_Outcome.Success(haxe_ds_Option.None));
 				} else {
-					var result2 = tink_core_Outcome.Failure(tink_core_TypedError.withData(status,"Failed to load template " + fullPath,err,{ fileName : "HttpViewEngine.hx", lineNumber : 54, className : "ufront.view.HttpViewEngine", methodName : "getTemplateString"}));
-					if(ft.list != null) {
-						var list2 = ft.list;
-						ft.list = null;
-						ft.result = result2;
-						tink_core__$Callback_CallbackList_$Impl_$.invoke(list2,result2);
-						tink_core__$Callback_CallbackList_$Impl_$.clear(list2);
-					}
+					var tmp = tink_core_Outcome.Failure(tink_core_TypedError.withData(status,"Failed to load template " + fullPath,err,{ fileName : "HttpViewEngine.hx", lineNumber : 54, className : "ufront.view.HttpViewEngine", methodName : "getTemplateString"}));
+					ft.trigger(tmp);
 				}
 			};
 			req.request();
-			return ft.future;
+			return ft;
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
 			if (e instanceof js__$Boot_HaxeError) e = e.val;
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(tink_core_TypedError.withData(null,"Failed to load template " + fullPath,e,{ fileName : "HttpViewEngine.hx", lineNumber : 59, className : "ufront.view.HttpViewEngine", methodName : "getTemplateString"})));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(tink_core_TypedError.withData(null,"Failed to load template " + fullPath,e,{ fileName : "HttpViewEngine.hx", lineNumber : 59, className : "ufront.view.HttpViewEngine", methodName : "getTemplateString"}))));
 		}
 	}
 	,__class__: ufront_view_HttpViewEngine
@@ -9816,7 +10640,7 @@ ufront_web_MVCHandler.prototype = {
 			var p_customParams = ["actionContext"];
 			var o = context.actionContext;
 			var p_className = Type.getClassName(o == null ? null : js_Boot.getClass(o));
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e,null,{ fileName : "MVCHandler.hx", lineNumber : 70, className : "ufront.web.MVCHandler", methodName : "executeResult"})));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e,null,{ fileName : "MVCHandler.hx", lineNumber : 70, className : "ufront.web.MVCHandler", methodName : "executeResult"}))));
 		}
 	}
 	,toString: function() {
@@ -10036,7 +10860,7 @@ ufront_web_context_HttpContext.prototype = {
 		if(this.session != null) {
 			return this.session.commit();
 		} else {
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 		}
 	}
 	,ufTrace: function(msg,pos) {
@@ -10387,7 +11211,7 @@ ufront_web_result_HttpAuthResult.requireAuth = function(context,username,passwor
 		return successFn();
 	} else {
 		var result = new ufront_web_result_HttpAuthResult(message,failureMessage);
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(result));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(result)));
 	}
 };
 ufront_web_result_HttpAuthResult.__super__ = ufront_web_result_ActionResult;
@@ -10437,7 +11261,7 @@ var ufront_web_result_ViewResult = function(data,viewPath,templatingEngine) {
 	this.templateSource = viewPath != null ? ufront_web_result_TemplateSource.TFromEngine(viewPath,templatingEngine) : ufront_web_result_TemplateSource.TUnknown;
 	this.layoutSource = ufront_web_result_TemplateSource.TUnknown;
 	this.finalOutputTrigger = new tink_core_FutureTrigger();
-	this.finalOutput = this.finalOutputTrigger.future;
+	this.finalOutput = this.finalOutputTrigger;
 };
 $hxClasses["ufront.web.result.ViewResult"] = ufront_web_result_ViewResult;
 ufront_web_result_ViewResult.__name__ = ["ufront","web","result","ViewResult"];
@@ -10550,12 +11374,12 @@ ufront_web_result_ViewResult.loadTemplateFromSource = function(source,engine) {
 		var templatingEngine = source[3];
 		var str = source[2];
 		try {
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(templatingEngine.factory(str)));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(templatingEngine.factory(str))));
 		} catch( e ) {
 			haxe_CallStack.lastException = e;
 			var engine1 = "Templating Engine: \"" + templatingEngine.type + "\"";
 			var template = "String template: \"" + str + "\"";
-			return tink_core__$Future_Future_$Impl_$.sync(ufront_web_result_ViewResult.error("Failed to parse template.","" + engine1 + "\n" + template,{ fileName : "ViewResult.hx", lineNumber : 630, className : "ufront.web.result.ViewResult", methodName : "loadTemplateFromSource"}));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(ufront_web_result_ViewResult.error("Failed to parse template.","" + engine1 + "\n" + template,{ fileName : "ViewResult.hx", lineNumber : 630, className : "ufront.web.result.ViewResult", methodName : "loadTemplateFromSource"})));
 		}
 		break;
 	case 1:
@@ -10563,7 +11387,7 @@ ufront_web_result_ViewResult.loadTemplateFromSource = function(source,engine) {
 		var path = source[2];
 		return engine.getTemplate(path,templatingEngine1);
 	case 2:case 3:
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(null));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(null)));
 	}
 };
 ufront_web_result_ViewResult.loadPartialTemplates = function(partialSources,engine) {
@@ -10577,7 +11401,7 @@ ufront_web_result_ViewResult.loadPartialTemplates = function(partialSources,engi
 		var name2 = [name1];
 		var source = [__map_reserved[name2[0]] != null ? allPartialSources.getReserved(name2[0]) : allPartialSources.h[name2[0]]];
 		var surprise = ufront_web_result_ViewResult.loadTemplateFromSource(source[0],engine);
-		surprise((function(source1,name3) {
+		surprise.handle((function(source1,name3) {
 			return function(outcome) {
 				switch(outcome[1]) {
 				case 0:
@@ -10610,7 +11434,7 @@ ufront_web_result_ViewResult.loadPartialTemplates = function(partialSources,engi
 		})(source,name2));
 		allPartialFutures.push(surprise);
 	}
-	return tink_core__$Future_Future_$Impl_$.map(tink_core__$Future_Future_$Impl_$.ofMany(allPartialFutures),function(_) {
+	var ret = tink_core__$Future_Future_$Impl_$.ofMany(allPartialFutures).map(function(_) {
 		var numberOfErrors = Lambda.count(partialErrors);
 		switch(numberOfErrors) {
 		case 0:
@@ -10636,6 +11460,7 @@ ufront_web_result_ViewResult.loadPartialTemplates = function(partialSources,engi
 			return ufront_web_result_ViewResult.error("Partials " + Std.string(partialNames) + " failed to load: " + partialErrors.toString(),partialErrors,{ fileName : "ViewResult.hx", lineNumber : 661, className : "ufront.web.result.ViewResult", methodName : "loadPartialTemplates"});
 		}
 	});
+	return ret.gather();
 };
 ufront_web_result_ViewResult.addHelpersForPartials = function(partialTemplates,contextData,contextHelpers) {
 	var name = partialTemplates.keys();
@@ -10808,14 +11633,7 @@ ufront_web_result_ViewResult.prototype = $extend(ufront_web_result_ActionResult.
 		return tink_core__$Future_Future_$Impl_$._tryMap(this.renderResult(viewEngine,defaultData),function(finalOut) {
 			finalOut = ufront_web_result_ContentResult.replaceVirtualLinks(actionContext,finalOut);
 			_gthis.writeResponse(finalOut,actionContext);
-			var _this = _gthis.finalOutputTrigger;
-			if(_this.list != null) {
-				var list = _this.list;
-				_this.list = null;
-				_this.result = finalOut;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list,finalOut);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-			}
+			_gthis.finalOutputTrigger.trigger(finalOut);
 			return tink_core_Noise.Noise;
 		});
 	}
@@ -10843,14 +11661,15 @@ ufront_web_result_ViewResult.prototype = $extend(ufront_web_result_ActionResult.
 		var partialsReady = ufront_web_result_ViewResult.loadPartialTemplates([ufront_web_result_ViewResult.globalPartials,this.partials],viewEngine);
 		var combinedFuture = tink_core__$Future_Future_$Impl_$.ofMany([templateReady,layoutReady,partialsReady]);
 		var handle = function(cb) {
-			combinedFuture(function(values) {
+			combinedFuture.handle(function(values) {
 				cb(values[0],values[1],values[2]);
 			});
 		};
 		var map = function(cb1) {
-			return tink_core__$Future_Future_$Impl_$.map(combinedFuture,function(values1) {
+			var ret = combinedFuture.map(function(values1) {
 				return cb1(values1[0],values1[1],values1[2]);
 			});
+			return ret.gather();
 		};
 		return ({ handle : handle, map : map}).map(function(viewTemplate,layoutTemplate,partialTemplates) {
 			try {
@@ -11096,12 +11915,12 @@ ufront_web_session_CacheSession.prototype = {
 			if(tmp) {
 				return ufront_core_SurpriseTools.asSurprise(startFreshSession());
 			} else {
-				return tink_core__$Future_Future_$Impl_$.map(this.cache.get(this.sessionID),function(outcome) {
+				var ret = this.cache.get(this.sessionID).map(function(outcome) {
 					switch(outcome[1]) {
 					case 0:
 						var data = outcome[2];
-						var tmp1 = (data instanceof haxe_ds_StringMap) ? data : null;
-						_gthis.sessionData = tmp1;
+						var ret1 = (data instanceof haxe_ds_StringMap) ? data : null;
+						_gthis.sessionData = ret1;
 						if(_gthis.sessionData != null) {
 							_gthis.started = true;
 							return tink_core_Outcome.Success(tink_core_Noise.Noise);
@@ -11128,15 +11947,16 @@ ufront_web_session_CacheSession.prototype = {
 						break;
 					}
 				});
+				return ret.gather();
 			}
 		} else {
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 		}
 	}
 	,commit: function() {
 		var _gthis = this;
 		var oldSessionID = this.sessionID;
-		var sessionIDSurprise = this.sessionID == null || this.regenerateFlag ? this.findNewSessionID() : tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(this.sessionID));
+		var sessionIDSurprise = this.sessionID == null || this.regenerateFlag ? this.findNewSessionID() : new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(this.sessionID)));
 		return tink_core__$Future_Future_$Impl_$._tryFailingFlatMap(tink_core__$Future_Future_$Impl_$._tryMap(tink_core__$Future_Future_$Impl_$._tryFailingFlatMap(tink_core__$Future_Future_$Impl_$._tryFailingFlatMap(tink_core__$Future_Future_$Impl_$._tryMap(sessionIDSurprise,function(id) {
 			_gthis.sessionID = id;
 			return tink_core_Noise.Noise;
@@ -11149,15 +11969,15 @@ ufront_web_session_CacheSession.prototype = {
 					return ufront_core_SurpriseTools.success();
 				}
 			}
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 		}),function(_1) {
 			if(_gthis.commitFlag && _gthis.sessionData != null) {
 				var _gthis1 = _gthis.cache;
 				var _gthis2 = _gthis.sessionID;
-				var this1 = tink_core__$Future_Future_$Impl_$.sync(_gthis.sessionData);
+				var this1 = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(_gthis.sessionData));
 				return ufront_core_SurpriseTools.changeFailureToError(ufront_core_SurpriseTools.changeSuccessTo(_gthis1.set(_gthis2,this1),tink_core_Noise.Noise),null,{ fileName : "CacheSession.hx", lineNumber : 262, className : "ufront.web.session.CacheSession", methodName : "commit"});
 			}
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 		}),function(_2) {
 			if(_gthis.expiryFlag && !_gthis.closeFlag) {
 				_gthis.setCookie(_gthis.sessionID,_gthis.expiry);
@@ -11168,13 +11988,13 @@ ufront_web_session_CacheSession.prototype = {
 				_gthis.setCookie("",-1);
 				return ufront_core_SurpriseTools.changeFailureToError(_gthis.cache.remove(_gthis.sessionID),null,{ fileName : "CacheSession.hx", lineNumber : 275, className : "ufront.web.session.CacheSession", methodName : "commit"});
 			}
-			return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+			return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 		});
 	}
 	,findNewSessionID: function() {
 		var _gthis = this;
 		var tryID = ufront_core_Uuid.create();
-		return tink_core__$Future_Future_$Impl_$.flatMap(this.cache.get(tryID),function(outcome) {
+		var ret = this.cache.get(tryID).flatMap(function(outcome) {
 			switch(outcome[1]) {
 			case 0:
 				var outcome1 = outcome[2];
@@ -11183,8 +12003,8 @@ ufront_web_session_CacheSession.prototype = {
 				if(outcome[2][1] == 0) {
 					_gthis.setCookie(tryID,_gthis.expiry);
 					var _gthis1 = _gthis.cache;
-					var this1 = tink_core__$Future_Future_$Impl_$.sync(new haxe_ds_StringMap());
-					return tink_core__$Future_Future_$Impl_$.map(_gthis1.set(tryID,this1),function(outcome2) {
+					var this1 = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(new haxe_ds_StringMap()));
+					var ret1 = _gthis1.set(tryID,this1).map(function(outcome2) {
 						switch(outcome2[1]) {
 						case 0:
 							return tink_core_Outcome.Success(tryID);
@@ -11193,13 +12013,15 @@ ufront_web_session_CacheSession.prototype = {
 							return tink_core_Outcome.Failure(tink_core_TypedError.withData(null,"Failed to reserve session ID " + tryID,err,{ fileName : "CacheSession.hx", lineNumber : 294, className : "ufront.web.session.CacheSession", methodName : "findNewSessionID"}));
 						}
 					});
+					return ret1.gather();
 				} else {
 					var e = outcome[2];
-					return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(tink_core_TypedError.withData(null,"Failed to find new session ID, cache error",e,{ fileName : "CacheSession.hx", lineNumber : 297, className : "ufront.web.session.CacheSession", methodName : "findNewSessionID"})));
+					return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(tink_core_TypedError.withData(null,"Failed to find new session ID, cache error",e,{ fileName : "CacheSession.hx", lineNumber : 297, className : "ufront.web.session.CacheSession", methodName : "findNewSessionID"}))));
 				}
 				break;
 			}
 		});
+		return ret.gather();
 	}
 	,setCookie: function(id,expiryLength) {
 		var expireAt;
@@ -11624,10 +12446,10 @@ ufront_web_session_TestSession.prototype = {
 	,setExpiry: function(e) {
 	}
 	,init: function() {
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 	}
 	,commit: function() {
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 	}
 	,triggerCommit: function() {
 	}
@@ -11693,10 +12515,10 @@ ufront_web_session_VoidSession.prototype = {
 	,setExpiry: function(e) {
 	}
 	,init: function() {
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 	}
 	,commit: function() {
-		return tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Success(tink_core_Noise.Noise));
+		return new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
 	}
 	,triggerCommit: function() {
 	}
@@ -11824,37 +12646,18 @@ ufront_web_upload_BrowserFileUpload.prototype = $extend(ufront_web_upload_BaseUp
 		fr.onload = function() {
 			var binaryString = fr.result;
 			var bytes = haxe_io_Bytes.ofString(binaryString);
-			var result = tink_core_Outcome.Success(bytes);
-			if(t.list != null) {
-				var list = t.list;
-				t.list = null;
-				t.result = result;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-			}
+			t.trigger(tink_core_Outcome.Success(bytes));
 		};
 		fr.onabort = function(e) {
-			var result1 = tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Error during BrowserFileUpload.getBytes(), readAsBinaryString() was aborted",null,{ fileName : "BrowserFileUpload.hx", lineNumber : 45, className : "ufront.web.upload.BrowserFileUpload", methodName : "getBytes"}));
-			if(t.list != null) {
-				var list1 = t.list;
-				t.list = null;
-				t.result = result1;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-			}
+			var tmp = tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Error during BrowserFileUpload.getBytes(), readAsBinaryString() was aborted",null,{ fileName : "BrowserFileUpload.hx", lineNumber : 45, className : "ufront.web.upload.BrowserFileUpload", methodName : "getBytes"}));
+			t.trigger(tmp);
 		};
 		fr.onerror = function(e1) {
-			var result2 = tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e1,"Error during BrowserFileUpload.getBytes(), readAsBinaryString() raised an error",{ fileName : "BrowserFileUpload.hx", lineNumber : 46, className : "ufront.web.upload.BrowserFileUpload", methodName : "getBytes"}));
-			if(t.list != null) {
-				var list2 = t.list;
-				t.list = null;
-				t.result = result2;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list2,result2);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list2);
-			}
+			var tmp1 = tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e1,"Error during BrowserFileUpload.getBytes(), readAsBinaryString() raised an error",{ fileName : "BrowserFileUpload.hx", lineNumber : 46, className : "ufront.web.upload.BrowserFileUpload", methodName : "getBytes"}));
+			t.trigger(tmp1);
 		};
 		fr.readAsBinaryString(this.file);
-		return t.future;
+		return t;
 	}
 	,getString: function(encoding) {
 		if(encoding == null) {
@@ -11867,37 +12670,18 @@ ufront_web_upload_BrowserFileUpload.prototype = $extend(ufront_web_upload_BaseUp
 		var fr = new FileReader();
 		fr.onload = function() {
 			var str = fr.result;
-			var result = tink_core_Outcome.Success(str);
-			if(t.list != null) {
-				var list = t.list;
-				t.list = null;
-				t.result = result;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-			}
+			t.trigger(tink_core_Outcome.Success(str));
 		};
 		fr.onabort = function(e) {
-			var result1 = tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Error during BrowserFileUpload.getString(), readAsText() was aborted",null,{ fileName : "BrowserFileUpload.hx", lineNumber : 69, className : "ufront.web.upload.BrowserFileUpload", methodName : "getString"}));
-			if(t.list != null) {
-				var list1 = t.list;
-				t.list = null;
-				t.result = result1;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-			}
+			var tmp = tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Error during BrowserFileUpload.getString(), readAsText() was aborted",null,{ fileName : "BrowserFileUpload.hx", lineNumber : 69, className : "ufront.web.upload.BrowserFileUpload", methodName : "getString"}));
+			t.trigger(tmp);
 		};
 		fr.onerror = function(e1) {
-			var result2 = tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e1,"Error during BrowserFileUpload.getString(), readAsText() raised an error",{ fileName : "BrowserFileUpload.hx", lineNumber : 70, className : "ufront.web.upload.BrowserFileUpload", methodName : "getString"}));
-			if(t.list != null) {
-				var list2 = t.list;
-				t.list = null;
-				t.result = result2;
-				tink_core__$Callback_CallbackList_$Impl_$.invoke(list2,result2);
-				tink_core__$Callback_CallbackList_$Impl_$.clear(list2);
-			}
+			var tmp1 = tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e1,"Error during BrowserFileUpload.getString(), readAsText() raised an error",{ fileName : "BrowserFileUpload.hx", lineNumber : 70, className : "ufront.web.upload.BrowserFileUpload", methodName : "getString"}));
+			t.trigger(tmp1);
 		};
 		fr.readAsText(this.file,encoding);
-		return t.future;
+		return t;
 	}
 	,writeToFile: function(newFilePath) {
 		if(this.attachedUpload != null) {
@@ -11932,50 +12716,36 @@ ufront_web_upload_BrowserFileUpload.prototype = $extend(ufront_web_upload_BaseUp
 				} catch( e ) {
 					haxe_CallStack.lastException = e;
 					if (e instanceof js__$Boot_HaxeError) e = e.val;
-					surprise = tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e,"Error during TmpFileUpload.process",{ fileName : "BrowserFileUpload.hx", lineNumber : 125, className : "ufront.web.upload.BrowserFileUpload", methodName : "process"})));
+					surprise = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e,"Error during TmpFileUpload.process",{ fileName : "BrowserFileUpload.hx", lineNumber : 125, className : "ufront.web.upload.BrowserFileUpload", methodName : "process"}))));
 				}
 			};
 			fr.onabort = function(e1) {
-				surprise = tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Error during BrowserFileUpload.process(), readAsBinaryString() was aborted",null,{ fileName : "BrowserFileUpload.hx", lineNumber : 128, className : "ufront.web.upload.BrowserFileUpload", methodName : "process"})));
+				surprise = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.internalServerError("Error during BrowserFileUpload.process(), readAsBinaryString() was aborted",null,{ fileName : "BrowserFileUpload.hx", lineNumber : 128, className : "ufront.web.upload.BrowserFileUpload", methodName : "process"}))));
 			};
 			fr.onerror = function(e2) {
-				surprise = tink_core__$Future_Future_$Impl_$.sync(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e2,"Error during BrowserFileUpload.process(), readAsBinaryString() raised an error",{ fileName : "BrowserFileUpload.hx", lineNumber : 129, className : "ufront.web.upload.BrowserFileUpload", methodName : "process"})));
+				surprise = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Failure(ufront_web_HttpError.wrap(e2,"Error during BrowserFileUpload.process(), readAsBinaryString() raised an error",{ fileName : "BrowserFileUpload.hx", lineNumber : 129, className : "ufront.web.upload.BrowserFileUpload", methodName : "process"}))));
 			};
 			fr.readAsBinaryString(blob);
-			surprise(function(outcome) {
+			surprise.handle(function(outcome) {
 				switch(outcome[1]) {
 				case 0:
 					if($final == false) {
 						pos += partSize;
 						readNext();
 					} else {
-						var result = tink_core_Outcome.Success(tink_core_Noise.Noise);
-						if(ft.list != null) {
-							var list = ft.list;
-							ft.list = null;
-							ft.result = result;
-							tink_core__$Callback_CallbackList_$Impl_$.invoke(list,result);
-							tink_core__$Callback_CallbackList_$Impl_$.clear(list);
-						}
+						ft.trigger(tink_core_Outcome.Success(tink_core_Noise.Noise));
 					}
 					break;
 				case 1:
 					var err = outcome[2];
-					var result1 = tink_core_Outcome.Failure(err);
-					if(ft.list != null) {
-						var list1 = ft.list;
-						ft.list = null;
-						ft.result = result1;
-						tink_core__$Callback_CallbackList_$Impl_$.invoke(list1,result1);
-						tink_core__$Callback_CallbackList_$Impl_$.clear(list1);
-					}
+					ft.trigger(tink_core_Outcome.Failure(err));
 					break;
 				}
 			});
 		};
 		var readNext1 = readNext;
 		readNext1();
-		return ft.future;
+		return ft;
 	}
 	,__class__: ufront_web_upload_BrowserFileUpload
 });
@@ -12320,13 +13090,15 @@ if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_html_compat_ArrayBuffer.sliceImpl;
 }
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
-CompileTimeClassList.__meta__ = { obj : { classLists : [["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"],["null,true,ufront.web.client.UFClientAction","actions.ConfidantInterface"],["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.TestApi"]]}};
+CompileTimeClassList.__meta__ = { obj : { classLists : [["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.MailApi,api.TestApi"],["null,true,ufront.web.client.UFClientAction","actions.ConfidantInterface"],["null,true,ufront.web.Controller","controller.HomeController,ufront.app.DefaultUfrontController"],["null,true,ufront.api.UFApi","api.MailApi,api.TestApi"]]}};
 ufront_api_UFApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.Connection",""]]}};
-api_TestApi.__meta__ = { obj : { asyncApi : ["api.AsyncTestApi"]}, fields : { getJson : { returnType : [3]}, getItem : { returnType : [3]}}};
+api_MailApi.__meta__ = { obj : { asyncApi : ["api.AsyncMailApi"]}, fields : { doMail : { returnType : [3]}}};
 ufront_api_UFAsyncApi.__meta__ = { obj : { rtti : [["cnx","haxe.remoting.AsyncConnection",""]]}};
+api_AsyncMailApi.__meta__ = { obj : { rtti : [["injectApi","minject.Injector","",""]]}};
+api_TestApi.__meta__ = { obj : { asyncApi : ["api.AsyncTestApi"]}, fields : { getJson : { returnType : [3]}, getItem : { returnType : [3]}}};
 api_AsyncTestApi.__meta__ = { obj : { rtti : [["injectApi","minject.Injector","",""]]}};
 ufront_web_Controller.__meta__ = { obj : { rtti : [["injectContext","ufront.web.context.HttpContext","",""]]}};
-controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""]]}, fields : { main : { wrapResult : [3]}, about : { wrapResult : [3]}, graphic : { wrapResult : [3], template : ["/home/about.html"]}, joomla : { wrapResult : [3], template : ["/home/about.html"]}, books : { wrapResult : [3], template : ["/home/about.html"]}, web : { wrapResult : [3], template : ["/home/about.html"]}, interactive : { wrapResult : [3], template : ["/home/about.html"]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [4]}, returnPortfolioItem : { wrapResult : [4]}}};
+controller_HomeController.__meta__ = { obj : { rtti : [["testApi","api.AsyncTestApi",""],["mailApi","api.MailApi",""]]}, fields : { main : { wrapResult : [3]}, about : { wrapResult : [3]}, graphic : { wrapResult : [3], template : ["/home/about.html"]}, joomla : { wrapResult : [3], template : ["/home/about.html"]}, books : { wrapResult : [3], template : ["/home/about.html"]}, web : { wrapResult : [3], template : ["/home/about.html"]}, interactive : { wrapResult : [3], template : ["/home/about.html"]}, contact : { wrapResult : [3]}, portfolio : { wrapResult : [4]}, returnPortfolioItem : { wrapResult : [4]}, contactResult : { wrapResult : [4], template : ["/home/contact.html"]}}};
 haxe_IMap.__meta__ = { obj : { 'interface' : null}};
 haxe_Serializer.USE_CACHE = false;
 haxe_Serializer.USE_ENUM_INDEX = false;
@@ -12358,6 +13130,24 @@ minject_point_InjectionPoint.__meta__ = { obj : { 'interface' : null}};
 minject_provider_DependencyProvider.__meta__ = { obj : { 'interface' : null}};
 ufront_app_UFErrorHandler.__meta__ = { obj : { 'interface' : null}};
 pushstate_PushState.ignoreAnchors = true;
+tink_core__$Callback_Callback_$Impl_$.depth = 0;
+tink_core__$Callback_Callback_$Impl_$.MAX_DEPTH = 1000;
+tink_core__$Callback_LinkObject.__meta__ = { obj : { 'interface' : null}};
+tink_core__$Future_FutureObject.__meta__ = { obj : { 'interface' : null}};
+tink_core__$Future_NeverFuture.inst = new tink_core__$Future_NeverFuture();
+tink_core__$Lazy_LazyObject.__meta__ = { obj : { 'interface' : null}};
+tink_core__$Future_Future_$Impl_$.NULL = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(null));
+tink_core__$Future_Future_$Impl_$.NOISE = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Noise.Noise));
+tink_core__$Future_Future_$Impl_$.NEVER = tink_core__$Future_NeverFuture.inst;
+tink_core__$Promise_Promise_$Impl_$.NULL = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(null)));
+tink_core__$Promise_Promise_$Impl_$.NOISE = new tink_core__$Future_SyncFuture(new tink_core__$Lazy_LazyConst(tink_core_Outcome.Success(tink_core_Noise.Noise)));
+tink_core__$Promise_Promise_$Impl_$.NEVER = (function($this) {
+	var $r;
+	var ret = tink_core__$Future_Future_$Impl_$.NEVER.map(tink_core_Outcome.Success);
+	$r = ret.gather();
+	return $r;
+}(this));
+tink_core_SignalObject.__meta__ = { obj : { 'interface' : null}};
 ufront_api_RequireAsyncCallbackApi.__meta__ = { obj : { 'interface' : null}};
 ufront_api_UFCallbackApi.__meta__ = { obj : { rtti : [["new","haxe.remoting.AsyncConnection","",""]]}};
 ufront_app_ClientJsApplication._currentApps = [];

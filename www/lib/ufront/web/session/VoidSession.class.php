@@ -9,10 +9,10 @@ class ufront_web_session_VoidSession implements ufront_web_session_UFHttpSession
 	public function setExpiry($e) {
 	}
 	public function init() {
-		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
 	}
 	public function commit() {
-		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
 	}
 	public function triggerCommit() {
 	}

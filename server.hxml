@@ -1,4 +1,7 @@
 -lib ufront-mvc
+
+-lib ufront-mail
+
 -lib express
 -lib tink_core
 -D server
