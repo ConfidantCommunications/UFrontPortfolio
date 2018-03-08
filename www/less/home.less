@@ -58,7 +58,16 @@ body{
     //background-image:url('/images/grid24.png');
 }
 input{width:320px;}
-textarea{width:325px;}
+input[type="submit"]{
+    width:326px;
+}
+input,textarea{
+    
+    font-family: 'Catamaran', sans-serif;
+    line-height: @baseline;
+    font-size:@baseline*2/3;
+    }
+textarea{width:324px;}
 .formHeader{
     margin:@baseline 0 @baseline*0.5 30%;
     border-top:1px solid @brand-primary;
