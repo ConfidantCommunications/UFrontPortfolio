@@ -29,7 +29,7 @@ class ufront_web_MVCHandler implements ufront_app_UFRequestHandler{
 				$p_fileName = "";
 				$p_customParams = (new _hx_array(array("actionContext")));
 				$p_className = Type::getClassName(Type::getClass($context->actionContext));
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, null, _hx_anonymous(array("fileName" => "MVCHandler.hx", "lineNumber" => 70, "className" => "ufront.web.MVCHandler", "methodName" => "executeResult"))))));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, null, _hx_anonymous(array("fileName" => "MVCHandler.hx", "lineNumber" => 70, "className" => "ufront.web.MVCHandler", "methodName" => "executeResult")))));
 			}
 		}
 	}

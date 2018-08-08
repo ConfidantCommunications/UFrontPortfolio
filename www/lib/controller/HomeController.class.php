@@ -26,7 +26,7 @@ class controller_HomeController extends ufront_web_Controller {
 		return $_SERVER['SERVER_NAME'];
 	}
 	public function about() {
-		$t = "Confidant Communications : About Us";
+		$t = "About Us : Confidant Communications";
 		$d = _hx_anonymous(array("title" => $t, "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "http://" . _hx_string_or_null($this->getHostName()) . "/"));
 		$obj = _hx_anonymous(array());
 		$this1 = null;
@@ -41,7 +41,7 @@ class controller_HomeController extends ufront_web_Controller {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp1, $this2, _hx_anonymous(array("msg" => $t)));
 	}
 	public function graphic() {
-		$t = "Confidant Communications : Graphic Design";
+		$t = "Graphic Design in Saskatoon : Confidant Communications";
 		$obj = _hx_anonymous(array());
 		$this1 = null;
 		if($obj !== null) {
@@ -54,7 +54,7 @@ class controller_HomeController extends ufront_web_Controller {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp, $this2, _hx_anonymous(array("msg" => $t)));
 	}
 	public function joomla() {
-		$t = "Confidant Communications : Joomla! Development and Training in Saskatoon";
+		$t = "Joomla! Development and Training in Saskatoon : Confidant Communications";
 		$obj = _hx_anonymous(array());
 		$this1 = null;
 		if($obj !== null) {
@@ -67,7 +67,7 @@ class controller_HomeController extends ufront_web_Controller {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp, $this2, _hx_anonymous(array("msg" => $t)));
 	}
 	public function books() {
-		$t = "Confidant Communications : Book Design, Book Marketing, and Book Publishing in Saskatoon";
+		$t = "Book Design, Book Marketing, and Book Publishing in Saskatoon : Confidant Communications";
 		$obj = _hx_anonymous(array());
 		$this1 = null;
 		if($obj !== null) {
@@ -80,7 +80,7 @@ class controller_HomeController extends ufront_web_Controller {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp, $this2, _hx_anonymous(array("msg" => $t)));
 	}
 	public function web() {
-		$t = "Confidant Communications : Web Design in Saskatoon";
+		$t = "Web Design in Saskatoon : Confidant Communications";
 		$obj = _hx_anonymous(array());
 		$this1 = null;
 		if($obj !== null) {
@@ -93,7 +93,7 @@ class controller_HomeController extends ufront_web_Controller {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp, $this2, _hx_anonymous(array("msg" => $t)));
 	}
 	public function interactive() {
-		$t = "Confidant Communications : Interactive Development in Saskatoon";
+		$t = "Interactive Development in Saskatoon : Confidant Communications";
 		$obj = _hx_anonymous(array());
 		$this1 = null;
 		if($obj !== null) {
@@ -106,7 +106,7 @@ class controller_HomeController extends ufront_web_Controller {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp, $this2, _hx_anonymous(array("msg" => $t)));
 	}
 	public function contact() {
-		$t = "Confidant Communications : Contact Us";
+		$t = "Contact Us : Confidant Communications";
 		$d = _hx_anonymous(array("title" => $t, "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "http://" . _hx_string_or_null($this->getHostName()) . "/"));
 		$obj = _hx_anonymous(array());
 		$this1 = null;
@@ -122,20 +122,21 @@ class controller_HomeController extends ufront_web_Controller {
 	}
 	public function portfolio() {
 		$_gthis = $this;
-		$t = "Confidant Communications : Portfolio of Graphic Design and Website Development Projects";
+		$t = "Portfolio of Graphic Design and Website Development Projects : Confidant Communications";
 		$path = "portfolio.json";
 		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->getJson($path), array(new _hx_lambda(array(&$_gthis, &$t), "controller_HomeController_0"), 'execute'));
 	}
 	public function returnPortfolioItem($id) {
-		$t = "Confidant Communications : Portfolio : ";
-		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->getItem($id), array(new _hx_lambda(array(&$t), "controller_HomeController_1"), 'execute'));
+		$t = "Portfolio : ";
+		$t2 = " : Confidant Communications";
+		return tink_core__Future_Future_Impl_::_tryMap($this->testApi->getItem($id), array(new _hx_lambda(array(&$t, &$t2), "controller_HomeController_1"), 'execute'));
 	}
 	public function processJson($pJson) {
 		$parsed = haxe_Json::phpJsonDecode($pJson);
 		return $parsed->items;
 	}
 	public function contactResult($args) {
-		$t = "Confidant Communications : Contact";
+		$t = "Contact : Confidant Communications";
 		$returnHome = "<p style=\"text-align:center;\"><a href=\"/\" rel=\"pushstate\">Go back home now?</a></p>";
 		return tink_core__Future_Future_Impl_::_tryMap($this->mailApi->doMail($args->email, $args->name, $args->message), array(new _hx_lambda(array(&$returnHome, &$t), "controller_HomeController_2"), 'execute'));
 	}
@@ -422,7 +423,7 @@ class controller_HomeController extends ufront_web_Controller {
 															if($reason !== null) {
 																$message = _hx_string_or_null($message) . _hx_string_or_null((": " . _hx_string_or_null($reason)));
 															}
-															throw new HException(new tink_core_TypedError(400, $message, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 243, "className" => "controller.HomeController", "methodName" => "execute"))));
+															throw new HException(new tink_core_TypedError(400, $message, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 245, "className" => "controller.HomeController", "methodName" => "execute"))));
 														}
 														$_param_tmp_email = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "email");
 														if(!$params->exists("name")) {
@@ -431,7 +432,7 @@ class controller_HomeController extends ufront_web_Controller {
 															if($reason1 !== null) {
 																$message1 = _hx_string_or_null($message1) . _hx_string_or_null((": " . _hx_string_or_null($reason1)));
 															}
-															throw new HException(new tink_core_TypedError(400, $message1, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 243, "className" => "controller.HomeController", "methodName" => "execute"))));
+															throw new HException(new tink_core_TypedError(400, $message1, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 245, "className" => "controller.HomeController", "methodName" => "execute"))));
 														}
 														$_param_tmp_name = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "name");
 														if(!$params->exists("message")) {
@@ -440,7 +441,7 @@ class controller_HomeController extends ufront_web_Controller {
 															if($reason2 !== null) {
 																$message2 = _hx_string_or_null($message2) . _hx_string_or_null((": " . _hx_string_or_null($reason2)));
 															}
-															throw new HException(new tink_core_TypedError(400, $message2, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 243, "className" => "controller.HomeController", "methodName" => "execute"))));
+															throw new HException(new tink_core_TypedError(400, $message2, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 245, "className" => "controller.HomeController", "methodName" => "execute"))));
 														}
 														$_param_tmp_message = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "message");
 														$args = _hx_anonymous(array("email" => $_param_tmp_email, "name" => $_param_tmp_name, "message" => $_param_tmp_message));
@@ -505,9 +506,9 @@ function controller_HomeController_0(&$_gthis, &$t, $result) {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp1, $this2, _hx_anonymous(array("msg" => $t)));
 	}
 }
-function controller_HomeController_1(&$t, $result) {
+function controller_HomeController_1(&$t, &$t2, $result) {
 	{
-		$d = _hx_string_or_null($t) . _hx_string_or_null($result->title);
+		$d = _hx_string_or_null($t) . _hx_string_or_null($result->title) . _hx_string_or_null($t2);
 		$d1 = _hx_anonymous(array("title" => $d, "content" => new _hx_array(array()), "portfolioItem" => $result, "panel1classes" => "recessed0 recessed1 recessed2", "panel2classes" => "recessed0 recessed1", "panel3classes" => "recessed0", "gobackLink" => "/portfolio/"));
 		$obj = _hx_anonymous(array());
 		$this1 = null;

@@ -8,8 +8,7 @@ class ufront_core__Futuristic_Futuristic_Impl_ {
 		return $this1;
 	}
 	static function fromSync($v) {
-		$f = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($v));
-		$this1 = $f;
+		$this1 = tink_core__Future_Future_Impl_::sync($v);
 		return $this1;
 	}
 	static function asFuture($this1) {

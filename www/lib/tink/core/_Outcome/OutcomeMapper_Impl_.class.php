@@ -45,13 +45,13 @@ function tink_core__Outcome_OutcomeMapper_Impl__1(&$f, $o) {
 			}break;
 			case 1:{
 				$f1 = _hx_deref($_g)->params[0];
-				return tink_core_Outcome::Failure(haxe_ds_Either::Right($f1));
+				return tink_core_Outcome::Failure(tink_core_Either::Right($f1));
 			}break;
 			}
 		}break;
 		case 1:{
 			$f2 = _hx_deref($o)->params[0];
-			return tink_core_Outcome::Failure(haxe_ds_Either::Left($f2));
+			return tink_core_Outcome::Failure(tink_core_Either::Left($f2));
 		}break;
 		}
 	}

@@ -20,7 +20,7 @@ class ufront_mailer_SmtpMailer implements ufront_mailer_UFMailer{
 	public $authUser;
 	public $authPassword;
 	public function send($email) {
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($this->sendSync($email)));
+		return tink_core__Future_Future_Impl_::sync($this->sendSync($email));
 	}
 	public function sendSync($email) {
 		$p = null;

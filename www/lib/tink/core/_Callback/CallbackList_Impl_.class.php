@@ -11,9 +11,16 @@ class tink_core__Callback_CallbackList_Impl_ {
 		return $this1->length;
 	}
 	static function add($this1, $cb) {
-		$node = new tink_core__Callback_ListCell($cb, $this1);
-		$this1->push($node);
-		return $node;
+		$this2 = null;
+		$this3 = (new _hx_array(array()));
+		$this3->length = 1;
+		$this2 = $this3;
+		$ret = $this2;
+		$ret[0] = $cb;
+		$cell = $ret;
+		$this1->push($cell);
+		$this4 = array(new _hx_lambda(array(&$cell, &$this1), "tink_core__Callback_CallbackList_Impl__0"), 'execute');
+		return $this4;
 	}
 	static function invoke($this1, $data) {
 		$_g = 0;
@@ -21,8 +28,8 @@ class tink_core__Callback_CallbackList_Impl_ {
 		while($_g < $_g1->length) {
 			$cell = $_g1[$_g];
 			$_g = $_g + 1;
-			if($cell->cb !== null) {
-				tink_core__Callback_Callback_Impl_::invoke((property_exists($cell, "cb") ? $cell->cb: array($cell, "cb")), $data);
+			if($cell[0] !== null) {
+				$cell[0]($data);
 			}
 			unset($cell);
 		}
@@ -33,10 +40,18 @@ class tink_core__Callback_CallbackList_Impl_ {
 		while($_g < $_g1->length) {
 			$cell = $_g1[$_g];
 			$_g = $_g + 1;
-			$cell->clear();
+			$cell[0] = null;
 			unset($cell);
 		}
 	}
 	static $__properties__ = array("get_length" => "get_length");
 	function __toString() { return 'tink.core._Callback.CallbackList_Impl_'; }
+}
+function tink_core__Callback_CallbackList_Impl__0(&$cell, &$this1) {
+	{
+		if($this1->remove($cell)) {
+			$cell[0] = null;
+		}
+		$cell = null;
+	}
 }

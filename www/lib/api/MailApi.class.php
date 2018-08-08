@@ -46,7 +46,10 @@ class api_MailApi extends ufront_api_UFApi {
 				return ufront_core_SurpriseTools::asGoodSurprise($errorMessage);
 			}
 		}
-		$mailer->send($email)->handle(array(new _hx_lambda(array(&$errorMessage, &$result), "api_MailApi_0"), 'execute'));
+		{
+			$this1 = $mailer->send($email);
+			call_user_func_array($this1, array(array(new _hx_lambda(array(&$errorMessage, &$result), "api_MailApi_0"), 'execute')));
+		}
 		return ufront_core_SurpriseTools::asGoodSurprise($result);
 	}
 	static function __meta__() { $args = func_get_args(); return call_user_func_array(self::$__meta__, $args); }

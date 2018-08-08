@@ -21,9 +21,15 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 
   override public function execute( context:HttpContext, ?data:Dynamic):Void {
 
-		untyped __js__('window.ga("set", {page: {0}, title: {1}, location:{2}});',PushState.currentPath,data.msg,document.location);
-		untyped __js__('window.ga("send", "pageview");');
+		// trace("hash:"+document.location.hash);
+		var msg = data.msg;
 
+		//detect a campaign redirect and notify analytics
+		if (document.location.hash == "#r") msg = "campaignRedirect";
+
+		untyped __js__('window.ga("set", {page: {0}, title: {1}, location:{2}});',PushState.currentPath,msg,document.location);
+
+		untyped __js__('window.ga("send", "pageview");');
 		//lines below for most recent analytics. Generates error.
 		//untyped __js__('gtag("config", "UA-104215086-1", {"page_title" : {1}, "page_location" : {2}, "page_path": {0}});', PushState.currentPath, data.msg, document.location);
 

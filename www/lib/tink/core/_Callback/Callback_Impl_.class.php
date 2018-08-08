@@ -7,65 +7,30 @@ class tink_core__Callback_Callback_Impl_ {
 		$this1 = $f;
 		return $this1;
 	}
-	static function toFunction($this1) {
-		return $this1;
-	}
-	static $depth = 0;
-	static $MAX_DEPTH = 1000;
 	static function invoke($this1, $data) {
-		if(tink_core__Callback_Callback_Impl_::$depth < 1000) {
-			tink_core__Callback_Callback_Impl_::$depth++;
-			call_user_func_array($this1, array($data));
-			tink_core__Callback_Callback_Impl_::$depth--;
-		} else {
-			$_e = $this1;
-			$f = array(new _hx_lambda(array(&$_e), "tink_core__Callback_Callback_Impl__0"), 'execute');
-			$a1 = $data;
-			tink_core__Callback_Callback_Impl_::defer(array(new _hx_lambda(array(&$a1, &$f), "tink_core__Callback_Callback_Impl__1"), 'execute'));
-		}
-	}
-	static function ignore($cb) {
-		return tink_core__Callback_Callback_Impl_::fromNiladic(array(new _hx_lambda(array(&$cb), "tink_core__Callback_Callback_Impl__2"), 'execute'));
+		call_user_func_array($this1, array($data));
 	}
 	static function fromNiladic($f) {
-		$this1 = array(new _hx_lambda(array(&$f), "tink_core__Callback_Callback_Impl__3"), 'execute');
+		$this1 = array(new _hx_lambda(array(&$f), "tink_core__Callback_Callback_Impl__0"), 'execute');
 		return $this1;
 	}
 	static function fromMany($callbacks) {
-		return array(new _hx_lambda(array(&$callbacks), "tink_core__Callback_Callback_Impl__4"), 'execute');
-	}
-	static function defer($f) {
-		haxe_Timer::delay($f, 0);
+		return array(new _hx_lambda(array(&$callbacks), "tink_core__Callback_Callback_Impl__1"), 'execute');
 	}
 	function __toString() { return 'tink.core._Callback.Callback_Impl_'; }
 }
-function tink_core__Callback_Callback_Impl__0(&$_e, $data1) {
-	{
-		tink_core__Callback_Callback_Impl_::invoke($_e, $data1);
-	}
-}
-function tink_core__Callback_Callback_Impl__1(&$a1, &$f) {
-	{
-		call_user_func_array($f, array($a1));
-	}
-}
-function tink_core__Callback_Callback_Impl__2(&$cb) {
-	{
-		tink_core__Callback_Callback_Impl_::invoke($cb, tink_core_Noise::$Noise);
-	}
-}
-function tink_core__Callback_Callback_Impl__3(&$f, $r) {
+function tink_core__Callback_Callback_Impl__0(&$f, $r) {
 	{
 		call_user_func($f);
 	}
 }
-function tink_core__Callback_Callback_Impl__4(&$callbacks, $v) {
+function tink_core__Callback_Callback_Impl__1(&$callbacks, $v) {
 	{
 		$_g = 0;
 		while($_g < $callbacks->length) {
 			$callback = $callbacks[$_g];
 			$_g = $_g + 1;
-			tink_core__Callback_Callback_Impl_::invoke($callback, $v);
+			call_user_func_array($callback, array($v));
 			unset($callback);
 		}
 	}

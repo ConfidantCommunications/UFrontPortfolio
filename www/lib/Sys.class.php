@@ -10,8 +10,5 @@ class Sys {
 		Sys::hprint($v);
 		Sys::hprint("\x0A");
 	}
-	static function time() {
-		return microtime(true);
-	}
 	function __toString() { return 'Sys'; }
 }

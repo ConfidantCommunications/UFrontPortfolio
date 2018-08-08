@@ -82,8 +82,7 @@ class ufront_remoting_RemotingHandler implements ufront_app_UFRequestHandler{
 					}
 				}
 				$apiCallFinished = $this->executeApiCall($path, $args, $this->context, $httpContext->actionContext);
-				$ret = $apiCallFinished->map(array(new _hx_lambda(array(), "ufront_remoting_RemotingHandler_0"), 'execute'));
-				$remotingResponse = $ret->gather();
+				$remotingResponse = tink_core__Future_Future_Impl_::map($apiCallFinished, array(new _hx_lambda(array(), "ufront_remoting_RemotingHandler_0"), 'execute'), null);
 			}catch(Exception $__hx__e) {
 				$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 				$e1 = $_ex_;
@@ -109,21 +108,28 @@ class ufront_remoting_RemotingHandler implements ufront_app_UFRequestHandler{
 						$tmp1 = false;
 					}
 					if($tmp1) {
-						$v = "Unable to access " . _hx_string_or_null($path->join(".")) . " - API Not Found (";
-						$v1 = _hx_string_or_null($v) . _hx_string_or_null($error) . "). See ";
-						$remotingResponse = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(_hx_string_or_null($v1) . Std::string($this->context->objects)));
+						$remotingResponse1 = "Unable to access " . _hx_string_or_null($path->join(".")) . " - API Not Found (";
+						$remotingResponse2 = _hx_string_or_null($remotingResponse1) . _hx_string_or_null($error) . "). See ";
+						$remotingResponse = tink_core__Future_Future_Impl_::sync(_hx_string_or_null($remotingResponse2) . Std::string($this->context->objects));
 						$r->setNotFound();
 					} else {
 						$r->setInternalError();
-						$remotingResponse = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($this->remotingError($e1, $httpContext)));
+						$remotingResponse = tink_core__Future_Future_Impl_::sync($this->remotingError($e1, $httpContext));
 					}
 				}
 			}
-			$remotingResponse->handle(array(new _hx_lambda(array(&$doneTrigger, &$httpContext, &$r), "ufront_remoting_RemotingHandler_2"), 'execute'));
+			call_user_func_array($remotingResponse, array(array(new _hx_lambda(array(&$doneTrigger, &$httpContext, &$r), "ufront_remoting_RemotingHandler_2"), 'execute')));
 		} else {
-			$doneTrigger->trigger(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+			$result1 = tink_core_Outcome::Success(tink_core_Noise::$Noise);
+			if($doneTrigger->{"list"} !== null) {
+				$list1 = $doneTrigger->{"list"};
+				$doneTrigger->{"list"} = null;
+				$doneTrigger->result = $result1;
+				tink_core__Callback_CallbackList_Impl_::invoke($list1, $result1);
+				tink_core__Callback_CallbackList_Impl_::clear($list1);
+			}
 		}
-		return $doneTrigger;
+		return (property_exists($doneTrigger, "future") ? $doneTrigger->future: array($doneTrigger, "future"));
 	}
 	public function initializeContext($injector) {
 		$this->context = new haxe_remoting_Context();
@@ -187,9 +193,9 @@ class ufront_remoting_RemotingHandler implements ufront_app_UFRequestHandler{
 			return $result;
 		} else {
 			if(($flags & 1 << ufront_api_ApiReturnType::$ARTVoid->index) !== 0) {
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(null));
+				return tink_core__Future_Future_Impl_::sync(null);
 			} else {
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($result));
+				return tink_core__Future_Future_Impl_::sync($result);
 			}
 		}
 	}
@@ -241,6 +247,15 @@ function ufront_remoting_RemotingHandler_2(&$doneTrigger, &$httpContext, &$r, $r
 		$r->write($response);
 		$httpContext1 = $httpContext;
 		$httpContext1->completion = $httpContext1->completion | 1 << ufront_web_context_RequestCompletion::$CRequestHandlersComplete->index;
-		$doneTrigger->trigger(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+		{
+			$result = tink_core_Outcome::Success(tink_core_Noise::$Noise);
+			if($doneTrigger->{"list"} !== null) {
+				$list = $doneTrigger->{"list"};
+				$doneTrigger->{"list"} = null;
+				$doneTrigger->result = $result;
+				tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
+				tink_core__Callback_CallbackList_Impl_::clear($list);
+			}
+		}
 	}
 }

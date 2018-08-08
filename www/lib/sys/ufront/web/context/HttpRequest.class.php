@@ -80,12 +80,10 @@ class sys_ufront_web_context_HttpRequest extends ufront_web_context_HttpRequest 
 		if($noParts === false) {
 			call_user_func($doEndOfPart);
 		}
-		if($callbackFutures->length > 0) {
-			$this2 = tink_core__Future_Future_Impl_::ofMany($callbackFutures, null);
-			$ret = $this2->flatMap(array(new _hx_lambda(array(&$errors), "sys_ufront_web_context_HttpRequest_7"), 'execute'));
-			return $ret->gather();
+		if($errors->length > 0) {
+			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(tink_core_TypedError::withData(null, "Error parsing multipart request data", $errors, _hx_anonymous(array("fileName" => "HttpRequest.hx", "lineNumber" => 167, "className" => "sys.ufront.web.context.HttpRequest", "methodName" => "parseMultipart")))));
 		} else {
-			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 		}
 	}
 	public function get_query() {
@@ -228,23 +226,23 @@ class sys_ufront_web_context_HttpRequest extends ufront_web_context_HttpRequest 
 }
 function sys_ufront_web_context_HttpRequest_0($_, $_1) {
 	{
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 	}
 }
 function sys_ufront_web_context_HttpRequest_1($_2, $_3, $_4) {
 	{
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 	}
 }
 function sys_ufront_web_context_HttpRequest_2() {
 	{
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 	}
 }
 function sys_ufront_web_context_HttpRequest_3(&$callbackFutures, &$errors, $surprise) {
 	{
 		$callbackFutures->push($surprise);
-		$surprise->handle(array(new _hx_lambda(array(&$errors), "sys_ufront_web_context_HttpRequest_8"), 'execute'));
+		call_user_func_array($surprise, array(array(new _hx_lambda(array(&$errors), "sys_ufront_web_context_HttpRequest_7"), 'execute')));
 	}
 }
 function sys_ufront_web_context_HttpRequest_4(&$_gthis, &$currentContent, &$isFile, &$onEndPart, &$partName, &$processCallbackResult) {
@@ -299,16 +297,7 @@ function sys_ufront_web_context_HttpRequest_6(&$currentContent, &$isFile, &$onDa
 		}
 	}
 }
-function sys_ufront_web_context_HttpRequest_7(&$errors, $_5) {
-	{
-		if($errors->length === 0) {
-			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
-		} else {
-			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(tink_core_TypedError::withData(null, "Error parsing multipart request data", $errors, _hx_anonymous(array("fileName" => "HttpRequest.hx", "lineNumber" => 171, "className" => "sys.ufront.web.context.HttpRequest", "methodName" => "parseMultipart"))))));
-		}
-	}
-}
-function sys_ufront_web_context_HttpRequest_8(&$errors, $outcome) {
+function sys_ufront_web_context_HttpRequest_7(&$errors, $outcome) {
 	{
 		if($outcome->index === 1) {
 			$err = _hx_deref($outcome)->params[0];

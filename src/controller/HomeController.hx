@@ -60,7 +60,7 @@ class HomeController extends Controller
 	@:route(GET, "/about")
 	public function about()
 	{
-		var t:String="Confidant Communications : About Us";
+		var t:String="About Us : Confidant Communications";
 		return new PartialViewResult({
 				title: t,
 				portfolioItem:null,
@@ -82,7 +82,7 @@ class HomeController extends Controller
 	
 	public function graphic()
 	{
- 		var t:String="Confidant Communications : Graphic Design";
+ 		var t:String="Graphic Design in Saskatoon : Confidant Communications";
 
 		return new PartialViewResult({ 
 			title:t,
@@ -102,7 +102,7 @@ class HomeController extends Controller
 	
 	public function joomla()
 	{
- 		var t:String="Confidant Communications : Joomla! Development and Training in Saskatoon";
+ 		var t:String="Joomla! Development and Training in Saskatoon : Confidant Communications";
 
 		return new PartialViewResult({ 
 			title:t,
@@ -116,12 +116,13 @@ class HomeController extends Controller
 		.addClientAction(ConfidantInterface,{msg:t});
 	}
 
+
 	@:route(GET, "/about/book-design-saskatoon")
 	@template("/home/about.html") 
 	
 	public function books()
 	{
- 		var t:String="Confidant Communications : Book Design, Book Marketing, and Book Publishing in Saskatoon";
+ 		var t:String="Book Design, Book Marketing, and Book Publishing in Saskatoon : Confidant Communications";
 
 		return new PartialViewResult({ 
 			title:t,
@@ -139,7 +140,7 @@ class HomeController extends Controller
 	
 	public function web()
 	{
- 		var t:String="Confidant Communications : Web Design in Saskatoon";
+ 		var t:String="Web Design in Saskatoon : Confidant Communications";
 
 		return new PartialViewResult({ 
 			title:t,
@@ -158,7 +159,7 @@ class HomeController extends Controller
 	
 	public function interactive()
 	{
- 		var t:String="Confidant Communications : Interactive Development in Saskatoon";
+ 		var t:String="Interactive Development in Saskatoon : Confidant Communications";
 
 		return new PartialViewResult({ 
 			title:t,
@@ -175,7 +176,7 @@ class HomeController extends Controller
 	@:route(GET, "/contact")
 	public function contact()
 	{
-		var t:String='Confidant Communications : Contact Us';
+		var t:String='Contact Us : Confidant Communications';
 		return new PartialViewResult({ 
 			title:t,
 			portfolioItem:null,
@@ -193,7 +194,7 @@ class HomeController extends Controller
 	{
 		//ufLog('Custom id ${args.id} entered');
 //		var path=context.contentDirectory+"portfolio.json";
-		var t = "Confidant Communications : Portfolio of Graphic Design and Website Development Projects";
+		var t = "Portfolio of Graphic Design and Website Development Projects : Confidant Communications";
 		var path="portfolio.json";	
 		return testApi.getJson(path) >>
 			function(result:String) return new PartialViewResult({
@@ -215,10 +216,11 @@ class HomeController extends Controller
 	@:route(GET, "/portfolio/$id")
 	public function returnPortfolioItem(id:String)
 	{
-		var t:String = "Confidant Communications : Portfolio : "; 
+		var t = "Portfolio : "; 
+		var t2 = " : Confidant Communications";
 		return testApi.getItem(id) >>
 			function(result:PortfolioItem) return new PartialViewResult({
-				title: t+result.title,
+				title: t+result.title+t2,
 				content:new Array<MyItem>(),
 				portfolioItem: result,
 				panel1classes:"recessed0 recessed1 recessed2",
@@ -242,7 +244,7 @@ class HomeController extends Controller
 	@template("/home/contact.html")
 	public function contactResult(args:{ email:String, name:String, message:String })
 	{
-		var t:String = "Confidant Communications : Contact"; 
+		var t:String = "Contact : Confidant Communications"; 
 		var returnHome:String = '<p style="text-align:center;"><a href="/" rel="pushstate">Go back home now?</a></p>';
 		return mailApi.doMail(args.email, args.name, args.message) >>
 			function(result:String) return new PartialViewResult({

@@ -43,11 +43,9 @@ class ufront_app_HttpApplication {
 					unset($module);
 				}
 			}
-			$this1 = tink_core__Future_Future_Impl_::ofMany($futures, null);
-			$ret = $this1->map(array(new _hx_lambda(array(), "ufront_app_HttpApplication_1"), 'execute'));
-			$this->modulesReady = $ret->gather();
+			$this->modulesReady = tink_core__Future_Future_Impl_::map(tink_core__Future_Future_Impl_::ofMany($futures, null), array(new _hx_lambda(array(), "ufront_app_HttpApplication_1"), 'execute'), null);
 		}
-		return $this->modulesReady;
+		return (property_exists($this, "modulesReady") ? $this->modulesReady: array($this, "modulesReady"));
 	}
 	public function dispose() {
 		$_gthis = $this;
@@ -62,9 +60,7 @@ class ufront_app_HttpApplication {
 				unset($module);
 			}
 		}
-		$this1 = tink_core__Future_Future_Impl_::ofMany($futures, null);
-		$ret = $this1->map(array(new _hx_lambda(array(&$_gthis), "ufront_app_HttpApplication_2"), 'execute'));
-		return $ret->gather();
+		return tink_core__Future_Future_Impl_::map(tink_core__Future_Future_Impl_::ofMany($futures, null), array(new _hx_lambda(array(&$_gthis), "ufront_app_HttpApplication_2"), 'execute'), null);
 	}
 	public function getModulesThatRequireInit() {
 		$moduleSets = (new _hx_array(array($this->requestMiddleware, $this->requestHandlers, $this->responseMiddleware, $this->logHandlers, $this->errorHandlers)));
@@ -162,7 +158,11 @@ class ufront_app_HttpApplication {
 		$logHandModules = $this->logHandlers->map(array(new _hx_lambda(array(&$_gthis), "ufront_app_HttpApplication_6"), 'execute'));
 		$msg = "Begin executing request " . _hx_string_or_null($httpContext->getRequestUri());
 		$allDone = tink_core__Future_Future_Impl_::_tryFailingFlatMap($this->init(), array(new _hx_lambda(array(&$_gthis, &$httpContext, &$logHandModules, &$reqHandModules, &$reqMidModules, &$resMidModules), "ufront_app_HttpApplication_7"), 'execute'));
-		$allDone->handle(tink_core__Callback_Callback_Impl_::fromNiladic(array(new _hx_lambda(array(&$httpContext), "ufront_app_HttpApplication_8"), 'execute')));
+		{
+			$f4 = array(new _hx_lambda(array(&$httpContext), "ufront_app_HttpApplication_8"), 'execute');
+			$this8 = array(new _hx_lambda(array(&$f4), "ufront_app_HttpApplication_9"), 'execute');
+			call_user_func_array($allDone, array($this8));
+		}
 		return $allDone;
 	}
 	public function logModule($ctx, $msg) {
@@ -172,10 +172,10 @@ class ufront_app_HttpApplication {
 		$done = new tink_core_FutureTrigger();
 		$msg = "  Begin executing modules for " . Std::string($flag);
 		$runNext = null;
-		$runNext = array(new _hx_lambda(array(&$_gthis, &$ctx, &$done, &$flag, &$modules, &$runNext), "ufront_app_HttpApplication_9"), 'execute');
+		$runNext = array(new _hx_lambda(array(&$_gthis, &$ctx, &$done, &$flag, &$modules, &$runNext), "ufront_app_HttpApplication_10"), 'execute');
 		$runNext2 = $runNext;
 		call_user_func($runNext2);
-		return $done;
+		return (property_exists($done, "future") ? $done->future: array($done, "future"));
 	}
 	public function handleError($err, $ctx, $doneTrigger) {
 		$_gthis = $this;
@@ -183,11 +183,15 @@ class ufront_app_HttpApplication {
 			$msg = "  Begin handling error " . Std::string($err);
 			$ctx1 = $ctx;
 			$ctx1->completion = $ctx1->completion | 1 << ufront_web_context_RequestCompletion::$CErrorHandlersTriggered->index;
-			$errHandlerModules = $this->errorHandlers->map(array(new _hx_lambda(array(&$err), "ufront_app_HttpApplication_10"), 'execute'));
-			$resMidModules = $this->responseMiddleware->map(array(new _hx_lambda(array(), "ufront_app_HttpApplication_11"), 'execute'));
-			$logHandModules = $this->logHandlers->map(array(new _hx_lambda(array(&$_gthis), "ufront_app_HttpApplication_12"), 'execute'));
-			$allDone = tink_core__Future_Future_Impl_::_tryFailingFlatMap(tink_core__Future_Future_Impl_::_tryFailingFlatMap($this->executeModules($errHandlerModules, $ctx, ufront_web_context_RequestCompletion::$CErrorHandlersComplete), array(new _hx_lambda(array(&$ctx), "ufront_app_HttpApplication_13"), 'execute')), array(new _hx_lambda(array(&$_gthis, &$ctx, &$logHandModules, &$resMidModules), "ufront_app_HttpApplication_14"), 'execute'));
-			$allDone->handle(tink_core__Callback_Callback_Impl_::fromNiladic(array(new _hx_lambda(array(&$doneTrigger, &$err), "ufront_app_HttpApplication_15"), 'execute')));
+			$errHandlerModules = $this->errorHandlers->map(array(new _hx_lambda(array(&$err), "ufront_app_HttpApplication_11"), 'execute'));
+			$resMidModules = $this->responseMiddleware->map(array(new _hx_lambda(array(), "ufront_app_HttpApplication_12"), 'execute'));
+			$logHandModules = $this->logHandlers->map(array(new _hx_lambda(array(&$_gthis), "ufront_app_HttpApplication_13"), 'execute'));
+			$allDone = tink_core__Future_Future_Impl_::_tryFailingFlatMap(tink_core__Future_Future_Impl_::_tryFailingFlatMap($this->executeModules($errHandlerModules, $ctx, ufront_web_context_RequestCompletion::$CErrorHandlersComplete), array(new _hx_lambda(array(&$ctx), "ufront_app_HttpApplication_14"), 'execute')), array(new _hx_lambda(array(&$_gthis, &$ctx, &$logHandModules, &$resMidModules), "ufront_app_HttpApplication_15"), 'execute'));
+			{
+				$f3 = array(new _hx_lambda(array(&$doneTrigger, &$err), "ufront_app_HttpApplication_16"), 'execute');
+				$this5 = array(new _hx_lambda(array(&$f3), "ufront_app_HttpApplication_17"), 'execute');
+				call_user_func_array($allDone, array($this5));
+			}
 		} else {
 			$msg2 = "You had an error after your error handler had already run.  Last active module: " . _hx_string_or_null($this->currentModule->className) . "." . _hx_string_or_null($this->currentModule->methodName);
 			Sys::println($msg2);
@@ -301,7 +305,7 @@ function ufront_app_HttpApplication_3($m) {
 	{
 		$this1 = null;
 		$f = (property_exists($m, "requestIn") ? $m->requestIn: array($m, "requestIn"));
-		$this2 = array(new _hx_lambda(array(&$f), "ufront_app_HttpApplication_16"), 'execute');
+		$this2 = array(new _hx_lambda(array(&$f), "ufront_app_HttpApplication_18"), 'execute');
 		$this1 = new tink_core_MPair($this2, _hx_anonymous(array("methodName" => "requestIn", "lineNumber" => -1, "fileName" => "", "customParams" => (new _hx_array(array())), "className" => Type::getClassName(Type::getClass($m)))));
 		return $this1;
 	}
@@ -310,7 +314,7 @@ function ufront_app_HttpApplication_4($m1) {
 	{
 		$this3 = null;
 		$f1 = (property_exists($m1, "handleRequest") ? $m1->handleRequest: array($m1, "handleRequest"));
-		$this4 = array(new _hx_lambda(array(&$f1), "ufront_app_HttpApplication_17"), 'execute');
+		$this4 = array(new _hx_lambda(array(&$f1), "ufront_app_HttpApplication_19"), 'execute');
 		$this3 = new tink_core_MPair($this4, _hx_anonymous(array("methodName" => "handleRequest", "lineNumber" => -1, "fileName" => "", "customParams" => (new _hx_array(array())), "className" => Type::getClassName(Type::getClass($m1)))));
 		return $this3;
 	}
@@ -319,7 +323,7 @@ function ufront_app_HttpApplication_5($m2) {
 	{
 		$this5 = null;
 		$f2 = (property_exists($m2, "responseOut") ? $m2->responseOut: array($m2, "responseOut"));
-		$this6 = array(new _hx_lambda(array(&$f2), "ufront_app_HttpApplication_18"), 'execute');
+		$this6 = array(new _hx_lambda(array(&$f2), "ufront_app_HttpApplication_20"), 'execute');
 		$this5 = new tink_core_MPair($this6, _hx_anonymous(array("methodName" => "requestOut", "lineNumber" => -1, "fileName" => "", "customParams" => (new _hx_array(array())), "className" => Type::getClassName(Type::getClass($m2)))));
 		return $this5;
 	}
@@ -328,14 +332,14 @@ function ufront_app_HttpApplication_6(&$_gthis, $m3) {
 	{
 		$f3 = (property_exists($m3, "log") ? $m3->log: array($m3, "log"));
 		$a2 = $_gthis->messages;
-		$a = array(new _hx_lambda(array(&$a2, &$f3), "ufront_app_HttpApplication_19"), 'execute');
+		$a = array(new _hx_lambda(array(&$a2, &$f3), "ufront_app_HttpApplication_21"), 'execute');
 		$this7 = new tink_core_MPair($a, _hx_anonymous(array("methodName" => "log", "lineNumber" => -1, "fileName" => "", "customParams" => (new _hx_array(array("httpContext", "appMessages"))), "className" => Type::getClassName(Type::getClass($m3)))));
 		return $this7;
 	}
 }
 function ufront_app_HttpApplication_7(&$_gthis, &$httpContext, &$logHandModules, &$reqHandModules, &$reqMidModules, &$resMidModules, $n) {
 	{
-		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($reqMidModules, $httpContext, ufront_web_context_RequestCompletion::$CRequestMiddlewareComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext, &$logHandModules, &$reqHandModules, &$resMidModules), "ufront_app_HttpApplication_20"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($reqMidModules, $httpContext, ufront_web_context_RequestCompletion::$CRequestMiddlewareComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext, &$logHandModules, &$reqHandModules, &$resMidModules), "ufront_app_HttpApplication_22"), 'execute'));
 	}
 }
 function ufront_app_HttpApplication_8(&$httpContext) {
@@ -343,7 +347,12 @@ function ufront_app_HttpApplication_8(&$httpContext) {
 		$msg1 = "End executing request " . _hx_string_or_null($httpContext->getRequestUri());
 	}
 }
-function ufront_app_HttpApplication_9(&$_gthis, &$ctx, &$done, &$flag, &$modules, &$runNext) {
+function ufront_app_HttpApplication_9(&$f4, $r) {
+	{
+		call_user_func($f4);
+	}
+}
+function ufront_app_HttpApplication_10(&$_gthis, &$ctx, &$done, &$flag, &$modules, &$runNext) {
 	{
 		$m = $modules->shift();
 		$runNext1 = null;
@@ -354,7 +363,16 @@ function ufront_app_HttpApplication_9(&$_gthis, &$ctx, &$done, &$flag, &$modules
 		}
 		if($runNext1) {
 			$msg1 = "  Finished execcuting modules for " . Std::string($flag) . " (completion flag was set)";
-			$done->trigger(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+			{
+				$result = tink_core_Outcome::Success(tink_core_Noise::$Noise);
+				if($done->{"list"} !== null) {
+					$list = $done->{"list"};
+					$done->{"list"} = null;
+					$done->result = $result;
+					tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
+					tink_core__Callback_CallbackList_Impl_::clear($list);
+				}
+			}
 		} else {
 			if($m === null) {
 				$msg2 = "  Finished execcuting modules for " . Std::string($flag) . " (all modules completed)";
@@ -362,7 +380,16 @@ function ufront_app_HttpApplication_9(&$_gthis, &$ctx, &$done, &$flag, &$modules
 					$ctx1 = $ctx;
 					$ctx1->completion = $ctx1->completion | 1 << $flag->index;
 				}
-				$done->trigger(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+				{
+					$result1 = tink_core_Outcome::Success(tink_core_Noise::$Noise);
+					if($done->{"list"} !== null) {
+						$list1 = $done->{"list"};
+						$done->{"list"} = null;
+						$done->result = $result1;
+						tink_core__Callback_CallbackList_Impl_::invoke($list1, $result1);
+						tink_core__Callback_CallbackList_Impl_::clear($list1);
+					}
+				}
 			} else {
 				$moduleCb = (property_exists($m, "a") ? $m->a: array($m, "a"));
 				$_gthis->currentModule = $m->b;
@@ -378,145 +405,159 @@ function ufront_app_HttpApplication_9(&$_gthis, &$ctx, &$done, &$flag, &$modules
 							$msg4 = "Caught error " . Std::string($e) . " while executing module ";
 							$ctx->messages->push(_hx_anonymous(array("msg" => _hx_string_or_null($msg4) . _hx_string_or_null($_gthis->currentModule->className) . "." . _hx_string_or_null($_gthis->currentModule->methodName) . " in HttpApplication.executeModules()", "pos" => _hx_anonymous(array("fileName" => "HttpApplication.hx", "lineNumber" => 422, "className" => "ufront.app.HttpApplication", "methodName" => "executeModules")), "type" => ufront_log_MessageType::$MLog)));
 						}
-						$moduleResult = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, null, $_gthis->currentModule))));
+						$moduleResult = tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, null, $_gthis->currentModule)));
 					}
 				}
-				$moduleResult->handle(array(new _hx_lambda(array(&$_gthis, &$ctx, &$done, &$runNext), "ufront_app_HttpApplication_21"), 'execute'));
+				call_user_func_array($moduleResult, array(array(new _hx_lambda(array(&$_gthis, &$ctx, &$done, &$runNext), "ufront_app_HttpApplication_23"), 'execute')));
 			}
 		}
 	}
 }
-function ufront_app_HttpApplication_10(&$err, $m) {
+function ufront_app_HttpApplication_11(&$err, $m) {
 	{
 		$args = (new _hx_array(array($err->toString())));
 		$b = _hx_anonymous(array("methodName" => "handleError", "lineNumber" => -1, "fileName" => "", "customParams" => $args, "className" => Type::getClassName(Type::getClass($m))));
 		$this1 = null;
 		$f = (property_exists($m, "handleError") ? $m->handleError: array($m, "handleError"));
 		$a1 = $err;
-		$this1 = new tink_core_MPair(array(new _hx_lambda(array(&$a1, &$f), "ufront_app_HttpApplication_22"), 'execute'), $b);
+		$this1 = new tink_core_MPair(array(new _hx_lambda(array(&$a1, &$f), "ufront_app_HttpApplication_24"), 'execute'), $b);
 		return $this1;
 	}
 }
-function ufront_app_HttpApplication_11($m1) {
+function ufront_app_HttpApplication_12($m1) {
 	{
 		$this2 = null;
 		$f1 = (property_exists($m1, "responseOut") ? $m1->responseOut: array($m1, "responseOut"));
-		$this3 = array(new _hx_lambda(array(&$f1), "ufront_app_HttpApplication_23"), 'execute');
+		$this3 = array(new _hx_lambda(array(&$f1), "ufront_app_HttpApplication_25"), 'execute');
 		$this2 = new tink_core_MPair($this3, _hx_anonymous(array("methodName" => "requestOut", "lineNumber" => -1, "fileName" => "", "customParams" => (new _hx_array(array())), "className" => Type::getClassName(Type::getClass($m1)))));
 		return $this2;
 	}
 }
-function ufront_app_HttpApplication_12(&$_gthis, $m2) {
+function ufront_app_HttpApplication_13(&$_gthis, $m2) {
 	{
 		$f2 = (property_exists($m2, "log") ? $m2->log: array($m2, "log"));
 		$a21 = $_gthis->messages;
-		$a = array(new _hx_lambda(array(&$a21, &$f2), "ufront_app_HttpApplication_24"), 'execute');
+		$a = array(new _hx_lambda(array(&$a21, &$f2), "ufront_app_HttpApplication_26"), 'execute');
 		$this4 = new tink_core_MPair($a, _hx_anonymous(array("methodName" => "log", "lineNumber" => -1, "fileName" => "", "customParams" => (new _hx_array(array("httpContext", "appMessages"))), "className" => Type::getClassName(Type::getClass($m2)))));
 		return $this4;
 	}
 }
-function ufront_app_HttpApplication_13(&$ctx, $n) {
+function ufront_app_HttpApplication_14(&$ctx, $n) {
 	{
 		$ctx2 = $ctx;
 		$ctx2->completion = $ctx2->completion | 1 << ufront_web_context_RequestCompletion::$CRequestHandlersComplete->index;
 		return ufront_core_SurpriseTools::success();
 	}
 }
-function ufront_app_HttpApplication_14(&$_gthis, &$ctx, &$logHandModules, &$resMidModules, $n1) {
+function ufront_app_HttpApplication_15(&$_gthis, &$ctx, &$logHandModules, &$resMidModules, $n1) {
 	{
-		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($resMidModules, $ctx, ufront_web_context_RequestCompletion::$CResponseMiddlewareComplete), array(new _hx_lambda(array(&$_gthis, &$ctx, &$logHandModules), "ufront_app_HttpApplication_25"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($resMidModules, $ctx, ufront_web_context_RequestCompletion::$CResponseMiddlewareComplete), array(new _hx_lambda(array(&$_gthis, &$ctx, &$logHandModules), "ufront_app_HttpApplication_27"), 'execute'));
 	}
 }
-function ufront_app_HttpApplication_15(&$doneTrigger, &$err) {
+function ufront_app_HttpApplication_16(&$doneTrigger, &$err) {
 	{
 		$msg1 = "  End handling error " . Std::string($err);
-		$doneTrigger->trigger(tink_core_Outcome::Failure($err));
+		{
+			$result = tink_core_Outcome::Failure($err);
+			if($doneTrigger->{"list"} !== null) {
+				$list = $doneTrigger->{"list"};
+				$doneTrigger->{"list"} = null;
+				$doneTrigger->result = $result;
+				tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
+				tink_core__Callback_CallbackList_Impl_::clear($list);
+			}
+		}
 	}
 }
-function ufront_app_HttpApplication_16(&$f, $a1) {
+function ufront_app_HttpApplication_17(&$f3, $r) {
+	{
+		call_user_func($f3);
+	}
+}
+function ufront_app_HttpApplication_18(&$f, $a1) {
 	{
 		return call_user_func_array($f, array($a1));
 	}
 }
-function ufront_app_HttpApplication_17(&$f1, $a11) {
+function ufront_app_HttpApplication_19(&$f1, $a11) {
 	{
 		return call_user_func_array($f1, array($a11));
 	}
 }
-function ufront_app_HttpApplication_18(&$f2, $a12) {
+function ufront_app_HttpApplication_20(&$f2, $a12) {
 	{
 		return call_user_func_array($f2, array($a12));
 	}
 }
-function ufront_app_HttpApplication_19(&$a2, &$f3, $a13) {
+function ufront_app_HttpApplication_21(&$a2, &$f3, $a13) {
 	{
 		return call_user_func_array($f3, array($a13, $a2));
 	}
 }
-function ufront_app_HttpApplication_20(&$_gthis, &$httpContext, &$logHandModules, &$reqHandModules, &$resMidModules, $n1) {
+function ufront_app_HttpApplication_22(&$_gthis, &$httpContext, &$logHandModules, &$reqHandModules, &$resMidModules, $n1) {
 	{
-		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($reqHandModules, $httpContext, ufront_web_context_RequestCompletion::$CRequestHandlersComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext, &$logHandModules, &$resMidModules), "ufront_app_HttpApplication_26"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($reqHandModules, $httpContext, ufront_web_context_RequestCompletion::$CRequestHandlersComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext, &$logHandModules, &$resMidModules), "ufront_app_HttpApplication_28"), 'execute'));
 	}
 }
-function ufront_app_HttpApplication_21(&$_gthis, &$ctx, &$done, &$runNext, $result) {
+function ufront_app_HttpApplication_23(&$_gthis, &$ctx, &$done, &$runNext, $result2) {
 	{
-		switch($result->index) {
+		switch($result2->index) {
 		case 0:{
 			call_user_func($runNext);
 		}break;
 		case 1:{
-			$e1 = _hx_deref($result)->params[0];
+			$e1 = _hx_deref($result2)->params[0];
 			$_gthis->handleError($e1, $ctx, $done);
 		}break;
 		}
 	}
 }
-function ufront_app_HttpApplication_22(&$a1, &$f, $a2) {
+function ufront_app_HttpApplication_24(&$a1, &$f, $a2) {
 	{
 		return call_user_func_array($f, array($a1, $a2));
 	}
 }
-function ufront_app_HttpApplication_23(&$f1, $a11) {
+function ufront_app_HttpApplication_25(&$f1, $a11) {
 	{
 		return call_user_func_array($f1, array($a11));
 	}
 }
-function ufront_app_HttpApplication_24(&$a21, &$f2, $a12) {
+function ufront_app_HttpApplication_26(&$a21, &$f2, $a12) {
 	{
 		return call_user_func_array($f2, array($a12, $a21));
 	}
 }
-function ufront_app_HttpApplication_25(&$_gthis, &$ctx, &$logHandModules, $n2) {
+function ufront_app_HttpApplication_27(&$_gthis, &$ctx, &$logHandModules, $n2) {
 	{
-		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($logHandModules, $ctx, ufront_web_context_RequestCompletion::$CLogHandlersComplete), array(new _hx_lambda(array(&$_gthis, &$ctx), "ufront_app_HttpApplication_27"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($logHandModules, $ctx, ufront_web_context_RequestCompletion::$CLogHandlersComplete), array(new _hx_lambda(array(&$_gthis, &$ctx), "ufront_app_HttpApplication_29"), 'execute'));
 	}
 }
-function ufront_app_HttpApplication_26(&$_gthis, &$httpContext, &$logHandModules, &$resMidModules, $n2) {
+function ufront_app_HttpApplication_28(&$_gthis, &$httpContext, &$logHandModules, &$resMidModules, $n2) {
 	{
-		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($resMidModules, $httpContext, ufront_web_context_RequestCompletion::$CResponseMiddlewareComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext, &$logHandModules), "ufront_app_HttpApplication_28"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($resMidModules, $httpContext, ufront_web_context_RequestCompletion::$CResponseMiddlewareComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext, &$logHandModules), "ufront_app_HttpApplication_30"), 'execute'));
 	}
 }
-function ufront_app_HttpApplication_27(&$_gthis, &$ctx, $n3) {
+function ufront_app_HttpApplication_29(&$_gthis, &$ctx, $n3) {
 	{
-		return tink_core__Future_Future_Impl_::_tryMap($_gthis->clearMessages(), array(new _hx_lambda(array(&$_gthis, &$ctx), "ufront_app_HttpApplication_29"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryMap($_gthis->clearMessages(), array(new _hx_lambda(array(&$_gthis, &$ctx), "ufront_app_HttpApplication_31"), 'execute'));
 	}
 }
-function ufront_app_HttpApplication_28(&$_gthis, &$httpContext, &$logHandModules, $n3) {
+function ufront_app_HttpApplication_30(&$_gthis, &$httpContext, &$logHandModules, $n3) {
 	{
-		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($logHandModules, $httpContext, ufront_web_context_RequestCompletion::$CLogHandlersComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext), "ufront_app_HttpApplication_30"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($_gthis->executeModules($logHandModules, $httpContext, ufront_web_context_RequestCompletion::$CLogHandlersComplete), array(new _hx_lambda(array(&$_gthis, &$httpContext), "ufront_app_HttpApplication_32"), 'execute'));
 	}
 }
-function ufront_app_HttpApplication_29(&$_gthis, &$ctx, $n4) {
+function ufront_app_HttpApplication_31(&$_gthis, &$ctx, $n4) {
 	{
 		return $_gthis->flush($ctx);
 	}
 }
-function ufront_app_HttpApplication_30(&$_gthis, &$httpContext, $n4) {
+function ufront_app_HttpApplication_32(&$_gthis, &$httpContext, $n4) {
 	{
-		return tink_core__Future_Future_Impl_::_tryMap($_gthis->clearMessages(), array(new _hx_lambda(array(&$_gthis, &$httpContext), "ufront_app_HttpApplication_31"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryMap($_gthis->clearMessages(), array(new _hx_lambda(array(&$_gthis, &$httpContext), "ufront_app_HttpApplication_33"), 'execute'));
 	}
 }
-function ufront_app_HttpApplication_31(&$_gthis, &$httpContext, $n5) {
+function ufront_app_HttpApplication_33(&$_gthis, &$httpContext, $n5) {
 	{
 		return $_gthis->flush($httpContext);
 	}

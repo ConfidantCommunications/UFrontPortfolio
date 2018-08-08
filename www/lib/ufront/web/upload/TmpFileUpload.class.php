@@ -13,12 +13,12 @@ class ufront_web_upload_TmpFileUpload extends ufront_web_upload_BaseUpload imple
 			return $this->attachedUpload->getBytes();
 		}
 		try {
-			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(sys_io_File::getBytes($this->tmpFileName))));
+			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(sys_io_File::getBytes($this->tmpFileName)));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 			$e = $_ex_;
 			{
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, "Error during TmpFileUpload.getBytes()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 49, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "getBytes"))))));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, "Error during TmpFileUpload.getBytes()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 49, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "getBytes")))));
 			}
 		}
 	}
@@ -30,12 +30,12 @@ class ufront_web_upload_TmpFileUpload extends ufront_web_upload_BaseUpload imple
 			return $this->attachedUpload->getString($encoding);
 		}
 		try {
-			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(sys_io_File::getContent($this->tmpFileName))));
+			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(sys_io_File::getContent($this->tmpFileName)));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 			$e = $_ex_;
 			{
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, "Error during TmpFileUpload.getString()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 67, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "getString"))))));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, "Error during TmpFileUpload.getString()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 67, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "getString")))));
 			}
 		}
 	}
@@ -81,7 +81,7 @@ class ufront_web_upload_TmpFileUpload extends ufront_web_upload_BaseUpload imple
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 			$e = $_ex_;
 			{
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, "Error during TmpFileUpload.writeToFile()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 87, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "writeToFile"))))));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e, "Error during TmpFileUpload.writeToFile()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 87, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "writeToFile")))));
 			}
 		}
 	}
@@ -100,12 +100,12 @@ class ufront_web_upload_TmpFileUpload extends ufront_web_upload_BaseUpload imple
 			$readNext = array(new _hx_lambda(array(&$doneTrigger, &$fh, &$onData, &$partSize, &$pos, &$readNext), "ufront_web_upload_TmpFileUpload_0"), 'execute');
 			$readNext1 = $readNext;
 			call_user_func($readNext1);
-			return $doneTrigger;
+			return (property_exists($doneTrigger, "future") ? $doneTrigger->future: array($doneTrigger, "future"));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 			$e2 = $_ex_;
 			{
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e2, "Error during TmpFileUpload.process()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 152, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "process"))))));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e2, "Error during TmpFileUpload.process()", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 152, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "process")))));
 			}
 		}
 	}
@@ -152,10 +152,10 @@ function ufront_web_upload_TmpFileUpload_0(&$doneTrigger, &$fh, &$onData, &$part
 			}
 			else { $e1 = $_ex_;
 			{
-				$surprise = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e1, "Error during TmpFileUpload.process", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 132, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "process"))))));
+				$surprise = tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::wrap($e1, "Error during TmpFileUpload.process", _hx_anonymous(array("fileName" => "TmpFileUpload.hx", "lineNumber" => 132, "className" => "ufront.web.upload.TmpFileUpload", "methodName" => "process")))));
 			}}
 		}
-		$surprise->handle(array(new _hx_lambda(array(&$doneTrigger, &$final, &$partSize, &$pos, &$readNext), "ufront_web_upload_TmpFileUpload_1"), 'execute'));
+		call_user_func_array($surprise, array(array(new _hx_lambda(array(&$doneTrigger, &$final, &$partSize, &$pos, &$readNext), "ufront_web_upload_TmpFileUpload_1"), 'execute')));
 	}
 }
 function ufront_web_upload_TmpFileUpload_1(&$doneTrigger, &$final, &$partSize, &$pos, &$readNext, $outcome) {
@@ -166,12 +166,28 @@ function ufront_web_upload_TmpFileUpload_1(&$doneTrigger, &$final, &$partSize, &
 				$pos = $pos + $partSize;
 				call_user_func($readNext);
 			} else {
-				$doneTrigger->trigger(tink_core_Outcome::Success(tink_core_Noise::$Noise));
+				$result = tink_core_Outcome::Success(tink_core_Noise::$Noise);
+				if($doneTrigger->{"list"} !== null) {
+					$list = $doneTrigger->{"list"};
+					$doneTrigger->{"list"} = null;
+					$doneTrigger->result = $result;
+					tink_core__Callback_CallbackList_Impl_::invoke($list, $result);
+					tink_core__Callback_CallbackList_Impl_::clear($list);
+				}
 			}
 		}break;
 		case 1:{
 			$err = _hx_deref($outcome)->params[0];
-			$doneTrigger->trigger(tink_core_Outcome::Failure($err));
+			{
+				$result1 = tink_core_Outcome::Failure($err);
+				if($doneTrigger->{"list"} !== null) {
+					$list1 = $doneTrigger->{"list"};
+					$doneTrigger->{"list"} = null;
+					$doneTrigger->result = $result1;
+					tink_core__Callback_CallbackList_Impl_::invoke($list1, $result1);
+					tink_core__Callback_CallbackList_Impl_::clear($list1);
+				}
+			}
 		}break;
 		}
 	}

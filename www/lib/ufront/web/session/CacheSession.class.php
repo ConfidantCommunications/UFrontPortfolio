@@ -81,12 +81,10 @@ class ufront_web_session_CacheSession implements ufront_web_session_UFHttpSessio
 			if($tmp) {
 				return ufront_core_SurpriseTools::asSurprise(call_user_func($startFreshSession));
 			} else {
-				$this1 = $this->cache->get($this->sessionID);
-				$ret = $this1->map(array(new _hx_lambda(array(&$_gthis, &$startFreshSession), "ufront_web_session_CacheSession_1"), 'execute'));
-				return $ret->gather();
+				return tink_core__Future_Future_Impl_::map($this->cache->get($this->sessionID), array(new _hx_lambda(array(&$_gthis, &$startFreshSession), "ufront_web_session_CacheSession_1"), 'execute'), null);
 			}
 		} else {
-			return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+			return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 		}
 	}
 	public function commit() {
@@ -102,16 +100,14 @@ class ufront_web_session_CacheSession implements ufront_web_session_UFHttpSessio
 		if($sessionIDSurprise1) {
 			$sessionIDSurprise = $this->findNewSessionID();
 		} else {
-			$sessionIDSurprise = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($this->sessionID)));
+			$sessionIDSurprise = tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($this->sessionID));
 		}
 		return tink_core__Future_Future_Impl_::_tryFailingFlatMap(tink_core__Future_Future_Impl_::_tryMap(tink_core__Future_Future_Impl_::_tryFailingFlatMap(tink_core__Future_Future_Impl_::_tryFailingFlatMap(tink_core__Future_Future_Impl_::_tryMap($sessionIDSurprise, array(new _hx_lambda(array(&$_gthis), "ufront_web_session_CacheSession_2"), 'execute')), array(new _hx_lambda(array(&$_gthis, &$oldSessionID), "ufront_web_session_CacheSession_3"), 'execute')), array(new _hx_lambda(array(&$_gthis), "ufront_web_session_CacheSession_4"), 'execute')), array(new _hx_lambda(array(&$_gthis), "ufront_web_session_CacheSession_5"), 'execute')), array(new _hx_lambda(array(&$_gthis), "ufront_web_session_CacheSession_6"), 'execute'));
 	}
 	public function findNewSessionID() {
 		$_gthis = $this;
 		$tryID = ufront_core_Uuid::create();
-		$this1 = $this->cache->get($tryID);
-		$ret = $this1->flatMap(array(new _hx_lambda(array(&$_gthis, &$tryID), "ufront_web_session_CacheSession_7"), 'execute'));
-		return $ret->gather();
+		return tink_core__Future_Future_Impl_::flatMap($this->cache->get($tryID), array(new _hx_lambda(array(&$_gthis, &$tryID), "ufront_web_session_CacheSession_7"), 'execute'), null);
 	}
 	public function setCookie($id, $expiryLength) {
 		$expireAt = null;
@@ -323,7 +319,7 @@ function ufront_web_session_CacheSession_3(&$_gthis, &$oldSessionID, $_) {
 				return ufront_core_SurpriseTools::success();
 			}
 		}
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 	}
 }
 function ufront_web_session_CacheSession_4(&$_gthis, $_1) {
@@ -337,12 +333,11 @@ function ufront_web_session_CacheSession_4(&$_gthis, $_1) {
 		if($tmp1) {
 			$_gthis1 = $_gthis->cache;
 			$_gthis2 = $_gthis->sessionID;
-			$f = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($_gthis->sessionData));
-			$this1 = $f;
+			$this1 = tink_core__Future_Future_Impl_::sync($_gthis->sessionData);
 			$tmp2 = ufront_core_SurpriseTools::changeSuccessTo($_gthis1->set($_gthis2, $this1), tink_core_Noise::$Noise);
 			return ufront_core_SurpriseTools::changeFailureToError($tmp2, null, _hx_anonymous(array("fileName" => "CacheSession.hx", "lineNumber" => 262, "className" => "ufront.web.session.CacheSession", "methodName" => "commit")));
 		}
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 	}
 }
 function ufront_web_session_CacheSession_5(&$_gthis, $_2) {
@@ -366,7 +361,7 @@ function ufront_web_session_CacheSession_6(&$_gthis, $_3) {
 			$tmp4 = $_gthis->cache->remove($_gthis->sessionID);
 			return ufront_core_SurpriseTools::changeFailureToError($tmp4, null, _hx_anonymous(array("fileName" => "CacheSession.hx", "lineNumber" => 275, "className" => "ufront.web.session.CacheSession", "methodName" => "commit")));
 		}
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(tink_core_Noise::$Noise)));
+		return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(tink_core_Noise::$Noise));
 	}
 }
 function ufront_web_session_CacheSession_7(&$_gthis, &$tryID, $outcome) {
@@ -381,14 +376,11 @@ function ufront_web_session_CacheSession_7(&$_gthis, &$tryID, $outcome) {
 				$_gthis->setCookie($tryID, $_gthis->expiry);
 				$_gthis1 = $_gthis->cache;
 				$v = new haxe_ds_StringMap();
-				$f = new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($v));
-				$this2 = $f;
-				$this3 = $_gthis1->set($tryID, $this2);
-				$ret1 = $this3->map(array(new _hx_lambda(array(&$tryID), "ufront_web_session_CacheSession_8"), 'execute'));
-				return $ret1->gather();
+				$this1 = tink_core__Future_Future_Impl_::sync($v);
+				return tink_core__Future_Future_Impl_::map($_gthis1->set($tryID, $this1), array(new _hx_lambda(array(&$tryID), "ufront_web_session_CacheSession_8"), 'execute'), null);
 			} else {
 				$e = _hx_deref($outcome)->params[0];
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(tink_core_TypedError::withData(null, "Failed to find new session ID, cache error", $e, _hx_anonymous(array("fileName" => "CacheSession.hx", "lineNumber" => 297, "className" => "ufront.web.session.CacheSession", "methodName" => "findNewSessionID"))))));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(tink_core_TypedError::withData(null, "Failed to find new session ID, cache error", $e, _hx_anonymous(array("fileName" => "CacheSession.hx", "lineNumber" => 297, "className" => "ufront.web.session.CacheSession", "methodName" => "findNewSessionID")))));
 			}
 		}break;
 		}

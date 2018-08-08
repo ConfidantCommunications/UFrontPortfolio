@@ -22,7 +22,7 @@ class ufront_api_UFCallbackApi {
 		if(($flags & 1 << ufront_api_ApiReturnType::$ARTVoid->index) !== 0) {
 			try {
 				call_user_func($callApi);
-				tink_core__Callback_Callback_Impl_::invoke($onResult, null);
+				call_user_func_array($onResult, array(null));
 			}catch(Exception $__hx__e) {
 				$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 				$e1 = $_ex_;
@@ -40,7 +40,7 @@ class ufront_api_UFCallbackApi {
 			if($tmp) {
 				try {
 					$surprise = call_user_func($callApi);
-					$surprise->handle(array(new _hx_lambda(array(&$onError, &$onResult, &$remotingCallString1), "ufront_api_UFCallbackApi_3"), 'execute'));
+					call_user_func_array($surprise, array(array(new _hx_lambda(array(&$onError, &$onResult, &$remotingCallString1), "ufront_api_UFCallbackApi_3"), 'execute')));
 				}catch(Exception $__hx__e) {
 					$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 					$e2 = $_ex_;
@@ -52,7 +52,7 @@ class ufront_api_UFCallbackApi {
 				if(($flags & 1 << ufront_api_ApiReturnType::$ARTFuture->index) !== 0) {
 					try {
 						$future = call_user_func($callApi);
-						$future->handle(array(new _hx_lambda(array(&$onResult), "ufront_api_UFCallbackApi_4"), 'execute'));
+						call_user_func_array($future, array(array(new _hx_lambda(array(&$onResult), "ufront_api_UFCallbackApi_4"), 'execute')));
 					}catch(Exception $__hx__e) {
 						$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 						$e3 = $_ex_;
@@ -67,11 +67,11 @@ class ufront_api_UFCallbackApi {
 							switch($outcome->index) {
 							case 0:{
 								$data2 = _hx_deref($outcome)->params[0];
-								tink_core__Callback_Callback_Impl_::invoke($onResult, $data2);
+								call_user_func_array($onResult, array($data2));
 							}break;
 							case 1:{
 								$err2 = _hx_deref($outcome)->params[0];
-								tink_core__Callback_Callback_Impl_::invoke($onError, ufront_remoting_RemotingError::RApiFailure($remotingCallString1, $err2));
+								call_user_func_array($onError, array(ufront_remoting_RemotingError::RApiFailure($remotingCallString1, $err2)));
 							}break;
 							}
 						}catch(Exception $__hx__e) {
@@ -84,7 +84,7 @@ class ufront_api_UFCallbackApi {
 					} else {
 						try {
 							$result1 = call_user_func($callApi);
-							tink_core__Callback_Callback_Impl_::invoke($onResult, $result1);
+							call_user_func_array($onResult, array($result1));
 						}catch(Exception $__hx__e) {
 							$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 							$e5 = $_ex_;
@@ -129,7 +129,7 @@ function ufront_api_UFCallbackApi_0(&$_gthis, &$args, &$method) {
 function ufront_api_UFCallbackApi_1(&$onError, &$remotingCallString1, $e) {
 	{
 		$stack = haxe_CallStack::toString(haxe_CallStack::exceptionStack());
-		tink_core__Callback_Callback_Impl_::invoke($onError, ufront_remoting_RemotingError::RServerSideException($remotingCallString1, $e, $stack));
+		call_user_func_array($onError, array(ufront_remoting_RemotingError::RServerSideException($remotingCallString1, $e, $stack)));
 	}
 }
 function ufront_api_UFCallbackApi_2($err) {
@@ -141,17 +141,17 @@ function ufront_api_UFCallbackApi_3(&$onError, &$onResult, &$remotingCallString1
 		switch($result->index) {
 		case 0:{
 			$data = _hx_deref($result)->params[0];
-			tink_core__Callback_Callback_Impl_::invoke($onResult, $data);
+			call_user_func_array($onResult, array($data));
 		}break;
 		case 1:{
 			$err1 = _hx_deref($result)->params[0];
-			tink_core__Callback_Callback_Impl_::invoke($onError, ufront_remoting_RemotingError::RApiFailure($remotingCallString1, $err1));
+			call_user_func_array($onError, array(ufront_remoting_RemotingError::RApiFailure($remotingCallString1, $err1)));
 		}break;
 		}
 	}
 }
 function ufront_api_UFCallbackApi_4(&$onResult, $data1) {
 	{
-		tink_core__Callback_Callback_Impl_::invoke($onResult, $data1);
+		call_user_func_array($onResult, array($data1));
 	}
 }

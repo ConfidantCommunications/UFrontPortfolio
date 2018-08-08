@@ -16,7 +16,7 @@ class ufront_api_UFAsyncApi {
 		if(($flags & 1 << ufront_api_ApiReturnType::$ARTVoid->index) !== 0) {
 			try {
 				call_user_func($callApi);
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success(null)));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success(null));
 			}catch(Exception $__hx__e) {
 				$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 				$e1 = $_ex_;
@@ -34,8 +34,7 @@ class ufront_api_UFAsyncApi {
 			if($tmp) {
 				try {
 					$surprise = call_user_func($callApi);
-					$ret = $surprise->map(array(new _hx_lambda(array(&$pos, &$remotingCallString1), "ufront_api_UFAsyncApi_2"), 'execute'));
-					return $ret->gather();
+					return tink_core__Future_Future_Impl_::map($surprise, array(new _hx_lambda(array(&$pos, &$remotingCallString1), "ufront_api_UFAsyncApi_2"), 'execute'), null);
 				}catch(Exception $__hx__e) {
 					$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 					$e2 = $_ex_;
@@ -47,8 +46,7 @@ class ufront_api_UFAsyncApi {
 				if(($flags & 1 << ufront_api_ApiReturnType::$ARTFuture->index) !== 0) {
 					try {
 						$future = call_user_func($callApi);
-						$ret1 = $future->map(array(new _hx_lambda(array(), "ufront_api_UFAsyncApi_3"), 'execute'));
-						return $ret1->gather();
+						return tink_core__Future_Future_Impl_::map($future, array(new _hx_lambda(array(), "ufront_api_UFAsyncApi_3"), 'execute'), null);
 					}catch(Exception $__hx__e) {
 						$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 						$e3 = $_ex_;
@@ -63,11 +61,11 @@ class ufront_api_UFAsyncApi {
 							switch($outcome->index) {
 							case 0:{
 								$data2 = _hx_deref($outcome)->params[0];
-								return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($data2)));
+								return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($data2));
 							}break;
 							case 1:{
 								$err1 = _hx_deref($outcome)->params[0];
-								return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Failure(ufront_web_HttpError::remotingError(ufront_remoting_RemotingError::RApiFailure($remotingCallString1, $err1), $pos))));
+								return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Failure(ufront_web_HttpError::remotingError(ufront_remoting_RemotingError::RApiFailure($remotingCallString1, $err1), $pos)));
 							}break;
 							}
 						}catch(Exception $__hx__e) {
@@ -80,7 +78,7 @@ class ufront_api_UFAsyncApi {
 					} else {
 						try {
 							$result1 = call_user_func($callApi);
-							return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success($result1)));
+							return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success($result1));
 						}catch(Exception $__hx__e) {
 							$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 							$e5 = $_ex_;

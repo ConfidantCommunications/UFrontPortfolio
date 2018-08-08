@@ -31,7 +31,7 @@ class ufront_view_UFViewEngine {
 				$tmp1 = true;
 			}
 			if($tmp1) {
-				return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst(tink_core_Outcome::Success((property_exists($cached, "b") ? $cached->b: array($cached, "b")))));
+				return tink_core__Future_Future_Impl_::sync(tink_core_Outcome::Success((property_exists($cached, "b") ? $cached->b: array($cached, "b"))));
 			}
 		}
 		$tplStrReady = new tink_core_FutureTrigger();
@@ -45,41 +45,44 @@ class ufront_view_UFViewEngine {
 		}
 		if($tmp2) {
 			$finalPath = $path;
-			$this->getTemplateString($finalPath)->handle(array(new _hx_lambda(array(&$path, &$tplStrReady), "ufront_view_UFViewEngine_0"), 'execute'));
-		} else {
-			$tmp4 = null;
-			if($templatingEngine !== null) {
-				$tmp4 = $ext === "";
-			} else {
-				$tmp4 = false;
+			{
+				$this1 = $this->getTemplateString($finalPath);
+				call_user_func_array($this1, array(array(new _hx_lambda(array(&$path, &$tplStrReady), "ufront_view_UFViewEngine_0"), 'execute')));
 			}
-			if($tmp4) {
+		} else {
+			$tmp3 = null;
+			if($templatingEngine !== null) {
+				$tmp3 = $ext === "";
+			} else {
+				$tmp3 = false;
+			}
+			if($tmp3) {
 				$exts = $templatingEngine->extensions->copy();
 				$testNextExtension = null;
 				$testNextExtension = array(new _hx_lambda(array(&$_gthis, &$exts, &$finalPath, &$path, &$templatingEngine, &$testNextExtension, &$tplStrReady), "ufront_view_UFViewEngine_1"), 'execute');
-				$testNextExtension4 = $testNextExtension;
-				call_user_func($testNextExtension4);
+				$testNextExtension1 = $testNextExtension;
+				call_user_func($testNextExtension1);
 			} else {
-				$tmp5 = null;
+				$tmp4 = null;
 				if($templatingEngine === null) {
-					$tmp5 = $ext !== "";
+					$tmp4 = $ext !== "";
 				} else {
-					$tmp5 = false;
+					$tmp4 = false;
 				}
-				if($tmp5) {
+				if($tmp4) {
 					$tplEngines = $this->engines->copy();
 					$testNextEngine = null;
 					$testNextEngine = array(new _hx_lambda(array(&$_gthis, &$ext, &$finalPath, &$path, &$templatingEngine, &$testNextEngine, &$tplEngines, &$tplStrReady), "ufront_view_UFViewEngine_2"), 'execute');
-					$testNextEngine3 = $testNextEngine;
-					call_user_func($testNextEngine3);
+					$testNextEngine1 = $testNextEngine;
+					call_user_func($testNextEngine1);
 				} else {
-					$tmp6 = null;
+					$tmp5 = null;
 					if($templatingEngine === null) {
-						$tmp6 = $ext === "";
+						$tmp5 = $ext === "";
 					} else {
-						$tmp6 = false;
+						$tmp5 = false;
 					}
-					if($tmp6) {
+					if($tmp5) {
 						$tplEngines1 = $this->engines->copy();
 						$engine1 = null;
 						$extensions = (new _hx_array(array()));
@@ -87,17 +90,17 @@ class ufront_view_UFViewEngine {
 						$ext2 = null;
 						$testNextEngineOrExtension = null;
 						$testNextEngineOrExtension = array(new _hx_lambda(array(&$_gthis, &$engine1, &$ext2, &$extensions, &$extensionsUsed, &$finalPath, &$path, &$templatingEngine, &$testNextEngineOrExtension, &$tplEngines1, &$tplStrReady), "ufront_view_UFViewEngine_3"), 'execute');
-						$testNextEngineOrExtension5 = $testNextEngineOrExtension;
-						call_user_func($testNextEngineOrExtension5);
+						$testNextEngineOrExtension2 = $testNextEngineOrExtension;
+						call_user_func($testNextEngineOrExtension2);
 					}
 				}
 			}
 		}
-		return tink_core__Future_Future_Impl_::_tryFailingMap($tplStrReady, array(new _hx_lambda(array(&$_gthis, &$finalPath, &$path, &$templatingEngine), "ufront_view_UFViewEngine_4"), 'execute'));
+		return tink_core__Future_Future_Impl_::_tryFailingMap((property_exists($tplStrReady, "future") ? $tplStrReady->future: array($tplStrReady, "future")), array(new _hx_lambda(array(&$_gthis, &$finalPath, &$path, &$templatingEngine), "ufront_view_UFViewEngine_4"), 'execute'));
 	}
 	public function getTemplateString($path) {
-		$v = tink_core_Outcome::Failure(new tink_core_TypedError(null, "Attempting to fetch template " . _hx_string_or_null($path) . " with UFViewEngine.  This is an abstract class, you must use one of the ViewEngine implementations.", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 226, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplateString"))));
-		return new tink_core__Future_SyncFuture(new tink_core__Lazy_LazyConst($v));
+		$tmp = tink_core_Outcome::Failure(new tink_core_TypedError(null, "Attempting to fetch template " . _hx_string_or_null($path) . " with UFViewEngine.  This is an abstract class, you must use one of the ViewEngine implementations.", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 226, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplateString"))));
+		return tink_core__Future_Future_Impl_::sync($tmp);
 	}
 	public function addTemplatingEngine($engine) {
 		$this->engines->push($engine);
@@ -122,17 +125,41 @@ function ufront_view_UFViewEngine_0(&$path, &$tplStrReady, $result) {
 			switch(_hx_deref($result)->params[0]->index) {
 			case 0:{
 				$tpl = _hx_deref(_hx_deref($result)->params[0])->params[0];
-				$tplStrReady->trigger(tink_core_Outcome::Success($tpl));
+				{
+					$result1 = tink_core_Outcome::Success($tpl);
+					if($tplStrReady->{"list"} !== null) {
+						$list = $tplStrReady->{"list"};
+						$tplStrReady->{"list"} = null;
+						$tplStrReady->result = $result1;
+						tink_core__Callback_CallbackList_Impl_::invoke($list, $result1);
+						tink_core__Callback_CallbackList_Impl_::clear($list);
+					}
+				}
 			}break;
 			case 1:{
-				$tmp3 = tink_core_Outcome::Failure(new tink_core_TypedError(null, "Template " . _hx_string_or_null($path) . " not found", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 115, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
-				$tplStrReady->trigger($tmp3);
+				$result2 = tink_core_Outcome::Failure(new tink_core_TypedError(null, "Template " . _hx_string_or_null($path) . " not found", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 115, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
+				if($tplStrReady->{"list"} !== null) {
+					$list1 = $tplStrReady->{"list"};
+					$tplStrReady->{"list"} = null;
+					$tplStrReady->result = $result2;
+					tink_core__Callback_CallbackList_Impl_::invoke($list1, $result2);
+					tink_core__Callback_CallbackList_Impl_::clear($list1);
+				}
 			}break;
 			}
 		}break;
 		case 1:{
 			$err = _hx_deref($result)->params[0];
-			$tplStrReady->trigger(tink_core_Outcome::Failure($err));
+			{
+				$result3 = tink_core_Outcome::Failure($err);
+				if($tplStrReady->{"list"} !== null) {
+					$list2 = $tplStrReady->{"list"};
+					$tplStrReady->{"list"} = null;
+					$tplStrReady->result = $result3;
+					tink_core__Callback_CallbackList_Impl_::invoke($list2, $result3);
+					tink_core__Callback_CallbackList_Impl_::clear($list2);
+				}
+			}
 		}break;
 		}
 	}
@@ -142,12 +169,21 @@ function ufront_view_UFViewEngine_1(&$_gthis, &$exts, &$finalPath, &$path, &$tem
 		if($exts->length > 0) {
 			$ext1 = $exts->shift();
 			$finalPath = haxe_io_Path::withExtension($path, $ext1);
-			$_gthis->getTemplateString($finalPath)->handle(array(new _hx_lambda(array(&$testNextExtension, &$tplStrReady), "ufront_view_UFViewEngine_5"), 'execute'));
+			{
+				$this2 = $_gthis->getTemplateString($finalPath);
+				call_user_func_array($this2, array(array(new _hx_lambda(array(&$testNextExtension, &$tplStrReady), "ufront_view_UFViewEngine_5"), 'execute')));
+			}
 		} else {
-			$testNextExtension1 = "No template found for " . _hx_string_or_null($path) . " with extensions ";
-			$testNextExtension2 = _hx_string_or_null($testNextExtension1) . Std::string($templatingEngine->extensions);
-			$testNextExtension3 = tink_core_Outcome::Failure(new tink_core_TypedError(null, $testNextExtension2, _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 131, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
-			$tplStrReady->trigger($testNextExtension3);
+			$result7 = "No template found for " . _hx_string_or_null($path) . " with extensions ";
+			$result8 = _hx_string_or_null($result7) . Std::string($templatingEngine->extensions);
+			$result9 = tink_core_Outcome::Failure(new tink_core_TypedError(null, $result8, _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 131, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
+			if($tplStrReady->{"list"} !== null) {
+				$list5 = $tplStrReady->{"list"};
+				$tplStrReady->{"list"} = null;
+				$tplStrReady->result = $result9;
+				tink_core__Callback_CallbackList_Impl_::invoke($list5, $result9);
+				tink_core__Callback_CallbackList_Impl_::clear($list5);
+			}
 		}
 	}
 }
@@ -157,13 +193,22 @@ function ufront_view_UFViewEngine_2(&$_gthis, &$ext, &$finalPath, &$path, &$temp
 			$engine = $tplEngines->shift();
 			if(Lambda::has($engine->extensions, $ext)) {
 				$finalPath = haxe_io_Path::normalize($path);
-				$_gthis->getTemplateString($finalPath)->handle(array(new _hx_lambda(array(&$engine, &$path, &$templatingEngine, &$tplStrReady), "ufront_view_UFViewEngine_6"), 'execute'));
+				{
+					$this3 = $_gthis->getTemplateString($finalPath);
+					call_user_func_array($this3, array(array(new _hx_lambda(array(&$engine, &$path, &$templatingEngine, &$tplStrReady), "ufront_view_UFViewEngine_6"), 'execute')));
+				}
 			} else {
 				call_user_func($testNextEngine);
 			}
 		} else {
-			$testNextEngine2 = tink_core_Outcome::Failure(new tink_core_TypedError(null, "No templating engine found for " . _hx_string_or_null($path) . " (None support extension " . _hx_string_or_null($ext) . ")", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 151, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
-			$tplStrReady->trigger($testNextEngine2);
+			$result14 = tink_core_Outcome::Failure(new tink_core_TypedError(null, "No templating engine found for " . _hx_string_or_null($path) . " (None support extension " . _hx_string_or_null($ext) . ")", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 151, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
+			if($tplStrReady->{"list"} !== null) {
+				$list9 = $tplStrReady->{"list"};
+				$tplStrReady->{"list"} = null;
+				$tplStrReady->result = $result14;
+				tink_core__Callback_CallbackList_Impl_::invoke($list9, $result14);
+				tink_core__Callback_CallbackList_Impl_::clear($list9);
+			}
 		}
 	}
 }
@@ -176,10 +221,18 @@ function ufront_view_UFViewEngine_3(&$_gthis, &$engine1, &$ext2, &$extensions, &
 			$testNextEngineOrExtension1 = false;
 		}
 		if($testNextEngineOrExtension1) {
-			$testNextEngineOrExtension2 = "No template found for " . _hx_string_or_null($path) . " with extensions ";
-			$testNextEngineOrExtension3 = _hx_string_or_null($testNextEngineOrExtension2) . Std::string($extensionsUsed);
-			$testNextEngineOrExtension4 = tink_core_Outcome::Failure(new tink_core_TypedError(null, $testNextEngineOrExtension3, _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 165, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
-			$tplStrReady->trigger($testNextEngineOrExtension4);
+			{
+				$result15 = "No template found for " . _hx_string_or_null($path) . " with extensions ";
+				$result16 = _hx_string_or_null($result15) . Std::string($extensionsUsed);
+				$result17 = tink_core_Outcome::Failure(new tink_core_TypedError(null, $result16, _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 165, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
+				if($tplStrReady->{"list"} !== null) {
+					$list10 = $tplStrReady->{"list"};
+					$tplStrReady->{"list"} = null;
+					$tplStrReady->result = $result17;
+					tink_core__Callback_CallbackList_Impl_::invoke($list10, $result17);
+					tink_core__Callback_CallbackList_Impl_::clear($list10);
+				}
+			}
 			return;
 		} else {
 			if($extensions->length === 0) {
@@ -192,7 +245,10 @@ function ufront_view_UFViewEngine_3(&$_gthis, &$engine1, &$ext2, &$extensions, &
 		}
 		$extensionsUsed->push($ext2);
 		$finalPath = haxe_io_Path::withExtension($path, $ext2);
-		$_gthis->getTemplateString($finalPath)->handle(array(new _hx_lambda(array(&$engine1, &$templatingEngine, &$testNextEngineOrExtension, &$tplStrReady), "ufront_view_UFViewEngine_7"), 'execute'));
+		{
+			$this4 = $_gthis->getTemplateString($finalPath);
+			call_user_func_array($this4, array(array(new _hx_lambda(array(&$engine1, &$templatingEngine, &$testNextEngineOrExtension, &$tplStrReady), "ufront_view_UFViewEngine_7"), 'execute')));
+		}
 		return;
 	}
 }
@@ -201,10 +257,10 @@ function ufront_view_UFViewEngine_4(&$_gthis, &$finalPath, &$path, &$templatingE
 		try {
 			$tpl4 = $templatingEngine->factory($tplStr);
 			if($_gthis->cache !== null) {
-				$this1 = $_gthis->cache;
-				$this2 = new tink_core_MPair($templatingEngine->type, $tpl4);
-				$v = $this2;
-				$this1->set($path, $v);
+				$this5 = $_gthis->cache;
+				$this6 = new tink_core_MPair($templatingEngine->type, $tpl4);
+				$v = $this6;
+				$this5->set($path, $v);
 			}
 			return tink_core_Outcome::Success($tpl4);
 		}catch(Exception $__hx__e) {
@@ -216,14 +272,23 @@ function ufront_view_UFViewEngine_4(&$_gthis, &$finalPath, &$path, &$templatingE
 		}
 	}
 }
-function ufront_view_UFViewEngine_5(&$testNextExtension, &$tplStrReady, $result1) {
+function ufront_view_UFViewEngine_5(&$testNextExtension, &$tplStrReady, $result4) {
 	{
-		switch($result1->index) {
+		switch($result4->index) {
 		case 0:{
-			switch(_hx_deref($result1)->params[0]->index) {
+			switch(_hx_deref($result4)->params[0]->index) {
 			case 0:{
-				$tpl1 = _hx_deref(_hx_deref($result1)->params[0])->params[0];
-				$tplStrReady->trigger(tink_core_Outcome::Success($tpl1));
+				$tpl1 = _hx_deref(_hx_deref($result4)->params[0])->params[0];
+				{
+					$result5 = tink_core_Outcome::Success($tpl1);
+					if($tplStrReady->{"list"} !== null) {
+						$list3 = $tplStrReady->{"list"};
+						$tplStrReady->{"list"} = null;
+						$tplStrReady->result = $result5;
+						tink_core__Callback_CallbackList_Impl_::invoke($list3, $result5);
+						tink_core__Callback_CallbackList_Impl_::clear($list3);
+					}
+				}
 			}break;
 			case 1:{
 				call_user_func($testNextExtension);
@@ -231,47 +296,89 @@ function ufront_view_UFViewEngine_5(&$testNextExtension, &$tplStrReady, $result1
 			}
 		}break;
 		case 1:{
-			$err1 = _hx_deref($result1)->params[0];
-			$tplStrReady->trigger(tink_core_Outcome::Failure($err1));
+			$err1 = _hx_deref($result4)->params[0];
+			{
+				$result6 = tink_core_Outcome::Failure($err1);
+				if($tplStrReady->{"list"} !== null) {
+					$list4 = $tplStrReady->{"list"};
+					$tplStrReady->{"list"} = null;
+					$tplStrReady->result = $result6;
+					tink_core__Callback_CallbackList_Impl_::invoke($list4, $result6);
+					tink_core__Callback_CallbackList_Impl_::clear($list4);
+				}
+			}
 		}break;
 		}
 	}
 }
-function ufront_view_UFViewEngine_6(&$engine, &$path, &$templatingEngine, &$tplStrReady, $result2) {
+function ufront_view_UFViewEngine_6(&$engine, &$path, &$templatingEngine, &$tplStrReady, $result10) {
 	{
-		switch($result2->index) {
+		switch($result10->index) {
 		case 0:{
-			switch(_hx_deref($result2)->params[0]->index) {
+			switch(_hx_deref($result10)->params[0]->index) {
 			case 0:{
-				$tpl2 = _hx_deref(_hx_deref($result2)->params[0])->params[0];
+				$tpl2 = _hx_deref(_hx_deref($result10)->params[0])->params[0];
 				{
 					$templatingEngine = $engine;
-					$tplStrReady->trigger(tink_core_Outcome::Success($tpl2));
+					{
+						$result11 = tink_core_Outcome::Success($tpl2);
+						if($tplStrReady->{"list"} !== null) {
+							$list6 = $tplStrReady->{"list"};
+							$tplStrReady->{"list"} = null;
+							$tplStrReady->result = $result11;
+							tink_core__Callback_CallbackList_Impl_::invoke($list6, $result11);
+							tink_core__Callback_CallbackList_Impl_::clear($list6);
+						}
+					}
 				}
 			}break;
 			case 1:{
-				$testNextEngine1 = tink_core_Outcome::Failure(new tink_core_TypedError(null, "Template " . _hx_string_or_null($path) . " not found", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 147, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
-				$tplStrReady->trigger($testNextEngine1);
+				$result12 = tink_core_Outcome::Failure(new tink_core_TypedError(null, "Template " . _hx_string_or_null($path) . " not found", _hx_anonymous(array("fileName" => "UFViewEngine.hx", "lineNumber" => 147, "className" => "ufront.view.UFViewEngine", "methodName" => "getTemplate"))));
+				if($tplStrReady->{"list"} !== null) {
+					$list7 = $tplStrReady->{"list"};
+					$tplStrReady->{"list"} = null;
+					$tplStrReady->result = $result12;
+					tink_core__Callback_CallbackList_Impl_::invoke($list7, $result12);
+					tink_core__Callback_CallbackList_Impl_::clear($list7);
+				}
 			}break;
 			}
 		}break;
 		case 1:{
-			$err2 = _hx_deref($result2)->params[0];
-			$tplStrReady->trigger(tink_core_Outcome::Failure($err2));
+			$err2 = _hx_deref($result10)->params[0];
+			{
+				$result13 = tink_core_Outcome::Failure($err2);
+				if($tplStrReady->{"list"} !== null) {
+					$list8 = $tplStrReady->{"list"};
+					$tplStrReady->{"list"} = null;
+					$tplStrReady->result = $result13;
+					tink_core__Callback_CallbackList_Impl_::invoke($list8, $result13);
+					tink_core__Callback_CallbackList_Impl_::clear($list8);
+				}
+			}
 		}break;
 		}
 	}
 }
-function ufront_view_UFViewEngine_7(&$engine1, &$templatingEngine, &$testNextEngineOrExtension, &$tplStrReady, $result3) {
+function ufront_view_UFViewEngine_7(&$engine1, &$templatingEngine, &$testNextEngineOrExtension, &$tplStrReady, $result18) {
 	{
-		switch($result3->index) {
+		switch($result18->index) {
 		case 0:{
-			switch(_hx_deref($result3)->params[0]->index) {
+			switch(_hx_deref($result18)->params[0]->index) {
 			case 0:{
-				$tpl3 = _hx_deref(_hx_deref($result3)->params[0])->params[0];
+				$tpl3 = _hx_deref(_hx_deref($result18)->params[0])->params[0];
 				{
 					$templatingEngine = $engine1;
-					$tplStrReady->trigger(tink_core_Outcome::Success($tpl3));
+					{
+						$result19 = tink_core_Outcome::Success($tpl3);
+						if($tplStrReady->{"list"} !== null) {
+							$list11 = $tplStrReady->{"list"};
+							$tplStrReady->{"list"} = null;
+							$tplStrReady->result = $result19;
+							tink_core__Callback_CallbackList_Impl_::invoke($list11, $result19);
+							tink_core__Callback_CallbackList_Impl_::clear($list11);
+						}
+					}
 				}
 			}break;
 			case 1:{
@@ -280,8 +387,17 @@ function ufront_view_UFViewEngine_7(&$engine1, &$templatingEngine, &$testNextEng
 			}
 		}break;
 		case 1:{
-			$err3 = _hx_deref($result3)->params[0];
-			$tplStrReady->trigger(tink_core_Outcome::Failure($err3));
+			$err3 = _hx_deref($result18)->params[0];
+			{
+				$result20 = tink_core_Outcome::Failure($err3);
+				if($tplStrReady->{"list"} !== null) {
+					$list12 = $tplStrReady->{"list"};
+					$tplStrReady->{"list"} = null;
+					$tplStrReady->result = $result20;
+					tink_core__Callback_CallbackList_Impl_::invoke($list12, $result20);
+					tink_core__Callback_CallbackList_Impl_::clear($list12);
+				}
+			}
 		}break;
 		}
 	}
