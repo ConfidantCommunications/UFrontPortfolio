@@ -8,6 +8,7 @@ class controller_HomeController extends ufront_web_Controller {
 	}}
 	public $testApi;
 	public $mailApi;
+	public $recaptchaApi;
 	public function main() {
 		$t = "Confidant Communications : Graphic Design, Website Design and Joomla Interactive Developer in Saskatoon, Saskatchewan";
 		$obj = _hx_anonymous(array());
@@ -105,21 +106,6 @@ class controller_HomeController extends ufront_web_Controller {
 		$this2 = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp, $this2, _hx_anonymous(array("msg" => $t)));
 	}
-	public function contact() {
-		$t = "Contact Us : Confidant Communications";
-		$d = _hx_anonymous(array("title" => $t, "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "http://" . _hx_string_or_null($this->getHostName()) . "/"));
-		$obj = _hx_anonymous(array());
-		$this1 = null;
-		if($obj !== null) {
-			$this1 = $obj;
-		} else {
-			$this1 = _hx_anonymous(array());
-		}
-		$tmp = new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject($this1, $d), null, null);
-		$tmp1 = $tmp->addPartialString("subcontent", "", ufront_view_TemplatingEngines::get_haxe());
-		$this2 = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
-		return ufront_web_result_AddClientActionResult::addClientAction($tmp1, $this2, _hx_anonymous(array("msg" => $t)));
-	}
 	public function portfolio() {
 		$_gthis = $this;
 		$t = "Portfolio of Graphic Design and Website Development Projects : Confidant Communications";
@@ -135,10 +121,25 @@ class controller_HomeController extends ufront_web_Controller {
 		$parsed = haxe_Json::phpJsonDecode($pJson);
 		return $parsed->items;
 	}
+	public function contact() {
+		$vr = new ufront_web_result_ViewResult(null, null, null);
+		$t = "Contact Us : Confidant Communications";
+		$d = _hx_anonymous(array("title" => $t, "portfolioItem" => null, "panel1classes" => "recessed0 recessed1", "panel2classes" => "recessed0", "panel3classes" => "", "gobackLink" => "http://" . _hx_string_or_null($this->getHostName()) . "/"));
+		$obj = _hx_anonymous(array());
+		$this1 = null;
+		if($obj !== null) {
+			$this1 = $obj;
+		} else {
+			$this1 = _hx_anonymous(array());
+		}
+		$tmp = new ufront_web_result_ViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject($this1, $d), null, null);
+		$tmp1 = $tmp->addPartialString("subcontent", "", ufront_view_TemplatingEngines::get_haxe());
+		$this2 = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
+		return ufront_web_result_CallJavascriptResult::addJsScriptToResult(ufront_web_result_AddClientActionResult::addClientAction($tmp1, $this2, _hx_anonymous(array("msg" => $t))), "//www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit");
+	}
 	public function contactResult($args) {
-		$t = "Contact : Confidant Communications";
-		$returnHome = "<p style=\"text-align:center;\"><a href=\"/\" rel=\"pushstate\">Go back home now?</a></p>";
-		return tink_core__Future_Future_Impl_::_tryMap($this->mailApi->doMail($args->email, $args->name, $args->message), array(new _hx_lambda(array(&$returnHome, &$t), "controller_HomeController_2"), 'execute'));
+		$_gthis = $this;
+		return tink_core__Future_Future_Impl_::_tryFailingFlatMap($this->recaptchaApi->verify($args->gRecaptchaResponse), array(new _hx_lambda(array(&$_gthis, &$args), "controller_HomeController_2"), 'execute'));
 	}
 	public function execute() {
 		$uriParts = $this->context->actionContext->get_uriParts();
@@ -333,68 +334,68 @@ class controller_HomeController extends ufront_web_Controller {
 											$tmp19 = false;
 										}
 										if($tmp19) {
-											$tmp18 = $uriParts[0] === "contact";
+											$tmp18 = $uriParts[0] === "portfolio";
 										} else {
 											$tmp18 = false;
 										}
 										if($tmp18) {
-											$this->context->actionContext->action = "contact";
+											$this->context->actionContext->action = "portfolio";
 											$this->context->actionContext->args = (new _hx_array(array()));
 											$this->context->actionContext->get_uriParts()->splice(0, 1);
-											$this8 = _hx_field(haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController")), "contact")->wrapResult[0];
+											$this8 = _hx_field(haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController")), "portfolio")->wrapResult[0];
 											$wrappingRequired7 = $this8;
-											$result7 = $this->wrapResult($this->contact(), $wrappingRequired7);
+											$result7 = $this->wrapResult($this->portfolio(), $wrappingRequired7);
 											$this->setContextActionResultWhenFinished($result7);
 											return $result7;
 										} else {
 											$tmp20 = null;
 											$tmp21 = null;
+											$tmp22 = null;
 											if(strtolower($method) === "get") {
-												$tmp21 = 1 === $uriParts->length;
+												$tmp22 = 2 === $uriParts->length;
+											} else {
+												$tmp22 = false;
+											}
+											if($tmp22) {
+												$tmp21 = $uriParts[0] === "portfolio";
 											} else {
 												$tmp21 = false;
 											}
 											if($tmp21) {
-												$tmp20 = $uriParts[0] === "portfolio";
+												$tmp20 = strlen($uriParts[1]) > 0;
 											} else {
 												$tmp20 = false;
 											}
 											if($tmp20) {
-												$this->context->actionContext->action = "portfolio";
-												$this->context->actionContext->args = (new _hx_array(array()));
-												$this->context->actionContext->get_uriParts()->splice(0, 1);
-												$this9 = _hx_field(haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController")), "portfolio")->wrapResult[0];
+												$id = $uriParts[1];
+												$this->context->actionContext->action = "returnPortfolioItem";
+												$this->context->actionContext->args = (new _hx_array(array($id)));
+												$this->context->actionContext->get_uriParts()->splice(0, 2);
+												$this9 = _hx_field(haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController")), "returnPortfolioItem")->wrapResult[0];
 												$wrappingRequired8 = $this9;
-												$result8 = $this->wrapResult($this->portfolio(), $wrappingRequired8);
+												$result8 = $this->wrapResult($this->returnPortfolioItem($id), $wrappingRequired8);
 												$this->setContextActionResultWhenFinished($result8);
 												return $result8;
 											} else {
-												$tmp22 = null;
 												$tmp23 = null;
 												$tmp24 = null;
 												if(strtolower($method) === "get") {
-													$tmp24 = 2 === $uriParts->length;
+													$tmp24 = 1 === $uriParts->length;
 												} else {
 													$tmp24 = false;
 												}
 												if($tmp24) {
-													$tmp23 = $uriParts[0] === "portfolio";
+													$tmp23 = $uriParts[0] === "contact";
 												} else {
 													$tmp23 = false;
 												}
 												if($tmp23) {
-													$tmp22 = strlen($uriParts[1]) > 0;
-												} else {
-													$tmp22 = false;
-												}
-												if($tmp22) {
-													$id = $uriParts[1];
-													$this->context->actionContext->action = "returnPortfolioItem";
-													$this->context->actionContext->args = (new _hx_array(array($id)));
-													$this->context->actionContext->get_uriParts()->splice(0, 2);
-													$this10 = _hx_field(haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController")), "returnPortfolioItem")->wrapResult[0];
+													$this->context->actionContext->action = "contact";
+													$this->context->actionContext->args = (new _hx_array(array()));
+													$this->context->actionContext->get_uriParts()->splice(0, 1);
+													$this10 = _hx_field(haxe_rtti_Meta::getFields(_hx_qtype("controller.HomeController")), "contact")->wrapResult[0];
 													$wrappingRequired9 = $this10;
-													$result9 = $this->wrapResult($this->returnPortfolioItem($id), $wrappingRequired9);
+													$result9 = $this->wrapResult($this->contact(), $wrappingRequired9);
 													$this->setContextActionResultWhenFinished($result9);
 													return $result9;
 												} else {
@@ -423,7 +424,7 @@ class controller_HomeController extends ufront_web_Controller {
 															if($reason !== null) {
 																$message = _hx_string_or_null($message) . _hx_string_or_null((": " . _hx_string_or_null($reason)));
 															}
-															throw new HException(new tink_core_TypedError(400, $message, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 245, "className" => "controller.HomeController", "methodName" => "execute"))));
+															throw new HException(new tink_core_TypedError(400, $message, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 260, "className" => "controller.HomeController", "methodName" => "execute"))));
 														}
 														$_param_tmp_email = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "email");
 														if(!$params->exists("name")) {
@@ -432,7 +433,7 @@ class controller_HomeController extends ufront_web_Controller {
 															if($reason1 !== null) {
 																$message1 = _hx_string_or_null($message1) . _hx_string_or_null((": " . _hx_string_or_null($reason1)));
 															}
-															throw new HException(new tink_core_TypedError(400, $message1, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 245, "className" => "controller.HomeController", "methodName" => "execute"))));
+															throw new HException(new tink_core_TypedError(400, $message1, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 260, "className" => "controller.HomeController", "methodName" => "execute"))));
 														}
 														$_param_tmp_name = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "name");
 														if(!$params->exists("message")) {
@@ -441,10 +442,19 @@ class controller_HomeController extends ufront_web_Controller {
 															if($reason2 !== null) {
 																$message2 = _hx_string_or_null($message2) . _hx_string_or_null((": " . _hx_string_or_null($reason2)));
 															}
-															throw new HException(new tink_core_TypedError(400, $message2, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 245, "className" => "controller.HomeController", "methodName" => "execute"))));
+															throw new HException(new tink_core_TypedError(400, $message2, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 260, "className" => "controller.HomeController", "methodName" => "execute"))));
 														}
 														$_param_tmp_message = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "message");
-														$args = _hx_anonymous(array("email" => $_param_tmp_email, "name" => $_param_tmp_name, "message" => $_param_tmp_message));
+														if(!$params->exists("gRecaptchaResponse")) {
+															$reason3 = "Missing parameter " . "gRecaptchaResponse";
+															$message3 = "Bad Request";
+															if($reason3 !== null) {
+																$message3 = _hx_string_or_null($message3) . _hx_string_or_null((": " . _hx_string_or_null($reason3)));
+															}
+															throw new HException(new tink_core_TypedError(400, $message3, _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 260, "className" => "controller.HomeController", "methodName" => "execute"))));
+														}
+														$_param_tmp_gRecaptchaResponse = ufront_core__MultiValueMap_MultiValueMap_Impl_::get($params, "gRecaptchaResponse");
+														$args = _hx_anonymous(array("email" => $_param_tmp_email, "name" => $_param_tmp_name, "message" => $_param_tmp_message, "gRecaptchaResponse" => $_param_tmp_gRecaptchaResponse));
 														$this->context->actionContext->action = "contactResult";
 														$this->context->actionContext->args = (new _hx_array(array($args)));
 														$this->context->actionContext->get_uriParts()->splice(0, 2);
@@ -464,13 +474,13 @@ class controller_HomeController extends ufront_web_Controller {
 					}
 				}
 			}
-			throw new HException(ufront_web_HttpError::pageNotFound(_hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 21, "className" => "controller.HomeController", "methodName" => "execute"))));
+			throw new HException(ufront_web_HttpError::pageNotFound(_hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 26, "className" => "controller.HomeController", "methodName" => "execute"))));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
 			$e = $_ex_;
 			{
 				$tmp28 = "Uncaught error while executing " . Std::string($this->context->actionContext->controller) . ".";
-				return ufront_core_SurpriseTools::asSurpriseError($e, _hx_string_or_null($tmp28) . _hx_string_or_null($this->context->actionContext->action) . "()", _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 21, "className" => "controller.HomeController", "methodName" => "execute")));
+				return ufront_core_SurpriseTools::asSurpriseError($e, _hx_string_or_null($tmp28) . _hx_string_or_null($this->context->actionContext->action) . "()", _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 26, "className" => "controller.HomeController", "methodName" => "execute")));
 			}
 		}
 	}
@@ -488,7 +498,7 @@ class controller_HomeController extends ufront_web_Controller {
 	static $__meta__;
 	function __toString() { return 'controller.HomeController'; }
 }
-controller_HomeController::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.AsyncTestApi", ""))), (new _hx_array(array("mailApi", "api.MailApi", "")))))))), "fields" => _hx_anonymous(array("main" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "about" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "graphic" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "joomla" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "books" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "web" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "interactive" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "contact" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "portfolio" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "returnPortfolioItem" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "contactResult" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))), "template" => (new _hx_array(array("/home/contact.html")))))))));
+controller_HomeController::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("rtti" => (new _hx_array(array((new _hx_array(array("testApi", "api.TestApi", ""))), (new _hx_array(array("mailApi", "api.MailApi", ""))), (new _hx_array(array("recaptchaApi", "api.RecaptchaApi", "")))))))), "fields" => _hx_anonymous(array("main" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "about" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "graphic" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "joomla" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "books" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "web" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "interactive" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))), "template" => (new _hx_array(array("/home/about.html"))))), "portfolio" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "returnPortfolioItem" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))))), "contact" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(3))))), "contactResult" => _hx_anonymous(array("wrapResult" => (new _hx_array(array(4))), "template" => (new _hx_array(array("/home/contact.html")))))))));
 function controller_HomeController_0(&$_gthis, &$t, $result) {
 	{
 		$d = $_gthis->processJson($result);
@@ -523,7 +533,25 @@ function controller_HomeController_1(&$t, &$t2, $result) {
 		return ufront_web_result_AddClientActionResult::addClientAction($tmp1, $this2, _hx_anonymous(array("msg" => _hx_string_or_null($t) . _hx_string_or_null($result->title))));
 	}
 }
-function controller_HomeController_2(&$returnHome, &$t, $result) {
+function controller_HomeController_2(&$_gthis, &$args, $outcome) {
+	{
+		$r = haxe_Json::phpJsonDecode($outcome);
+		$t = "Contact : Confidant Communications";
+		$returnHome = "<p style=\"text-align:center;\"><a href=\"/\" rel=\"pushstate\">Go back home now?</a></p>";
+		{
+			$msg = "outcome:" . _hx_string_or_null($outcome);
+			$pos = _hx_anonymous(array("fileName" => "HomeController.hx", "lineNumber" => 269, "className" => "controller.HomeController", "methodName" => "contactResult"));
+			if($_gthis->context !== null) {
+				$_gthis->context->messages->push(_hx_anonymous(array("msg" => $msg, "pos" => $pos, "type" => ufront_log_MessageType::$MTrace)));
+			} else {
+				$tmp = (property_exists("haxe_Log", "trace") ? haxe_Log::$trace: array("haxe_Log", "trace"));
+				call_user_func_array($tmp, array("" . Std::string($msg), $pos));
+			}
+		}
+		return tink_core__Future_Future_Impl_::_tryMap($_gthis->mailApi->doMail($r, $args->email, $args->name, $args->message), array(new _hx_lambda(array(&$returnHome, &$t), "controller_HomeController_3"), 'execute'));
+	}
+}
+function controller_HomeController_3(&$returnHome, &$t, $result) {
 	{
 		$obj = _hx_anonymous(array());
 		$this1 = null;
@@ -532,10 +560,10 @@ function controller_HomeController_2(&$returnHome, &$t, $result) {
 		} else {
 			$this1 = _hx_anonymous(array());
 		}
-		$tmp = new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject($this1, _hx_anonymous(array("title" => $t, "portfolioItem" => null, "panel1classes" => "recessed0 recessed1 recessed2", "panel2classes" => "recessed0 recessed1", "panel3classes" => "recessed0", "gobackLink" => "/contact/"))), null, null);
-		$tmp1 = _hx_string_or_null($result) . _hx_string_or_null($returnHome);
-		$tmp2 = $tmp->addPartialString("subcontent", $tmp1, ufront_view_TemplatingEngines::get_haxe());
+		$tmp1 = new ufront_web_result_PartialViewResult(ufront_view__TemplateData_TemplateData_Impl_::setObject($this1, _hx_anonymous(array("title" => $t, "portfolioItem" => null, "panel1classes" => "recessed0 recessed1 recessed2", "panel2classes" => "recessed0 recessed1", "panel3classes" => "recessed0", "gobackLink" => "/contact/"))), null, null);
+		$tmp2 = _hx_string_or_null($result) . _hx_string_or_null($returnHome);
+		$tmp3 = $tmp1->addPartialString("subcontent", $tmp2, ufront_view_TemplatingEngines::get_haxe());
 		$this2 = Type::getClassName(_hx_qtype("actions.ConfidantInterface"));
-		return ufront_web_result_AddClientActionResult::addClientAction($tmp2, $this2, _hx_anonymous(array("msg" => _hx_string_or_null($t) . _hx_string_or_null($result))));
+		return ufront_web_result_AddClientActionResult::addClientAction($tmp3, $this2, _hx_anonymous(array("msg" => _hx_string_or_null($t) . _hx_string_or_null($result))));
 	}
 }

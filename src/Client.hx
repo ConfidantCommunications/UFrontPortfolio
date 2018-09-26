@@ -31,6 +31,12 @@ class Client
 			errorHandlers: [ new CustomErrorPageHandler() ]
 		});
 		// ufrontApp.registerAction(actions.ConfidantInterface);//results in remapping
+
+		//this is not necessary when using "addClientAction" via the controller:
+		ufrontApp.registerAction(actions.RecaptchaSetup);
+		// ufrontApp.registerAction(actions.RecaptchaGetResponse);
+
+
 		// Listen to any history changes using PushState, and process each request.
 		ufrontApp.listen();
 		

@@ -22,9 +22,12 @@
 <br clear="all" />
 <h3 class="formHeader">Form-sending technology!</h3>
 <form id="contactForm" action="/contact/send/" method="post">
-<dt>Your Name: </dt><dd><input type="text" name="name" id="name" size="80" maxlength="80" /></dd>
+<dt>Your Name: </dt><dd><input type="text" name="name" id="name" size="80" maxlength="80" /><input type="hidden" name="gRecaptchaResponse" id="gRecaptchaResponse" value="" /></dd>
 <dt>Email: </dt><dd><input type="text" name="email" id="email" size="80" maxlength="80" /></dd>
 <dt>Message: </dt><dd><textarea id="message" name="message" rows="4" cols="60"></textarea></dd>
 <dt>&nbsp;</dt><dd><input type="submit" name="submit" value="Submit" /></dd>
 </form>
+<dt>Security: </dt><dd><div id="gRecaptcha">You will need to enable Javascript in order to use this form.</div></dd>
+
+
 </dl>				

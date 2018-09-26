@@ -2,8 +2,11 @@ package controller;
 
 import api.TestApi;
 import api.MailApi;
+import api.RecaptchaApi;
 import api.PortfolioItem;
 import actions.ConfidantInterface;
+// import actions.RecaptchaSetup;
+// import actions.RecaptchaGetResponse;
 using ufront.MVC;
 using ufront.web.result.AddClientActionResult;
 using ufront.web.result.CallJavascriptResult;
@@ -18,13 +21,19 @@ typedef MyData = {
   //var name:String;
   var items:Array<MyItem>;
 }
+
+
 class HomeController extends Controller
 {
 	@inject
-	public var testApi:AsyncTestApi;
+	public var testApi:TestApi;
 
 	@inject
 	public var mailApi:MailApi;
+
+	@inject 
+	public var recaptchaApi:RecaptchaApi; 
+
 	
 	@:route(GET, "/")
 	public function main()
@@ -173,21 +182,6 @@ class HomeController extends Controller
 		.addClientAction(ConfidantInterface,{msg:t});
 	}
 
-	@:route(GET, "/contact")
-	public function contact()
-	{
-		var t:String='Contact Us : Confidant Communications';
-		return new PartialViewResult({ 
-			title:t,
-			portfolioItem:null,
-			panel1classes:"recessed0 recessed1",
-			panel2classes:"recessed0",
-			panel3classes:"",
-			gobackLink:"http://"+getHostName()+"/"
-		})
-		.addPartialString("subcontent","",TemplatingEngines.haxe)
-		.addClientAction(ConfidantInterface,{msg:t});
-	}
 	
 	@:route(GET, "/portfolio")
 	public function portfolio()
@@ -240,22 +234,69 @@ class HomeController extends Controller
 		return parsed.items;
 	}
 	
+	@:route(GET, "/contact")
+	public function contact()
+	{
+		var vr = new ViewResult();
+		
+		var t:String='Contact Us : Confidant Communications';
+		return new ViewResult({ 
+			title:t,
+			portfolioItem:null,
+			panel1classes:"recessed0 recessed1",
+			panel2classes:"recessed0",
+			panel3classes:"",
+			gobackLink:"http://"+getHostName()+"/"
+		})
+		.addPartialString("subcontent","",TemplatingEngines.haxe)
+		.addClientAction(ConfidantInterface,{msg:t})
+		//.addClientAction(RecaptchaSetup);
+		.addJsScriptToResult( "//www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" );
+		// .addClientAction(RecaptchaGetResponse);
+	}
+
 	@:route(POST, "/contact/send/")
 	@template("/home/contact.html")
-	public function contactResult(args:{ email:String, name:String, message:String })
+	public function contactResult(args:{ email:String, name:String, message:String, gRecaptchaResponse:String })
 	{
-		var t:String = "Contact : Confidant Communications"; 
-		var returnHome:String = '<p style="text-align:center;"><a href="/" rel="pushstate">Go back home now?</a></p>';
-		return mailApi.doMail(args.email, args.name, args.message) >>
-			function(result:String) return new PartialViewResult({
-				title: t,
-				portfolioItem: null,
-				panel1classes:"recessed0 recessed1 recessed2",
-				panel2classes:"recessed0 recessed1",
-				panel3classes:"recessed0",
-				gobackLink:"/contact/"
-			})
-			.addPartialString("subcontent",result+returnHome,TemplatingEngines.haxe)
-			.addClientAction(ConfidantInterface,{msg:t+result});
+		// var response = "";
+		
+		return recaptchaApi.verify( args.gRecaptchaResponse )
+		>>function(outcome:String) { //leave it as a string!
+			var r:RecaptchaVerificationResult = haxe.Json.parse(outcome);
+			var t:String = "Contact : Confidant Communications"; 
+			var returnHome:String = '<p style="text-align:center;"><a href="/" rel="pushstate">Go back home now?</a></p>';
+			ufTrace("outcome:"+outcome);
+			// if(r.success == true){
+				return mailApi.doMail(r, args.email, args.name, args.message) >>
+					function(result:String) return new PartialViewResult({
+						title: t,
+						portfolioItem: null,
+						panel1classes:"recessed0 recessed1 recessed2",
+						panel2classes:"recessed0 recessed1",
+						panel3classes:"recessed0",
+						gobackLink:"/contact/"
+					})
+					.addPartialString("subcontent",result+returnHome,TemplatingEngines.haxe)
+					.addClientAction(ConfidantInterface,{msg:t+result});
+
+				
+			// } else {
+				// return new PartialViewResult({
+				// 		title: t,
+				// 		portfolioItem: null,
+				// 		panel1classes:"recessed0 recessed1 recessed2",
+				// 		panel2classes:"recessed0 recessed1",
+				// 		panel3classes:"recessed0",
+				// 		gobackLink:"/contact/"
+				// 	})
+				// 	.addPartialString("subcontent","Problem: "+r,TemplatingEngines.haxe)
+				// 	.addClientAction(ConfidantInterface,{msg:"Problem."});
+			// } 
+			
+		}
+			
 	}
+
+
 }

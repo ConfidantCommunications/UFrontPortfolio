@@ -15,6 +15,14 @@ class Server
 		//lines below resolve a problem with not finding the DefaultResolver class, a new problem since upgrading to Haxe 3.4.2
 		#if php
 		untyped __php__("require 'haxe/_Unserializer/DefaultResolver.class.php'; ");
+		
+		/*untyped __php__("
+		$headerCSP = \"Content-Security-Policy:connect-src 'self' ;		default-src 'self' www.google-analytics.com www.gstatic.com www.google.com fonts.gstatic.com; 		frame-ancestors 'self' ;		frame-src 'none' www.google.com;		media-src 'self' ;		object-src 'none'; 		script-src 'self' 'unsafe-inline' www.google-analytics.com www.google.com www.gstatic.com; 		style-src 'self' 'unsafe-inline' fonts.googleapis.com ;\";
+		
+		header($headerCSP);
+		");
+*/
+		
 		#end
 		//UFViewEngine.engines.add(new ErazorViewEngine()); // <-- Adding Erazor view engine
 

@@ -62,4 +62,4 @@ class api_TestApi extends ufront_api_UFApi {
 	static $__meta__;
 	function __toString() { return 'api.TestApi'; }
 }
-api_TestApi::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("asyncApi" => (new _hx_array(array("api.AsyncTestApi"))))), "fields" => _hx_anonymous(array("getJson" => _hx_anonymous(array("returnType" => (new _hx_array(array(3))))), "getItem" => _hx_anonymous(array("returnType" => (new _hx_array(array(3)))))))));
+api_TestApi::$__meta__ = _hx_anonymous(array("obj" => _hx_anonymous(array("asyncApi" => (new _hx_array(array("api.AsyncRecaptchaApi"))))), "fields" => _hx_anonymous(array("getJson" => _hx_anonymous(array("returnType" => (new _hx_array(array(3))))), "getItem" => _hx_anonymous(array("returnType" => (new _hx_array(array(3)))))))));

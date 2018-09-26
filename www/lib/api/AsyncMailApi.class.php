@@ -5,9 +5,9 @@ class api_AsyncMailApi extends ufront_api_UFAsyncApi {
 	public function __construct() { if(!php_Boot::$skip_constructor) {
 		parent::__construct();
 	}}
-	public function doMail($address, $name, $message) {
+	public function doMail($recaptchaResult, $address, $name, $message) {
 		$this1 = 3;
-		return $this->_makeApiCall("doMail", (new _hx_array(array($address, $name, $message))), $this1, _hx_anonymous(array("methodName" => "doMail", "lineNumber" => 0, "customParams" => null, "fileName" => "src/api/MailApi.hx", "className" => "AsyncMailApi")));
+		return $this->_makeApiCall("doMail", (new _hx_array(array($recaptchaResult, $address, $name, $message))), $this1, _hx_anonymous(array("methodName" => "doMail", "lineNumber" => 0, "customParams" => null, "fileName" => "src/api/MailApi.hx", "className" => "AsyncMailApi")));
 	}
 	public function injectApi($injector) {
 		$tmp = null;

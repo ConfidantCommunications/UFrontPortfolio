@@ -34,6 +34,10 @@ class haxe_Http {
 		$this->params->push(_hx_anonymous(array("param" => $param, "value" => $value)));
 		return $this;
 	}
+	public function addParameter($param, $value) {
+		$this->params->push(_hx_anonymous(array("param" => $param, "value" => $value)));
+		return $this;
+	}
 	public function request($post = null) {
 		$_gthis = $this;
 		$me = $this;

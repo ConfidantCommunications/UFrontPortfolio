@@ -1,6 +1,7 @@
 package api;
 using ufront.MVC;
 using tink.CoreApi;
+using api.RecaptchaApi;
 
 #if server
 import ufront.mailer.SmtpMailer;
@@ -19,7 +20,7 @@ class MailApi extends UFApi
 		var parsed:EmailConfig = haxe.Json.parse(pJson);
 		return parsed;
 	}
-	public function doMail(address:String,name:String,message:String):Surprise<String, Error> {
+	public function doMail(recaptchaResult:RecaptchaVerificationResult,address:String,name:String,message:String):Surprise<String, Error> {
 		var result:String='Email settings not configured properly.';
 		var path='../email.json';
 		//load the email config from external file (not in this git repo)
@@ -34,15 +35,29 @@ class MailApi extends UFApi
 		}
 		*/
 		var errorMessage:String;
-		if(name==""){errorMessage="<h4>No name?</h4>";return errorMessage.asGoodSurprise();}
-		if(message==""){errorMessage="<h4>The strong, silent type eh?</h4>";return errorMessage.asGoodSurprise();}
+
+		if(recaptchaResult.success==false){
+			errorMessage = "<h4>The Recaptcha did not verify: ";
+			if(recaptchaResult.errorCodes != null){
+				for(e in recaptchaResult.errorCodes) errorMessage += e;
+			}
+			errorMessage += "</h4>";
+			return new Error(errorMessage).asBadSurprise();
+		}
+		if(name==""){
+			errorMessage="<h4>No name?</h4>";
+			return new Error(errorMessage).asBadSurprise();
+		}
+		if(message==""){
+			errorMessage="<h4>The strong, silent type eh?</h4>";
+			return new Error(errorMessage).asBadSurprise();}
 		var theJson = null;
 		#if server
 			if(sys.FileSystem.exists(path)){
 				theJson = sys.io.File.getContent(path);
 			}
 		#end
-		if (theJson == null) return result.asGoodSurprise();
+		if (theJson == null) return new Error(result).asBadSurprise();
 		var settings;
 		settings = parseEmailJson(theJson);
 		var mailer = new SmtpMailer(settings);
@@ -58,7 +73,7 @@ class MailApi extends UFApi
 		} catch (e:Dynamic){
 			errorMessage = cast e;
 			errorMessage='<h4>'+errorMessage+'</h4>';
-			return errorMessage.asGoodSurprise();
+			return new Error(errorMessage).asBadSurprise();
 		}
 		mailer.send(email).handle(function(res) {
 			switch res {

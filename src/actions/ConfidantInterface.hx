@@ -21,7 +21,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
 
   override public function execute( context:HttpContext, ?data:Dynamic):Void {
 
-		// trace("hash:"+document.location.hash);
+		trace("hash:"+document.location.hash);
 		var msg = data.msg;
 
 		//detect a campaign redirect and notify analytics
@@ -37,6 +37,7 @@ class ConfidantInterface extends ufront.web.client.UFClientAction<{msg:String}> 
   }
 
   function listen():Void {
+	  trace("listen function");
 		//reset scrolling of content divs:
 		document.querySelector("#panel2").scrollTop=0;
 		document.querySelector("#panel3").scrollTop=0;

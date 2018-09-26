@@ -9,24 +9,40 @@ class api_MailApi extends ufront_api_UFApi {
 		$parsed = haxe_Json::phpJsonDecode($pJson);
 		return $parsed;
 	}
-	public function doMail($address, $name, $message) {
+	public function doMail($recaptchaResult, $address, $name, $message) {
 		$result = "Email settings not configured properly.";
 		$path = "../email.json";
 		$errorMessage = null;
+		if($recaptchaResult->success === false) {
+			$errorMessage = "<h4>The Recaptcha did not verify: ";
+			if($recaptchaResult->errorCodes !== null) {
+				$_g = 0;
+				$_g1 = $recaptchaResult->errorCodes;
+				while($_g < $_g1->length) {
+					$e = $_g1[$_g];
+					$_g = $_g + 1;
+					$errorMessage1 = Std::string($e);
+					$errorMessage = _hx_string_or_null($errorMessage) . _hx_string_or_null($errorMessage1);
+					unset($errorMessage1,$e);
+				}
+			}
+			$errorMessage = _hx_string_or_null($errorMessage) . "</h4>";
+			return ufront_core_SurpriseTools::asBadSurprise(new tink_core_TypedError(null, $errorMessage, _hx_anonymous(array("fileName" => "MailApi.hx", "lineNumber" => 45, "className" => "api.MailApi", "methodName" => "doMail"))));
+		}
 		if($name === "") {
 			$errorMessage = "<h4>No name?</h4>";
-			return ufront_core_SurpriseTools::asGoodSurprise($errorMessage);
+			return ufront_core_SurpriseTools::asBadSurprise(new tink_core_TypedError(null, $errorMessage, _hx_anonymous(array("fileName" => "MailApi.hx", "lineNumber" => 49, "className" => "api.MailApi", "methodName" => "doMail"))));
 		}
 		if($message === "") {
 			$errorMessage = "<h4>The strong, silent type eh?</h4>";
-			return ufront_core_SurpriseTools::asGoodSurprise($errorMessage);
+			return ufront_core_SurpriseTools::asBadSurprise(new tink_core_TypedError(null, $errorMessage, _hx_anonymous(array("fileName" => "MailApi.hx", "lineNumber" => 53, "className" => "api.MailApi", "methodName" => "doMail"))));
 		}
 		$theJson = null;
 		if(file_exists($path)) {
 			$theJson = sys_io_File::getContent($path);
 		}
 		if($theJson === null) {
-			return ufront_core_SurpriseTools::asGoodSurprise($result);
+			return ufront_core_SurpriseTools::asBadSurprise(new tink_core_TypedError(null, $result, _hx_anonymous(array("fileName" => "MailApi.hx", "lineNumber" => 60, "className" => "api.MailApi", "methodName" => "doMail"))));
 		}
 		$settings = $this->parseEmailJson($theJson);
 		$mailer = new ufront_mailer_SmtpMailer($settings);
@@ -39,11 +55,11 @@ class api_MailApi extends ufront_api_UFApi {
 			$email = $email3->setText("You received a message from " . _hx_string_or_null($name) . ": " . _hx_string_or_null($message));
 		}catch(Exception $__hx__e) {
 			$_ex_ = ($__hx__e instanceof HException) && $__hx__e->getCode() == null ? $__hx__e->e : $__hx__e;
-			$e = $_ex_;
+			$e1 = $_ex_;
 			{
-				$errorMessage = $e;
+				$errorMessage = $e1;
 				$errorMessage = "<h4>" . _hx_string_or_null($errorMessage) . "</h4>";
-				return ufront_core_SurpriseTools::asGoodSurprise($errorMessage);
+				return ufront_core_SurpriseTools::asBadSurprise(new tink_core_TypedError(null, $errorMessage, _hx_anonymous(array("fileName" => "MailApi.hx", "lineNumber" => 76, "className" => "api.MailApi", "methodName" => "doMail"))));
 			}
 		}
 		{
@@ -64,9 +80,9 @@ function api_MailApi_0(&$errorMessage, &$result, $res) {
 			$result = "<h4 class=\"formResult\">Email sent!</h4>";
 		}break;
 		case 1:{
-			$e1 = _hx_deref($res)->params[0];
+			$e2 = _hx_deref($res)->params[0];
 			{
-				$errorMessage = $e1;
+				$errorMessage = $e2;
 				$result = "<h4 class=\"formResult\">Something went wrong: " . _hx_string_or_null($errorMessage) . "</h4>";
 			}
 		}break;
